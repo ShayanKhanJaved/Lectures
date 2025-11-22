@@ -1,0 +1,1134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Celestica Initiative - Lecture 8</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Changa+One&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --retro-cream: #FFFDD0;
+            --retro-orange: #E85D04;
+            --retro-yellow: #FFBA08;
+            --retro-brown: #3F2E3E;
+            --retro-green: #588157;
+            --retro-blue: #219EBC;
+            --retro-red: #D00000;
+            --retro-purple: #7209b7;
+            --retro-cyan: #06b6d4;
+            --space-black: #0f172a;
+        }
+
+        body {
+            background-color: var(--retro-cream);
+            color: var(--retro-brown);
+            font-family: 'Space Mono', monospace;
+            background-image: radial-gradient(var(--retro-blue) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Changa One', cursive;
+        }
+
+        .retro-box {
+            background-color: #fff;
+            border: 4px solid var(--retro-brown);
+            box-shadow: 8px 8px 0px var(--retro-blue);
+            border-radius: 1rem;
+            transition: transform 0.2s;
+            overflow: hidden;
+        }
+
+        .retro-box:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 10px 10px 0px var(--retro-blue);
+        }
+
+        .retro-btn {
+            background-color: var(--retro-orange);
+            color: white;
+            border: 3px solid var(--retro-brown);
+            padding: 8px 16px;
+            font-family: 'Changa One', cursive;
+            font-size: 1.1rem;
+            cursor: pointer;
+            box-shadow: 4px 4px 0px var(--retro-brown);
+            transition: all 0.1s;
+            text-transform: uppercase;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .retro-btn:active {
+            transform: translate(4px, 4px);
+            box-shadow: 0px 0px 0px var(--retro-brown);
+        }
+
+        .retro-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: translate(2px, 2px);
+        }
+
+        .btn-blue { background-color: var(--retro-blue); }
+        .btn-red { background-color: var(--retro-red); }
+        .btn-green { background-color: var(--retro-green); }
+        .btn-purple { background-color: var(--retro-purple); }
+
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+        }
+
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 24px;
+            width: 24px;
+            border-radius: 50%;
+            background: var(--retro-yellow);
+            border: 2px solid var(--retro-brown);
+            margin-top: -10px;
+            cursor: pointer;
+        }
+
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 8px;
+            cursor: pointer;
+            background: var(--retro-brown);
+            border-radius: 4px;
+        }
+
+        .section-number {
+            background-color: var(--retro-orange); 
+            color: white; 
+            width: 3rem; 
+            height: 3rem; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            border-radius: 9999px; 
+            border: 4px solid var(--retro-brown); 
+            font-weight: bold; 
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+        
+        canvas {
+            image-rendering: pixelated; 
+            width: 100%;
+            height: auto;
+            border-radius: 0.5rem;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+            background-color: var(--space-black);
+            border: 4px solid var(--retro-brown);
+        }
+
+        .lesson-text {
+            background-color: rgba(255,255,255,0.9);
+            border: 2px solid var(--retro-brown);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Rocket Animation Classes */
+        @keyframes shake {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            10% { transform: translate(-1px, -2px) rotate(-1deg); }
+            20% { transform: translate(-3px, 0px) rotate(1deg); }
+            30% { transform: translate(3px, 2px) rotate(0deg); }
+            40% { transform: translate(1px, -1px) rotate(1deg); }
+            50% { transform: translate(-1px, 2px) rotate(-1deg); }
+            60% { transform: translate(-3px, 1px) rotate(0deg); }
+            70% { transform: translate(3px, 1px) rotate(-1deg); }
+            80% { transform: translate(-1px, -1px) rotate(1deg); }
+            90% { transform: translate(1px, 2px) rotate(0deg); }
+            100% { transform: translate(1px, -2px) rotate(-1deg); }
+        }
+        .rocket-shake {
+            animation: shake 0.5s;
+            animation-iteration-count: infinite;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8 max-w-6xl mx-auto">
+
+    <!-- Header -->
+    <header class="text-center mb-16">
+        <div class="inline-block bg-purple-600 text-white px-6 py-2 rounded-full border-4 border-gray-800 mb-4 font-bold transform -rotate-1 shadow-lg">
+            The Celestica Initiative 🚀
+        </div>
+        <h1 class="text-5xl md:text-8xl text-blue-500 drop-shadow-retro mb-4 leading-none" style="-webkit-text-stroke: 3px var(--retro-brown);">
+            ORBITAL<br>MECHANICS
+        </h1>
+        <div class="bg-white border-4 border-black inline-block px-8 py-4 transform rotate-1 shadow-[8px_8px_0px_rgba(0,0,0,0.2)]">
+            <p class="text-xl md:text-2xl text-gray-800 font-bold">Lecture 8: Gravity, Orbits & Rocket Science</p>
+        </div>
+    </header>
+
+    <!-- Intro -->
+    <section class="retro-box p-8 mb-12 bg-white relative overflow-hidden">
+        <div class="absolute top-0 right-0 -mt-4 -mr-4 bg-yellow-300 w-24 h-24 rounded-full border-4 border-black flex items-center justify-center text-4xl animate-bounce">🌍</div>
+        <h2 class="text-4xl text-purple-600 mb-4">Falling with Style</h2>
+        <p class="text-lg leading-relaxed">
+            Welcome to Space School, Cadet! <br><br>
+            Most people think zero-gravity means "no gravity." <strong>WRONG!</strong> The ISS has almost as much gravity as Earth. 
+            Astronauts float because they are falling sideways so fast (17,500 mph) that they miss the ground entirely.
+            <br><br>
+            Let's master the 15 rules of the void.
+        </p>
+    </section>
+
+    <!-- 1. The Space Racer (REPLACES NEWTON'S CANNON) -->
+    <section class="mb-16">
+        <div class="flex items-center gap-4 mb-4">
+            <div class="section-number">1</div>
+            <h2 class="text-3xl text-brown-800">The Space Racer (Orbital Phasing)</h2>
+        </div>
+        <div class="retro-box p-6 bg-blue-100">
+            <div class="lesson-text">
+                <strong>Lesson:</strong> Orbits are counter-intuitive! To catch the Red Ship ahead of you, you must <strong>dive down</strong> to a lower orbit to speed up. If you aim up, you slow down and fall behind!
+            </div>
+            <canvas id="phasingCanvas" width="600" height="300" class="mb-4"></canvas>
+            <div class="flex gap-4 items-center justify-center">
+                <button onclick="phaseAction('lower')" class="retro-btn btn-green">Dive Low (Speed Up)</button>
+                <button onclick="phaseAction('higher')" class="retro-btn btn-red">Climb High (Slow Down)</button>
+                <button onclick="resetPhasing()" class="retro-btn bg-gray-500">Reset</button>
+            </div>
+            <p id="phasingStatus" class="text-center mt-2 font-bold text-xl text-blue-800">Target (Red) is ahead! Catch it!</p>
+        </div>
+    </section>
+
+    <!-- 2. The Fireball (REPLACES GRAVITY WELL) -->
+    <section class="mb-16">
+        <div class="flex items-center gap-4 mb-4">
+            <div class="section-number">2</div>
+            <h2 class="text-3xl text-brown-800">The Fireball (Aerobraking)</h2>
+        </div>
+        <div class="retro-box p-6 bg-orange-50">
+            <div class="lesson-text">
+                <strong>Lesson:</strong> Returning from space generates massive heat. You must hit the atmosphere at the perfect angle. Too steep? You burn up. Too shallow? You bounce off into deep space.
+            </div>
+            <canvas id="aeroCanvas" width="600" height="300" class="mb-4"></canvas>
+            <div class="flex gap-4 items-center justify-center">
+                <div class="flex items-center gap-2">
+                    <label class="font-bold">Entry Angle:</label>
+                    <input type="range" id="entryAngle" min="0" max="45" value="10" class="w-32">
+                </div>
+                <button onclick="launchAero()" id="aeroBtn" class="retro-btn btn-orange">Enter Atmosphere 🔥</button>
+                <button onclick="resetAero()" class="retro-btn bg-gray-500">Reset</button>
+            </div>
+            <p id="aeroStatus" class="text-center mt-2 font-bold text-lg">Adjust angle and launch.</p>
+        </div>
+    </section>
+
+    <!-- 3. Elliptical Orbits -->
+    <section class="mb-16">
+        <div class="flex items-center gap-4 mb-4">
+            <div class="section-number">3</div>
+            <h2 class="text-3xl text-brown-800">Kepler's Slingshot</h2>
+        </div>
+        <div class="retro-box p-6 bg-yellow-50">
+            <div class="lesson-text">
+                <strong>Lesson:</strong> You go super fast when near the Sun (Periapsis) and slow when far away (Apoapsis).
+            </div>
+            <canvas id="keplerCanvas" width="600" height="250" class="mb-4"></canvas>
+            <div class="flex gap-4 items-center justify-center">
+                <label class="font-bold">Eccentricity:</label>
+                <input type="range" id="eccentricitySlider" min="0" max="0.7" step="0.01" value="0.5" class="w-1/2">
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. Hohmann Transfer -->
+    <section class="mb-16">
+        <div class="flex items-center gap-4 mb-4">
+            <div class="section-number">4</div>
+            <h2 class="text-3xl text-brown-800">Mission to Mars</h2>
+        </div>
+        <div class="retro-box p-6 bg-red-50">
+            <div class="lesson-text">
+                <strong>Lesson:</strong> Space isn't straight lines. Wait for the <strong>Green Transfer Window</strong> to align, then launch!
+            </div>
+            <canvas id="transferCanvas" width="600" height="350" class="mb-4"></canvas>
+            <div class="flex justify-center gap-4">
+                <button onclick="startTransfer()" id="launchBtn" class="retro-btn btn-green text-lg">LAUNCH ROCKET 🚀</button>
+                <button onclick="resetTransfer()" class="retro-btn bg-gray-500">Reset</button>
+            </div>
+            <p id="transferStatus" class="text-center mt-2 font-bold text-lg text-red-800">Status: Awaiting Launch Command</p>
+        </div>
+    </section>
+
+    <!-- 5. Tidal Locking -->
+    <section class="mb-16">
+        <div class="flex items-center gap-4 mb-4">
+            <div class="section-number">5</div>
+            <h2 class="text-3xl text-brown-800">The Dark Side</h2>
+        </div>
+        <div class="retro-box p-6 bg-indigo-50">
+            <div class="lesson-text">
+                <strong>Lesson:</strong> The Moon spins exactly once per orbit, keeping one face hidden from us.
+            </div>
+            <div class="flex flex-col md:flex-row items-center gap-4">
+                <canvas id="tidalCanvas" width="300" height="300" class="w-full md:w-1/2"></canvas>
+                <div class="flex-1 p-4">
+                    <label class="flex items-center gap-3 cursor-pointer bg-white p-4 border-2 border-black rounded shadow-md hover:shadow-lg transition">
+                        <input type="checkbox" id="lockCheck" class="w-6 h-6 accent-orange-600" checked onchange="toggleLock()">
+                        <span class="font-bold text-xl">Enable Tidal Lock</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. Binary Stars -->
+    <section class="mb-16">
+        <div class="flex items-center gap-4 mb-4">
+            <div class="section-number">6</div>
+            <h2 class="text-3xl text-brown-800">Binary Star Dance</h2>
+        </div>
+        <div class="retro-box p-6 bg-purple-100">
+            <div class="lesson-text">
+                <strong>Lesson:</strong> Objects orbit a common center of mass (Barycenter +). Even Jupiter pulls the Sun slightly off-center.
+            </div>
+            <canvas id="binaryCanvas" width="600" height="250" class="mb-4"></canvas>
+            <div class="flex gap-4 justify-center items-center">
+                <label class="font-bold">Blue Star Mass:</label>
+                <input type="range" id="massSlider" min="0.2" max="3" step="0.1" value="1" class="w-1/2">
+            </div>
+        </div>
+    </section>
+
+    <!-- 7. Retrograde Orbit -->
+    <section class="mb-16">
+        <div class="flex items-center gap-4 mb-4">
+            <div class="section-number">7</div>
+            <h2 class="text-3xl text-brown-800">Prograde vs Retrograde</h2>
+        </div>
+        <div class="retro-box p-6 bg-green-50">
+            <div class="lesson-text">
+                <strong>Lesson:</strong> Launching with the planet's spin (Prograde) saves fuel. Going against it (Retrograde) is extremely costly.
+            </div>
+            <canvas id="retroCanvas" width="600" height="250" class="mb-4"></canvas>
+            <div class="flex gap-4 justify-center flex-wrap">
+                <button onclick="launchSat(1)" class="retro-btn btn-blue">Launch Prograde</button>
+                <button onclick="launchSat(-1)" class="retro-btn btn-red">Launch Retrograde</button>
+                <button onclick="clearSats()" class="retro-btn bg-gray-500">Clear</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 8. Lagrange Points -->
+    <section class="mb-16">
+        <div class="flex items-center gap-4 mb-4">
+            <div class="section-number">8</div>
+            <h2 class="text-3xl text-brown-800">Lagrange Points</h2>
+        </div>
+        <div class="retro-box p-6 bg-gray-800 text-white">
+            <div class="lesson-text text-black">
+                <strong>Lesson:</strong> The 5 gravity parking spots. L4 and L5 are stable "traps" for asteroids.
+            </div>
+            <canvas id="lagrangeCanvas" width="600" height="300" class="mb-4 border-blue-500"></canvas>
+            <div class="flex justify-center">
+                <button onclick="resetLagrange()" class="retro-btn btn-purple">Reset Particles</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 9. Rocket Staging -->
+    <section class="mb-16">
+        <div class="flex items-center gap-4 mb-4">
+            <div class="section-number">9</div>
+            <h2 class="text-3xl text-brown-800">Drop the Weight (Staging)</h2>
+        </div>
+        <div class="retro-box p-6 bg-sky-100">
+            <div class="lesson-text">
+                <strong>Lesson:</strong> Rockets shed empty fuel tanks to get lighter and go faster. Watch the altitude climb!
+            </div>
+            
+            <div class="relative w-full h-80 bg-gradient-to-b from-slate-900 via-blue-500 to-blue-300 rounded-lg border-4 border-black overflow-hidden mb-4">
+                <!-- Clouds for motion reference -->
+                <div id="clouds" class="absolute w-full h-full transition-transform duration-100" style="will-change: transform;">
+                    <div class="absolute top-10 left-10 text-6xl opacity-50">☁️</div>
+                    <div class="absolute top-40 right-20 text-6xl opacity-50">☁️</div>
+                    <div class="absolute top-80 left-40 text-6xl opacity-50">☁️</div>
+                </div>
+
+                <!-- Rocket Assembly -->
+                <div id="rocketAssembly" class="absolute left-1/2 bottom-10 -translate-x-1/2 flex flex-col items-center transition-transform duration-100">
+                    <!-- Stage 2 -->
+                    <div class="w-12 h-16 bg-gray-100 border-2 border-black rounded-t-full flex items-center justify-center relative z-20">
+                        <span>🛰️</span>
+                    </div>
+                    <!-- Stage 1 -->
+                    <div id="stage1" class="w-14 h-24 bg-orange-500 border-2 border-black flex items-center justify-center text-white font-bold relative z-10 transition-all duration-500">
+                        S1
+                        <div id="engineFlame" class="hidden absolute top-full left-1/2 -translate-x-1/2 w-4 h-8 bg-yellow-400 rounded-full blur-sm animate-pulse"></div>
+                    </div>
+                </div>
+
+                <!-- HUD -->
+                <div class="absolute top-2 right-2 text-right font-mono text-white text-sm bg-black/50 p-2 rounded">
+                    <div id="altDisplay">Alt: 0 km</div>
+                    <div id="velDisplay">Vel: 0 m/s</div>
+                    <div id="fuelDisplay" class="text-green-400">Fuel: 100%</div>
+                </div>
+            </div>
+
+            <div class="flex justify-center gap-4">
+                <button onmousedown="igniteRocket()" onmouseup="cutEngine()" class="retro-btn btn-red w-32 select-none">IGNITE 🔥</button>
+                <button onclick="stageRocket()" id="stageBtn" class="retro-btn btn-blue w-32 select-none">STAGE ✂️</button>
+                <button onclick="resetRocket()" class="retro-btn bg-gray-500">Reset</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 10. Orbital Resonance -->
+    <section class="mb-16">
+        <div class="flex items-center gap-4 mb-4">
+            <div class="section-number">10</div>
+            <h2 class="text-3xl text-brown-800">The Cosmic Beat</h2>
+        </div>
+        <div class="retro-box p-6 bg-pink-50">
+            <div class="lesson-text">
+                <strong>Lesson:</strong> Moons of Jupiter sync up (1:2:4 resonance), causing gravity tugs that heat up their cores.
+            </div>
+            <canvas id="resonanceCanvas" width="600" height="300" class="mb-4"></canvas>
+            <div class="text-center font-mono font-bold" id="resonanceBeat">alignment: none</div>
+        </div>
+    </section>
+
+    <!-- 11. Escape Velocity -->
+    <section class="mb-16">
+        <div class="flex items-center gap-4 mb-4">
+            <div class="section-number">11</div>
+            <h2 class="text-3xl text-brown-800">Escape Velocity</h2>
+        </div>
+        <div class="retro-box p-6 bg-blue-200">
+            <div class="lesson-text">
+                <strong>Lesson:</strong> How fast to jump to leave a planet forever? Massive planets hold on tighter.
+            </div>
+            <canvas id="escapeCanvas" width="600" height="200" class="mb-4 bg-gradient-to-b from-slate-900 to-slate-700"></canvas>
+            <div class="flex gap-4 items-center justify-center flex-wrap">
+                <div class="flex gap-2">
+                    <button onclick="setPlanet('moon')" class="retro-btn bg-gray-400 text-xs">Moon</button>
+                    <button onclick="setPlanet('earth')" class="retro-btn bg-blue-500 text-xs">Earth</button>
+                    <button onclick="setPlanet('jupiter')" class="retro-btn bg-orange-400 text-xs">Jupiter</button>
+                </div>
+                <div class="flex items-center gap-2">
+                    <label class="font-bold">Jump Power:</label>
+                    <input type="range" id="jumpPower" min="5" max="25" value="10" class="w-32">
+                </div>
+                <button onclick="jumpChar()" class="retro-btn btn-green">JUMP!</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 12. Space Debris -->
+    <section class="mb-16">
+        <div class="flex items-center gap-4 mb-4">
+            <div class="section-number">12</div>
+            <h2 class="text-3xl text-brown-800">Space Junk</h2>
+        </div>
+        <div class="retro-box p-6 bg-black text-white">
+            <div class="lesson-text text-black">
+                <strong>Lesson:</strong> The Kessler Syndrome: Debris hits satellites, making more debris, trapping us on Earth.
+            </div>
+            <canvas id="debrisCanvas" width="600" height="300" class="mb-4 border-red-600"></canvas>
+            <div class="flex justify-center gap-4">
+                <button onclick="addDebrisSatellite()" class="retro-btn btn-blue">Launch Sat</button>
+                <button onclick="explodeRandom()" class="retro-btn btn-red">💥 ACCIDENT</button>
+                <button onclick="resetDebris()" class="retro-btn bg-gray-500">Clean</button>
+            </div>
+            <p class="text-center mt-2 text-red-500 font-mono" id="debrisCount">Debris Count: 0</p>
+        </div>
+    </section>
+
+    <!-- 13. Oberth Effect -->
+    <section class="mb-16">
+        <div class="flex items-center gap-4 mb-4">
+            <div class="section-number">13</div>
+            <h2 class="text-3xl text-brown-800">The Oberth Effect</h2>
+        </div>
+        <div class="retro-box p-6 bg-cyan-50">
+            <div class="lesson-text">
+                <strong>Lesson:</strong> Engines are more efficient when moving fast. Burn at the lowest point (Periapsis) for max boost!
+            </div>
+            <canvas id="oberthCanvas" width="600" height="300" class="mb-4"></canvas>
+            <div class="flex justify-center gap-4">
+                <button onclick="oberthBurn()" class="retro-btn btn-orange">ACTIVATE ENGINES 🔥</button>
+                <button onclick="resetOberth()" class="retro-btn bg-gray-500">Reset</button>
+            </div>
+            <p class="text-center mt-2 font-bold">Energy Added: <span id="oberthEnergy">0</span> J</p>
+        </div>
+    </section>
+
+    <!-- 14. Gravity Assist -->
+    <section class="mb-16">
+        <div class="flex items-center gap-4 mb-4">
+            <div class="section-number">14</div>
+            <h2 class="text-3xl text-brown-800">Gravity Assist</h2>
+        </div>
+        <div class="retro-box p-6 bg-teal-50">
+            <div class="lesson-text">
+                <strong>Lesson:</strong> Steal momentum from a planet to speed up (or slow down) without using fuel.
+            </div>
+            <canvas id="assistCanvas" width="600" height="300" class="mb-4"></canvas>
+            <div class="flex justify-center gap-4">
+                <button onclick="launchProbe()" class="retro-btn btn-blue">Launch Probe</button>
+            </div>
+            <p class="text-center mt-2 font-bold">Velocity: <span id="assistVel">0</span> km/s</p>
+        </div>
+    </section>
+
+    <!-- 15. Docking -->
+    <section class="mb-16">
+        <div class="flex items-center gap-4 mb-4">
+            <div class="section-number">15</div>
+            <h2 class="text-3xl text-brown-800">Orbital Docking</h2>
+        </div>
+        <div class="retro-box p-6 bg-slate-200">
+            <div class="lesson-text">
+                <strong>Lesson:</strong> Use RCS thrusters to gently align with the port. Don't come in too hot!
+            </div>
+            <canvas id="dockingCanvas" width="600" height="300" class="mb-4 bg-black"></canvas>
+            <div class="grid grid-cols-3 gap-2 w-32 mx-auto mb-4">
+                <div></div>
+                <button onmousedown="dockThrust(0, -1)" onmouseup="dockStop()" class="retro-btn btn-green p-2">⬆️</button>
+                <div></div>
+                <button onmousedown="dockThrust(-1, 0)" onmouseup="dockStop()" class="retro-btn btn-green p-2">⬅️</button>
+                <button onmousedown="dockThrust(0, 1)" onmouseup="dockStop()" class="retro-btn btn-green p-2">⬇️</button>
+                <button onmousedown="dockThrust(1, 0)" onmouseup="dockStop()" class="retro-btn btn-green p-2">➡️</button>
+            </div>
+            <p class="text-center font-bold" id="dockStatus">Align Green Box with Red Port</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="text-center text-gray-600 py-12 border-t-4 border-dotted border-purple-300">
+        <p class="font-bold text-lg">Made for The Celestica Initiative</p>
+        <p>Lecture 8 - Orbital Mechanics 101</p>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+
+        // --- 1. SPACE RACER (PHASING) ---
+        const phCanvas = document.getElementById('phasingCanvas');
+        const phCtx = phCanvas.getContext('2d');
+        
+        // State
+        let phTime = 0;
+        let phPlayerR = 100; // Base orbit radius
+        let phTargetR = 100;
+        let phPlayerAng = 0;
+        let phTargetAng = 1.5; // Target starts ahead (approx 90 deg)
+        
+        function resetPhasing() {
+            phPlayerR = 100;
+            phPlayerAng = 0;
+            phTargetAng = 1.5;
+            phTime = 0;
+            document.getElementById('phasingStatus').innerText = "Target (Red) is ahead! Catch it!";
+            document.getElementById('phasingStatus').className = "text-center mt-2 font-bold text-xl text-blue-800";
+        }
+        
+        function phaseAction(type) {
+            // Lesson: Lower R = Faster Angular Velocity
+            if(type === 'lower') phPlayerR = 70; // Dive
+            if(type === 'higher') phPlayerR = 130; // Climb
+        }
+        
+        function updatePhasing() {
+            phCtx.fillStyle = '#0f172a'; phCtx.fillRect(0,0,600,300);
+            let cx = 300, cy = 150;
+            
+            // Earth
+            phCtx.fillStyle = '#219EBC'; phCtx.beginPath(); phCtx.arc(cx, cy, 40, 0, Math.PI*2); phCtx.fill();
+            
+            // Orbits tracks
+            phCtx.strokeStyle = '#334155'; phCtx.setLineDash([5,5]);
+            phCtx.beginPath(); phCtx.arc(cx, cy, 70, 0, Math.PI*2); phCtx.stroke(); // Low
+            phCtx.beginPath(); phCtx.arc(cx, cy, 100, 0, Math.PI*2); phCtx.stroke(); // Mid
+            phCtx.beginPath(); phCtx.arc(cx, cy, 130, 0, Math.PI*2); phCtx.stroke(); // High
+            phCtx.setLineDash([]);
+            
+            // Update Physics
+            // v ~ 1/sqrt(r), omega = v/r = 1/r^1.5
+            let k = 20; // Speed constant
+            let wTarget = k / Math.pow(phTargetR, 1.5);
+            let wPlayer = k / Math.pow(phPlayerR, 1.5);
+            
+            phTargetAng += wTarget;
+            phPlayerAng += wPlayer;
+            
+            // Normalize angles
+            let pA = phPlayerAng % (Math.PI*2);
+            let tA = phTargetAng % (Math.PI*2);
+            
+            // Draw Target (Red)
+            let tx = cx + Math.cos(tA)*phTargetR; let ty = cy + Math.sin(tA)*phTargetR;
+            phCtx.fillStyle = '#EF4444'; phCtx.beginPath(); phCtx.arc(tx, ty, 8, 0, Math.PI*2); phCtx.fill();
+            
+            // Draw Player (Blue)
+            let px = cx + Math.cos(pA)*phPlayerR; let py = cy + Math.sin(pA)*phPlayerR;
+            phCtx.fillStyle = '#3B82F6'; phCtx.beginPath(); phCtx.arc(px, py, 8, 0, Math.PI*2); phCtx.fill();
+            
+            // Check Catch
+            let dist = Math.hypot(tx-px, ty-py);
+            if(dist < 20) {
+                document.getElementById('phasingStatus').innerText = "CAUGHT! Rendevous Complete.";
+                document.getElementById('phasingStatus').className = "text-center mt-2 font-bold text-xl text-green-500";
+                phPlayerR = phTargetR; // Lock orbit
+            } else if (phPlayerR < phTargetR) {
+                 document.getElementById('phasingStatus').innerText = "Lower orbit = Faster! Catching up...";
+                 document.getElementById('phasingStatus').className = "text-center mt-2 font-bold text-xl text-green-300";
+            } else if (phPlayerR > phTargetR) {
+                 document.getElementById('phasingStatus').innerText = "Higher orbit = Slower. Falling behind...";
+                 document.getElementById('phasingStatus').className = "text-center mt-2 font-bold text-xl text-red-300";
+            }
+            
+            requestAnimationFrame(updatePhasing);
+        }
+        updatePhasing();
+
+        // --- 2. THE FIREBALL (AEROBRAKING) ---
+        const aeCanvas = document.getElementById('aeroCanvas');
+        const aeCtx = aeCanvas.getContext('2d');
+        let aeShip = {x: 0, y: 50, vx: 4, vy: 0, active: false};
+        
+        function launchAero() {
+            let angle = parseInt(document.getElementById('entryAngle').value);
+            // Convert angle to vector
+            let rad = angle * (Math.PI/180);
+            aeShip = {x: 20, y: 50, vx: Math.cos(rad)*5, vy: Math.sin(rad)*5, active: true};
+            document.getElementById('aeroStatus').innerText = "Entering atmosphere...";
+            document.getElementById('aeroStatus').className = "text-center mt-2 font-bold text-lg text-white";
+            document.getElementById('aeroBtn').disabled = true;
+        }
+        
+        function resetAero() {
+            aeShip.active = false;
+            aeShip.x = 20; aeShip.y = 50;
+            document.getElementById('aeroStatus').innerText = "Adjust angle and launch.";
+            document.getElementById('aeroStatus').className = "text-center mt-2 font-bold text-lg text-white";
+            document.getElementById('aeroBtn').disabled = false;
+        }
+        
+        function drawAero() {
+            aeCtx.clearRect(0,0,600,300);
+            
+            // Atmosphere Gradients
+            let grad = aeCtx.createLinearGradient(0, 0, 0, 300);
+            grad.addColorStop(0, '#000');
+            grad.addColorStop(0.4, '#1e3a8a'); // Space edge
+            grad.addColorStop(0.8, '#60a5fa'); // Stratosphere
+            grad.addColorStop(1, '#bfdbfe'); // Surface
+            aeCtx.fillStyle = grad; aeCtx.fillRect(0,0,600,300);
+            
+            // Atmosphere Density Visuals (Lines)
+            aeCtx.strokeStyle = 'rgba(255,255,255,0.1)';
+            for(let i=150; i<300; i+=10) {
+                aeCtx.beginPath(); aeCtx.moveTo(0, i); aeCtx.lineTo(600, i); aeCtx.stroke();
+            }
+            
+            if(aeShip.active) {
+                // Physics
+                // Drag increases with Y (density) and Speed squared
+                // Density approx: map y 100->300 to 0->1
+                let density = Math.max(0, (aeShip.y - 100) / 200);
+                let speedSq = aeShip.vx*aeShip.vx + aeShip.vy*aeShip.vy;
+                let speed = Math.sqrt(speedSq);
+                
+                let dragForce = density * speedSq * 0.01;
+                
+                // Apply Drag opposite to velocity
+                if(speed > 0) {
+                    aeShip.vx -= (aeShip.vx/speed) * dragForce;
+                    aeShip.vy -= (aeShip.vy/speed) * dragForce;
+                }
+                
+                // Gravity (mild)
+                aeShip.vy += 0.05;
+                
+                // Move
+                aeShip.x += aeShip.vx;
+                aeShip.y += aeShip.vy;
+                
+                // Draw Fire if drag is high
+                if(dragForce > 0.05) {
+                    aeCtx.fillStyle = `rgba(255, ${255 - dragForce*2000}, 0, 0.8)`;
+                    aeCtx.beginPath(); aeCtx.arc(aeShip.x-10, aeShip.y, 10 + dragForce*100, 0, Math.PI*2); aeCtx.fill();
+                    // Shake msg
+                    if(dragForce > 0.2) document.getElementById('aeroStatus').innerText = "WARNING: HIGH HEAT! 🔥";
+                }
+                
+                // Fail/Win Checks
+                if(dragForce > 0.3) { // Burn up
+                     aeShip.active = false;
+                     document.getElementById('aeroStatus').innerText = "FAILURE: Burned up! Angle too steep.";
+                     document.getElementById('aeroStatus').className = "text-center mt-2 font-bold text-lg text-red-500";
+                }
+                else if(aeShip.y > 280) { // Landed?
+                    if(speed < 2) {
+                        aeShip.active = false;
+                        document.getElementById('aeroStatus').innerText = "SUCCESS: Soft Landing!";
+                        document.getElementById('aeroStatus').className = "text-center mt-2 font-bold text-lg text-green-600";
+                    } else {
+                        aeShip.active = false;
+                        document.getElementById('aeroStatus').innerText = "CRASH: Too fast! Needs more drag time.";
+                        document.getElementById('aeroStatus').className = "text-center mt-2 font-bold text-lg text-red-500";
+                    }
+                }
+                else if (aeShip.y < 0 || aeShip.x > 600) { // Skipped off
+                    aeShip.active = false;
+                    document.getElementById('aeroStatus').innerText = "LOST: Skipped off atmosphere! Angle too shallow.";
+                    document.getElementById('aeroStatus').className = "text-center mt-2 font-bold text-lg text-yellow-400";
+                }
+            }
+            
+            // Draw Ship
+            aeCtx.fillStyle = 'white';
+            aeCtx.beginPath(); 
+            aeCtx.moveTo(aeShip.x+10, aeShip.y); 
+            aeCtx.lineTo(aeShip.x-5, aeShip.y-5); 
+            aeCtx.lineTo(aeShip.x-5, aeShip.y+5); 
+            aeCtx.fill();
+            
+            requestAnimationFrame(drawAero);
+        }
+        drawAero();
+
+
+        // --- 3. KEPLER ---
+        const kCanvas = document.getElementById('keplerCanvas');
+        const kCtx = kCanvas.getContext('2d');
+        let kTheta = 0;
+        function updateKepler() {
+            let ecc = parseFloat(document.getElementById('eccentricitySlider').value);
+            kCtx.clearRect(0,0,600,250);
+            let a = 120; let cx = 300; let cy = 125; let focusOffset = a * ecc;
+            
+            kCtx.fillStyle = '#FFBA08'; kCtx.beginPath(); kCtx.arc(cx + focusOffset, cy, 15, 0, Math.PI*2); kCtx.fill(); 
+
+            kCtx.strokeStyle = '#334155'; kCtx.setLineDash([5, 5]); kCtx.beginPath();
+            kCtx.ellipse(cx, cy, a, a * Math.sqrt(1 - ecc*ecc), 0, 0, Math.PI*2); kCtx.stroke(); kCtx.setLineDash([]);
+
+            let orbitX = cx + a * Math.cos(kTheta);
+            let orbitY = cy + a * Math.sqrt(1 - ecc*ecc) * Math.sin(kTheta);
+            let dist = Math.sqrt((orbitX - (cx+focusOffset))**2 + (orbitY - cy)**2);
+            kTheta += 2000 / (dist * dist); 
+
+            kCtx.fillStyle = 'rgba(6, 182, 212, 0.2)';
+            kCtx.beginPath(); kCtx.moveTo(cx + focusOffset, cy); kCtx.lineTo(orbitX, orbitY); kCtx.lineTo(cx + a * Math.cos(kTheta-0.3), cy + a * Math.sqrt(1 - ecc*ecc) * Math.sin(kTheta-0.3)); kCtx.fill();
+
+            kCtx.fillStyle = '#06b6d4'; kCtx.beginPath(); kCtx.arc(orbitX, orbitY, 8, 0, Math.PI*2); kCtx.fill();
+            requestAnimationFrame(updateKepler);
+        }
+        updateKepler();
+
+        // --- 4. HOHMANN TRANSFER (FIXED) ---
+        const tCanvas = document.getElementById('transferCanvas');
+        const tCtx = tCanvas.getContext('2d');
+        let earthAngle = 0, marsAngle = 2, rocket = { state: 'earth', angle: 0, t: 0 };
+        
+        function resetTransfer() {
+            earthAngle = 0; marsAngle = 2; rocket = { state: 'earth', angle: 0, t: 0 };
+            document.getElementById('transferStatus').innerText = "Status: Awaiting Launch";
+            document.getElementById('transferStatus').className = "text-center mt-2 font-bold text-lg text-red-800";
+            document.getElementById('launchBtn').disabled = false;
+        }
+        function startTransfer() {
+            if(rocket.state === 'earth') {
+                rocket.state = 'transfer'; rocket.startAngle = earthAngle; rocket.t = 0;
+                document.getElementById('launchBtn').disabled = true;
+            }
+        }
+        function updateTransfer() {
+            tCtx.fillStyle = '#0f172a'; tCtx.fillRect(0,0,600,350);
+            let cx = 300, cy = 175;
+            tCtx.fillStyle = '#FFBA08'; tCtx.beginPath(); tCtx.arc(cx, cy, 15, 0, Math.PI*2); tCtx.fill(); 
+
+            // Transfer Window Zone (Visual Guide)
+            let ex = cx + Math.cos(earthAngle) * 80; let ey = cy + Math.sin(earthAngle) * 80;
+            tCtx.fillStyle = '#219EBC'; tCtx.beginPath(); tCtx.arc(ex, ey, 8, 0, Math.PI*2); tCtx.fill();
+            
+            let idealAngle = earthAngle + 0.76; 
+            tCtx.strokeStyle = 'rgba(0, 255, 0, 0.3)'; tCtx.lineWidth = 10;
+            tCtx.beginPath(); tCtx.arc(cx, cy, 140, idealAngle - 0.2, idealAngle + 0.2); tCtx.stroke();
+            tCtx.lineWidth = 1;
+
+            let mx = cx + Math.cos(marsAngle) * 140; let my = cy + Math.sin(marsAngle) * 140;
+            tCtx.fillStyle = '#E85D04'; tCtx.beginPath(); tCtx.arc(mx, my, 6, 0, Math.PI*2); tCtx.fill();
+
+            tCtx.strokeStyle = '#219EBC'; tCtx.beginPath(); tCtx.arc(cx, cy, 80, 0, Math.PI*2); tCtx.stroke();
+            tCtx.strokeStyle = '#E85D04'; tCtx.beginPath(); tCtx.arc(cx, cy, 140, 0, Math.PI*2); tCtx.stroke();
+
+            earthAngle += 0.015; marsAngle += 0.008; 
+
+            let rx, ry;
+            if(rocket.state === 'earth') { rx = ex; ry = ey; } 
+            else if (rocket.state === 'transfer') {
+                rocket.t += 0.011; 
+                let currR = 80 + (140-80) * Math.sin(rocket.t/2 * Math.PI);
+                let currAng = rocket.startAngle + rocket.t;
+                rx = cx + Math.cos(currAng) * currR; ry = cy + Math.sin(currAng) * currR;
+                
+                if (rocket.t >= Math.PI) {
+                    let angleDiff = Math.abs((currAng % (Math.PI*2)) - (marsAngle % (Math.PI*2)));
+                    if(angleDiff > Math.PI) angleDiff = (Math.PI*2) - angleDiff;
+                    
+                    if(angleDiff < 0.2) {
+                        rocket.state = 'mars';
+                        document.getElementById('transferStatus').innerText = "SUCCESS! Welcome to Mars. 👽";
+                        document.getElementById('transferStatus').className = "text-center mt-2 font-bold text-lg text-green-600";
+                    } else {
+                        rocket.state = 'lost';
+                        document.getElementById('transferStatus').innerText = "MISSED! Bad timing.";
+                        document.getElementById('transferStatus').className = "text-center mt-2 font-bold text-lg text-red-600";
+                    }
+                }
+            } else if (rocket.state === 'mars') { rx = mx; ry = my; }
+            else { rx = cx + Math.cos(rocket.startAngle + rocket.t) * 200; ry = cy + Math.sin(rocket.startAngle + rocket.t) * 200; rocket.t += 0.01; }
+
+            tCtx.fillStyle = 'white'; tCtx.beginPath(); tCtx.arc(rx, ry, 4, 0, Math.PI*2); tCtx.fill();
+            requestAnimationFrame(updateTransfer);
+        }
+        updateTransfer();
+
+        // --- 5. TIDAL LOCKING ---
+        const tdCanvas = document.getElementById('tidalCanvas');
+        const tdCtx = tdCanvas.getContext('2d');
+        let moonAngle = 0;
+        function toggleLock() {}
+        function updateTidal() {
+            tdCtx.clearRect(0,0,300,300); let cx = 150, cy = 150;
+            tdCtx.fillStyle = '#219EBC'; tdCtx.beginPath(); tdCtx.arc(cx, cy, 40, 0, Math.PI*2); tdCtx.fill();
+            moonAngle += 0.02;
+            let mx = cx + Math.cos(moonAngle) * 100; let my = cy + Math.sin(moonAngle) * 100;
+            tdCtx.save(); tdCtx.translate(mx, my);
+            if(document.getElementById('lockCheck').checked) tdCtx.rotate(moonAngle + Math.PI); else tdCtx.rotate(moonAngle * 4);
+            tdCtx.fillStyle = '#94a3b8'; tdCtx.beginPath(); tdCtx.arc(0, 0, 20, 0, Math.PI*2); tdCtx.fill();
+            tdCtx.fillStyle = 'red'; tdCtx.fillRect(0, -2, 20, 4); 
+            tdCtx.restore();
+            requestAnimationFrame(updateTidal);
+        }
+        updateTidal();
+
+        // --- 6. BINARY STARS ---
+        const bCanvas = document.getElementById('binaryCanvas');
+        const bCtx = bCanvas.getContext('2d');
+        let bAngle = 0;
+        function updateBinary() {
+            bCtx.fillStyle = '#0f172a'; bCtx.fillRect(0,0,600,250);
+            let cx = 300, cy = 125;
+            let m1 = 2; let m2 = parseFloat(document.getElementById('massSlider').value);
+            let dist = 150;
+            let r1 = dist * m2 / (m1+m2); let r2 = dist * m1 / (m1+m2);
+            bAngle += 0.02 * Math.sqrt((m1+m2));
+            
+            bCtx.strokeStyle = '#fff'; bCtx.beginPath(); bCtx.moveTo(cx-5, cy); bCtx.lineTo(cx+5, cy); bCtx.moveTo(cx, cy-5); bCtx.lineTo(cx, cy+5); bCtx.stroke();
+
+            let s1x = cx - Math.cos(bAngle) * r1; let s1y = cy - Math.sin(bAngle) * r1;
+            bCtx.fillStyle = '#FFBA08'; bCtx.beginPath(); bCtx.arc(s1x, s1y, 20, 0, Math.PI*2); bCtx.fill();
+
+            let s2x = cx + Math.cos(bAngle) * r2; let s2y = cy + Math.sin(bAngle) * r2;
+            bCtx.fillStyle = m2 > 1.5 ? '#3B82F6' : '#EF4444';
+            bCtx.beginPath(); bCtx.arc(s2x, s2y, 10 * m2 + 5, 0, Math.PI*2); bCtx.fill();
+            requestAnimationFrame(updateBinary);
+        }
+        updateBinary();
+
+        // --- 7. RETROGRADE ---
+        const rCanvas = document.getElementById('retroCanvas');
+        const rCtx = rCanvas.getContext('2d');
+        let sats = []; let planetRot = 0;
+        function launchSat(dir) { sats.push({ a: 0, r: 100 + Math.random()*50, speed: (0.05 * dir) * (Math.random()*0.5 + 0.8), color: dir === 1 ? '#3B82F6' : '#EF4444' }); }
+        function clearSats() { sats = []; }
+        function updateRetro() {
+            rCtx.clearRect(0,0,600,250); let cx = 300, cy = 125; planetRot += 0.05;
+            rCtx.save(); rCtx.translate(cx, cy); rCtx.rotate(planetRot);
+            rCtx.fillStyle = '#588157'; rCtx.beginPath(); rCtx.arc(0, 0, 40, 0, Math.PI*2); rCtx.fill();
+            rCtx.fillStyle = 'rgba(0,0,0,0.2)'; rCtx.fillRect(-10, -40, 20, 80); rCtx.restore();
+            sats.forEach(s => {
+                s.a += s.speed;
+                rCtx.fillStyle = s.color; rCtx.beginPath(); rCtx.arc(cx + Math.cos(s.a)*s.r, cy + Math.sin(s.a)*s.r, 5, 0, Math.PI*2); rCtx.fill();
+            });
+            requestAnimationFrame(updateRetro);
+        }
+        updateRetro();
+
+        // --- 8. LAGRANGE ---
+        const lgCanvas = document.getElementById('lagrangeCanvas');
+        const lgCtx = lgCanvas.getContext('2d');
+        let lgParts = [];
+        function resetLagrange() {
+            lgParts = [];
+            for(let i=0; i<100; i++) lgParts.push({x: Math.random()*600, y: Math.random()*300});
+        }
+        resetLagrange();
+        function updateLagrange() {
+            lgCtx.fillStyle = 'rgba(15,23,42,0.1)'; lgCtx.fillRect(0,0,600,300);
+            lgCtx.fillStyle = '#FFBA08'; lgCtx.beginPath(); lgCtx.arc(300, 150, 30, 0, Math.PI*2); lgCtx.fill();
+            lgCtx.fillStyle = '#219EBC'; lgCtx.beginPath(); lgCtx.arc(450, 150, 10, 0, Math.PI*2); lgCtx.fill();
+
+            lgCtx.fillStyle = 'white'; lgCtx.font = "12px monospace";
+            const lPoints = [{x: 400, y: 150, l: "L1"}, {x: 520, y: 150, l: "L2"}, {x: 100, y: 150, l: "L3"}, {x: 375, y: 20, l: "L4"}, {x: 375, y: 280, l: "L5"}];
+            lPoints.forEach(p => {
+                lgCtx.strokeStyle = '#ffffff'; lgCtx.beginPath(); lgCtx.arc(p.x, p.y, 5, 0, Math.PI*2); lgCtx.stroke();
+                lgCtx.fillText(p.l, p.x-5, p.y-10);
+            });
+
+            lgCtx.fillStyle = '#aaa';
+            lgParts.forEach(p => {
+                let dx = 0, dy = 0;
+                lPoints.forEach((lp, i) => {
+                    let d = Math.hypot(p.x - lp.x, p.y - lp.y);
+                    if(d < 50) {
+                        if(i < 3) { dx += (p.x - lp.x)/d; dy += (p.y - lp.y)/d; }
+                        else { dx -= (p.y - lp.y)/d; dy += (p.x - lp.x)/d; dx -= (p.x - lp.x)/(d*2); dy -= (p.y - lp.y)/(d*2); }
+                    }
+                });
+                p.x += dx; p.y += dy;
+                if(p.x < 0) p.x = 600; if(p.x > 600) p.x = 0; if(p.y < 0) p.y = 300; if(p.y > 300) p.y = 0;
+                lgCtx.fillRect(p.x, p.y, 2, 2);
+            });
+            requestAnimationFrame(updateLagrange);
+        }
+        updateLagrange();
+
+        // --- 9. ROCKET STAGING (FIXED & REDESIGNED) ---
+        let rFuel = 100; let rVel = 0; let rAlt = 0; let rStage = 1; let rEngine = false;
+        let rCloudOffset = 0;
+        
+        function igniteRocket() { 
+            rEngine = true; 
+            document.getElementById('engineFlame').classList.remove('hidden');
+            document.getElementById('rocketAssembly').classList.add('rocket-shake');
+            updateRocket(); 
+        }
+        
+        function cutEngine() { 
+            rEngine = false; 
+            document.getElementById('engineFlame').classList.add('hidden');
+            document.getElementById('rocketAssembly').classList.remove('rocket-shake');
+        }
+        
+        function stageRocket() {
+            if(rStage === 1 && rFuel < 90) { // Can only stage if burnt some fuel
+                rStage = 2;
+                const s1 = document.getElementById('stage1');
+                s1.style.transform = "translateY(200px) rotate(20deg)";
+                s1.style.opacity = "0";
+                rVel += 500; // Impulse
+            }
+        }
+        
+        function resetRocket() {
+            rFuel = 100; rVel = 0; rAlt = 0; rStage = 1; rEngine = false;
+            rCloudOffset = 0;
+            const s1 = document.getElementById('stage1');
+            s1.style.transform = "translateY(0) rotate(0deg)";
+            s1.style.opacity = "1";
+            document.getElementById('engineFlame').classList.add('hidden');
+            document.getElementById('clouds').style.transform = `translateY(0px)`;
+            updateDisplay();
+        }
+        
+        function updateRocket() {
+            if(!rEngine) return;
+            
+            if(rFuel > 0) {
+                rFuel -= 0.2;
+                let accel = rStage === 1 ? 2 : 5; 
+                rVel += accel;
+                rAlt += rVel / 100;
+                
+                rCloudOffset += rVel / 10;
+                document.getElementById('clouds').style.transform = `translateY(${rCloudOffset}px)`;
+                
+                updateDisplay();
+                requestAnimationFrame(updateRocket);
+            } else {
+                cutEngine();
+            }
+        }
+        
+        function updateDisplay() {
+            document.getElementById('fuelDisplay').innerText = `Fuel: ${Math.floor(rFuel)}%`;
+            document.getElementById('velDisplay').innerText = `Vel: ${Math.floor(rVel)} m/s`;
+            document.getElementById('altDisplay').innerText = `Alt: ${Math.floor(rAlt)} km`;
+        }
+
+        // --- 10. RESONANCE ---
+        const resCanvas = document.getElementById('resonanceCanvas');
+        const resCtx = resCanvas.getContext('2d');
+        let resTime = 0;
+        function updateResonance() {
+            resCtx.fillStyle = '#0f172a'; resCtx.fillRect(0,0,600,300);
+            let cx = 300, cy = 150;
+            resCtx.fillStyle = '#E85D04'; resCtx.beginPath(); resCtx.arc(cx, cy, 30, 0, Math.PI*2); resCtx.fill();
+            const moons = [{r: 60, s: 4}, {r: 100, s: 2}, {r: 160, s: 1}];
+            
+            let aligned = false;
+            let m0 = (resTime * moons[0].s) % (Math.PI*2);
+            let m1 = (resTime * moons[1].s) % (Math.PI*2);
+            let m2 = (resTime * moons[2].s) % (Math.PI*2);
+            if (Math.abs(m0-m1) < 0.2 && Math.abs(m1-m2) < 0.2) aligned = true;
+
+            if(aligned) {
+                document.getElementById('resonanceBeat').innerText = "ALIGNMENT! GRAVITY TUG! ⚠️";
+                document.getElementById('resonanceBeat').style.color = "red";
+            } else {
+                document.getElementById('resonanceBeat').innerText = "Drifting...";
+                document.getElementById('resonanceBeat').style.color = "#3F2E3E";
+            }
+
+            moons.forEach(m => {
+                let a = resTime * m.s;
+                let x = cx + Math.cos(a)*m.r; let y = cy + Math.sin(a)*m.r;
+                resCtx.strokeStyle = '#555'; resCtx.beginPath(); resCtx.arc(cx, cy, m.r, 0, Math.PI*2); resCtx.stroke();
+                resCtx.fillStyle = 'white'; resCtx.beginPath(); resCtx.arc(x, y, 6, 0, Math.PI*2); resCtx.fill();
+            });
+
+            resTime += 0.02;
+            requestAnimationFrame(updateResonance);
+        }
+        updateResonance();
+
+        // --- 11. ESCAPE ---
+        const escCanvas = document.getElementById('escapeCanvas');
+        const escCtx = escCanvas.getContext('2d');
+        let escY = 180; let escVy = 0; let escG = 0.5; let escActive = false;
+        function setPlanet(p) { escG = p === 'moon' ? 0.1 : p === 'earth' ? 0.5 : 1.2; }
+        function jumpChar() { if(!escActive) { escVy = -document.getElementById('jumpPower').value; escActive = true; } }
+        function updateEscape() {
+            escCtx.clearRect(0,0,600,200);
+            escCtx.fillStyle = escG < 0.3 ? '#888' : escG > 1 ? '#d97706' : '#15803d';
+            escCtx.fillRect(0, 190, 600, 10);
+            
+            if(escActive) {
+                escY += escVy; escVy += escG;
+                if(escY > 180) { escY = 180; escActive = false; }
+                if(escY < -50) { escY = -50; escVy = 0; }
+            }
+            escCtx.fillStyle = 'white'; escCtx.fillRect(290, escY, 20, 20);
+            escCtx.fillText(escY < 0 ? "ESCAPED!" : "", 320, 50);
+            requestAnimationFrame(updateEscape);
+        }
+        updateEscape();
+
+        // --- 12. DEBRIS ---
+        const debCanvas = document.getElementById('debrisCanvas');
+        const debCtx = debCanvas.getContext('2d');
+        let debris = [];
+        function resetDebris() { debris = []; document.getElementById('debrisCount').innerText = "Debris Count: 0"; }
+        function addDebrisSatellite() { debris.push({x: Math.random()*600, y: Math.random()*300, vx: (Math.random()-0.5)*4, vy: (Math.random()-0.5)*4, r: 5, type: 'sat'}); }
+        function explodeRandom() {
+            if(debris.length > 0) {
+                let t = debris[0]; t.type = 'junk';
+                for(let i=0; i<5; i++) debris.push({x: t.x, y: t.y, vx: (Math.random()-0.5)*10, vy: (Math.random()-0.5)*10, r: 2, type: 'junk'});
+            }
+        }
+        function updateDebris() {
+            debCtx.fillStyle = 'rgba(0,0,0,0.3)'; debCtx.fillRect(0,0,600,300);
+            for(let i=0; i<debris.length; i++) {
+                let d = debris[i]; d.x += d.vx; d.y += d.vy;
+                if(d.x < 0 || d.x > 600) d.vx *= -1; if(d.y < 0 || d.y > 300) d.vy *= -1;
+                for(let j=i+1; j<debris.length; j++) {
+                    let d2 = debris[j];
+                    if(Math.hypot(d.x-d2.x, d.y-d2.y) < d.r + d2.r) {
+                        if(Math.random() > 0.95 && debris.length < 200) debris.push({x: d.x, y: d.y, vx: (Math.random()-0.5)*5, vy: (Math.random()-0.5)*5, r: 1, type: 'junk'});
+                        d.vx *= -1; d2.vx *= -1;
+                    }
+                }
+                debCtx.fillStyle = d.type === 'sat' ? '#3B82F6' : '#EF4444';
+                debCtx.beginPath(); debCtx.arc(d.x, d.y, d.r, 0, Math.PI*2); debCtx.fill();
+            }
+            document.getElementById('debrisCount').innerText = `Debris Count: ${debris.length}`;
+            requestAnimationFrame(updateDebris);
+        }
+        updateDebris();
+
+        // --- 13. OBERTH ---
+        const obCanvas = document.getElementById('oberthCanvas');
+        const obCtx = obCanvas.getContext('2d');
+        let obShip = {a: 0, e: 20};
+        function resetOberth() { obShip = {a: 0, e: 20}; }
+        function oberthBurn() {
+            let cx = 300; let x = cx + Math.cos(obShip.a)*100; 
+            let dist = Math.abs(x - (cx+50)); 
+            let boost = (200 - dist) / 10; obShip.e += boost;
+            document.getElementById('oberthEnergy').innerText = Math.floor(obShip.e);
+        }
+        function updateOberth() {
+            obCtx.clearRect(0,0,600,300);
+            let cx = 300, cy = 150;
+            let w = 100 + obShip.e; let h = 60 + obShip.e/2;
+            obCtx.strokeStyle = '#555'; obCtx.beginPath(); obCtx.ellipse(cx, cy, w, h, 0, 0, Math.PI*2); obCtx.stroke();
+            obCtx.fillStyle = '#FFBA08'; obCtx.beginPath(); obCtx.arc(cx+40, cy, 15, 0, Math.PI*2); obCtx.fill();
+            obShip.a += 0.05;
+            let sx = cx + Math.cos(obShip.a)*w; let sy = cy + Math.sin(obShip.a)*h;
+            obCtx.fillStyle = 'white'; obCtx.fillRect(sx-5, sy-5, 10, 10);
+            requestAnimationFrame(updateOberth);
+        }
+        updateOberth();
+
+        // --- 14. ASSIST ---
+        const asCanvas = document.getElementById('assistCanvas');
+        const asCtx = asCanvas.getContext('2d');
+        let probe = {x: 0, y: 200, vx: 2, vy: 0, active: false};
+        let jupiter = {x: 300, y: 150, m: 10};
+        function launchProbe() { probe = {x: 10, y: 220, vx: 3, vy: -1, active: true}; }
+        function updateAssist() {
+            asCtx.fillStyle = 'rgba(15,23,42,0.3)'; asCtx.fillRect(0,0,600,300);
+            asCtx.fillStyle = '#E85D04'; asCtx.beginPath(); asCtx.arc(jupiter.x, jupiter.y, 20, 0, Math.PI*2); asCtx.fill();
+            if(probe.active) {
+                let dx = jupiter.x - probe.x; let dy = jupiter.y - probe.y;
+                let d2 = dx*dx + dy*dy; let d = Math.sqrt(d2);
+                if(d>10) { let f = 500 / d2; probe.vx += (dx/d)*f; probe.vy += (dy/d)*f; }
+                probe.x += probe.vx; probe.y += probe.vy;
+                let vTotal = Math.sqrt(probe.vx*probe.vx + probe.vy*probe.vy);
+                document.getElementById('assistVel').innerText = vTotal.toFixed(2);
+            }
+            asCtx.fillStyle = 'white'; asCtx.beginPath(); asCtx.arc(probe.x, probe.y, 4, 0, Math.PI*2); asCtx.fill();
+            requestAnimationFrame(updateAssist);
+        }
+        updateAssist();
+
+        // --- 15. DOCKING ---
+        const dkCanvas = document.getElementById('dockingCanvas');
+        const dkCtx = dkCanvas.getContext('2d');
+        let dkShip = {x: 100, y: 150, vx: 0, vy: 0};
+        let dkThrust = {x: 0, y: 0};
+        function dockThrust(x, y) { dkThrust.x = x*0.1; dkThrust.y = y*0.1; }
+        function dockStop() { dkThrust = {x:0, y:0}; }
+        function updateDock() {
+            dkCtx.fillStyle = 'black'; dkCtx.fillRect(0,0,600,300);
+            dkCtx.strokeStyle = 'red'; dkCtx.lineWidth = 4; dkCtx.strokeRect(400, 130, 40, 40);
+            dkShip.vx += dkThrust.x; dkShip.vy += dkThrust.y;
+            dkShip.x += dkShip.vx; dkShip.y += dkShip.vy;
+            dkShip.vx *= 0.99; dkShip.vy *= 0.99;
+            dkCtx.strokeStyle = '#4ade80'; dkCtx.lineWidth = 2; dkCtx.strokeRect(dkShip.x, dkShip.y, 30, 30);
+            if(Math.abs(dkShip.x - 405) < 10 && Math.abs(dkShip.y - 135) < 10 && Math.abs(dkShip.vx) < 0.5) {
+                document.getElementById('dockStatus').innerText = "DOCKING CONFIRMED! 🔗";
+                document.getElementById('dockStatus').style.color = "#4ade80";
+            } else {
+                document.getElementById('dockStatus').innerText = "Align Green Box with Red Port";
+                document.getElementById('dockStatus').style.color = "white";
+            }
+            requestAnimationFrame(updateDock);
+        }
+        updateDock();
+
+    </script>
+</body>
+</html>
