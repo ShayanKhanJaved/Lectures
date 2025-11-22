@@ -1,0 +1,1401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Celestica Initiative - Lecture 3</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Changa+One&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --retro-cream: #FFFDD0;
+            --retro-orange: #E85D04;
+            --retro-yellow: #FFBA08;
+            --retro-brown: #3F2E3E;
+            --retro-green: #588157;
+            --retro-blue: #219EBC;
+            --retro-red: #D00000;
+            --retro-purple: #7209b7;
+        }
+
+        body {
+            background-color: var(--retro-cream);
+            color: var(--retro-brown);
+            font-family: 'Space Mono', monospace;
+            background-image: radial-gradient(var(--retro-yellow) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Changa One', cursive;
+        }
+
+        .retro-box {
+            background-color: #fff;
+            border: 4px solid var(--retro-brown);
+            box-shadow: 8px 8px 0px var(--retro-orange);
+            border-radius: 1rem;
+            transition: transform 0.2s;
+        }
+
+        .retro-box:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 10px 10px 0px var(--retro-orange);
+        }
+
+        .retro-btn {
+            background-color: var(--retro-green);
+            color: white;
+            border: 3px solid var(--retro-brown);
+            padding: 10px 20px;
+            font-family: 'Changa One', cursive;
+            font-size: 1.2rem;
+            cursor: pointer;
+            box-shadow: 4px 4px 0px var(--retro-brown);
+            transition: all 0.1s;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        .retro-btn:active {
+            transform: translate(4px, 4px);
+            box-shadow: 0px 0px 0px var(--retro-brown);
+        }
+
+        .retro-btn:disabled {
+            background-color: #999;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .btn-orange { background-color: var(--retro-orange); }
+        .btn-blue { background-color: var(--retro-blue); }
+        .btn-red { background-color: var(--retro-red); }
+        .btn-purple { background-color: var(--retro-purple); }
+
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+        }
+
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 24px;
+            width: 24px;
+            border-radius: 50%;
+            background: var(--retro-orange);
+            border: 2px solid var(--retro-brown);
+            margin-top: -10px;
+            cursor: pointer;
+        }
+
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 8px;
+            cursor: pointer;
+            background: var(--retro-brown);
+            border-radius: 4px;
+        }
+
+        .section-number {
+            background-color: var(--retro-orange); 
+            color: white; 
+            width: 3rem; 
+            height: 3rem; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            border-radius: 9999px; 
+            border: 4px solid var(--retro-brown); 
+            font-weight: bold; 
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+        
+        canvas {
+            image-rendering: pixelated; 
+            width: 100%;
+            height: auto;
+        }
+
+        .matrix-cell {
+            transition: all 0.3s;
+        }
+        .matrix-highlight {
+            background-color: #FFBA08 !important;
+            transform: scale(1.05);
+            border-color: var(--retro-red) !important;
+            z-index: 10;
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8 max-w-6xl mx-auto">
+
+    <!-- Header -->
+    <header class="text-center mb-12">
+        <div class="inline-block bg-purple-600 text-white px-6 py-2 rounded-full border-4 border-gray-800 mb-4 font-bold transform -rotate-2">
+            The Celestica Initiative
+        </div>
+        <h1 class="text-5xl md:text-7xl text-green-500 text-stroke-brown drop-shadow-retro mb-2" style="-webkit-text-stroke: 2px var(--retro-brown);">
+            GAME THEORY
+        </h1>
+        <p class="text-xl md:text-2xl text-gray-700 font-bold">Lecture 3: The Physics of Strategy</p>
+    </header>
+
+    <!-- Intro -->
+    <section class="retro-box p-8 mb-12 bg-white">
+        <h2 class="text-3xl text-purple-600 mb-2">Welcome, Master Strategist!</h2>
+        <p class="text-lg">
+            Game Theory is not about "games"—it's about <strong>survival</strong>. It's the math of conflict and cooperation.
+            Below are 15 complex simulations. Don't just watch—play, experiment, and break them.
+        </p>
+    </section>
+
+    <!-- 1. The Prisoner's Dilemma -->
+    <section class="mb-16">
+        <div class="flex items-center gap-4 mb-4">
+            <div class="section-number">1</div>
+            <h2 class="text-3xl text-brown-800">The Interrogation (Prisoner's Dilemma)</h2>
+        </div>
+        <div class="retro-box p-6 bg-blue-50">
+            <p class="mb-4"><strong>Lesson:</strong> Rational self-interest can lead to collective ruin. The "Nash Equilibrium" (Both Snitch) is worse than cooperation.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="flex flex-col gap-4 justify-center">
+                    <div class="bg-white border-4 border-black p-4 rounded-xl text-center shadow-lg relative overflow-hidden group">
+                        <div class="absolute top-0 left-0 w-full h-2 bg-green-500 transform scale-x-0 group-hover:scale-x-100 transition-transform"></div>
+                        <h3 class="text-xl mb-2 font-bold">YOU</h3>
+                        <div class="flex gap-2 justify-center">
+                            <button onclick="playPD('silent')" class="retro-btn btn-green text-sm w-full hover:scale-105">Stay Silent 🤐</button>
+                            <button onclick="playPD('snitch')" class="retro-btn btn-red text-sm w-full hover:scale-105">Snitch! 🫵</button>
+                        </div>
+                    </div>
+                    <div class="bg-gray-800 border-4 border-black p-4 rounded-xl text-center text-white relative">
+                        <h3 class="text-xl mb-2 font-bold">ACCOMPLICE</h3>
+                        <div id="pd-opponent-move" class="text-3xl h-12 flex items-center justify-center font-mono text-yellow-400">Waiting...</div>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 grid-rows-2 gap-2 text-xs md:text-sm font-bold">
+                    <div id="pd-cc" class="matrix-cell bg-white border-4 border-gray-300 p-2 rounded flex flex-col items-center justify-center text-center">
+                        <span class="text-green-600 text-lg">COOPERATE</span>
+                        <span>1 Year Each</span>
+                    </div>
+                    <div id="pd-cd" class="matrix-cell bg-white border-4 border-gray-300 p-2 rounded flex flex-col items-center justify-center text-center">
+                        <span class="text-red-600 text-lg">SUCKER</span>
+                        <span>You: 5 | Them: 0</span>
+                    </div>
+                    <div id="pd-dc" class="matrix-cell bg-white border-4 border-gray-300 p-2 rounded flex flex-col items-center justify-center text-center">
+                        <span class="text-blue-600 text-lg">TEMPTATION</span>
+                        <span>You: 0 | Them: 5</span>
+                    </div>
+                    <div id="pd-dd" class="matrix-cell bg-white border-4 border-gray-300 p-2 rounded flex flex-col items-center justify-center text-center">
+                        <span class="text-gray-600 text-lg">DEFECT</span>
+                        <span>3 Years Each</span>
+                    </div>
+                </div>
+            </div>
+            <div id="pd-result" class="mt-4 font-bold text-center text-xl h-8 text-purple-700 animate-pulse"></div>
+        </div>
+    </section>
+
+    <!-- 2. Evolutionary Rock Paper Scissors -->
+    <section class="mb-16">
+        <div class="flex items-center gap-4 mb-4">
+            <div class="section-number">2</div>
+            <h2 class="text-3xl text-brown-800">Evolutionary Battle Royale</h2>
+        </div>
+        <div class="retro-box p-6 bg-gray-900 text-white">
+            <p class="mb-4 text-gray-300"><strong>Lesson:</strong> Cyclical Dominance. If Rocks populate the world, Papers flourish to eat them, leading to a rise in Scissors. A living ecosystem.</p>
+            <div class="flex flex-col md:flex-row gap-4">
+                <canvas id="rpsCanvas" width="400" height="300" class="bg-black border-4 border-white rounded-xl w-full md:w-2/3"></canvas>
+                <div class="flex-1 flex flex-col justify-center gap-4">
+                    <div class="flex flex-col gap-2 text-xl font-bold font-mono">
+                        <div class="text-gray-400">🪨 Rocks: <span id="count-rock">0</span></div>
+                        <div class="text-yellow-400">📜 Papers: <span id="count-paper">0</span></div>
+                        <div class="text-red-400">✂️ Scissors: <span id="count-scissor">0</span></div>
+                    </div>
+                    <div class="h-px bg-gray-700 my-2"></div>
+                    <p class="text-sm text-gray-400">Particles bounce. Winners convert losers. Watch the waves of dominance.</p>
+                    <button onclick="resetRPS()" class="retro-btn btn-blue hover:bg-blue-400 border-white">RESET ECOSYSTEM</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. The Chicken Game -->
+    <section class="mb-16">
+        <div class="flex items-center gap-4 mb-4">
+            <div class="section-number">3</div>
+            <h2 class="text-3xl text-brown-800">Collision Course (Game of Chicken)</h2>
+        </div>
+        <div class="retro-box p-6 bg-yellow-50">
+            <p class="mb-4"><strong>Lesson:</strong> Brinkmanship. The best strategy is to convince your opponent you are <em>crazy</em> and will never turn.</p>
+            <canvas id="chickenCanvas" width="600" height="150" class="w-full bg-gray-800 border-4 border-black rounded-xl mb-4"></canvas>
+            <div class="flex justify-center gap-4">
+                <button onclick="playChicken('swerve')" class="retro-btn bg-blue-500 w-1/2">SWERVE (Safe)</button>
+                <button onclick="playChicken('straight')" class="retro-btn bg-red-600 w-1/2">STRAIGHT (Crazy)</button>
+            </div>
+            <div id="chicken-feedback" class="text-center font-bold text-xl mt-4 h-8 font-mono">Choose your strategy...</div>
+        </div>
+    </section>
+
+    <!-- 4. Hotelling's Game -->
+    <section class="mb-16">
+        <div class="flex items-center gap-4 mb-4">
+            <div class="section-number">4</div>
+            <h2 class="text-3xl text-brown-800">The Ice Cream Wars (Hotelling's Law)</h2>
+        </div>
+        <div class="retro-box p-6 bg-orange-50">
+            <p class="mb-4"><strong>Lesson:</strong> Why are all gas stations next to each other? Competitors move to the center to steal market share from the edges.</p>
+            <canvas id="beachCanvas" width="600" height="250" class="w-full bg-yellow-100 border-4 border-black rounded-xl mb-4 cursor-crosshair shadow-inner"></canvas>
+            <div class="flex justify-between items-center bg-white p-4 rounded border-2 border-black">
+                <div class="text-sm font-bold text-gray-600">Click beach to place Stand.</div>
+                <div class="flex gap-6 text-xl">
+                    <div class="text-blue-600 font-bold border-b-4 border-blue-600">You: <span id="hotelling-p1">0%</span></div>
+                    <div class="text-red-600 font-bold border-b-4 border-red-600">Rival: <span id="hotelling-p2">0%</span></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. Tragedy of the Commons -->
+    <section class="mb-16">
+        <div class="flex items-center gap-4 mb-4">
+            <div class="section-number">5</div>
+            <h2 class="text-3xl text-brown-800">The Dying Pond (Commons)</h2>
+        </div>
+        <div class="retro-box p-6 bg-cyan-100">
+            <p class="mb-4"><strong>Lesson:</strong> Without regulation, shared resources are depleted. Individual profit = Collective doom.</p>
+            <div class="flex flex-col md:flex-row gap-6">
+                <canvas id="pondCanvas" width="300" height="300" class="bg-blue-400 border-4 border-black rounded-xl w-full md:w-auto shadow-lg"></canvas>
+                <div class="flex-1 flex flex-col justify-center">
+                    <div class="bg-white p-4 border-4 border-black rounded-xl mb-4 shadow-[4px_4px_0px_rgba(0,0,0,1)]">
+                        <h3 class="font-bold text-lg underline decoration-wavy decoration-blue-400">Ecosystem Status</h3>
+                        <div class="mt-2 space-y-2">
+                            <div class="flex justify-between"><span>🐟 Fish Population:</span> <span id="fish-count" class="font-bold text-blue-600">50</span></div>
+                            <div class="w-full bg-gray-200 h-2 rounded-full"><div id="fish-bar" class="bg-blue-500 h-2 rounded-full w-full transition-all"></div></div>
+                            <div class="flex justify-between"><span>⛵ Your Fleet:</span> <span id="my-boats" class="font-bold text-green-600">1</span></div>
+                            <div class="flex justify-between"><span>🏴‍☠️ Rival Fleet:</span> <span id="ai-boats" class="font-bold text-red-600">1</span></div>
+                        </div>
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="addBoat()" class="retro-btn btn-orange flex-1">+ Boat</button>
+                        <button onclick="removeBoat()" class="retro-btn btn-green flex-1">- Boat</button>
+                    </div>
+                    <button onclick="resetPond()" class="retro-btn bg-gray-800 text-white mt-2">Reset Simulation</button>
+                    <div id="pond-msg" class="mt-2 font-bold text-red-600 h-6 text-center"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. The Ultimatum Game -->
+    <section class="mb-16">
+        <div class="flex items-center gap-4 mb-4">
+            <div class="section-number">6</div>
+            <h2 class="text-3xl text-brown-800">The Pizza Verdict (Fairness)</h2>
+        </div>
+        <div class="retro-box p-6 bg-purple-50">
+            <p class="mb-4"><strong>Lesson:</strong> Humans are irrational punishers. We reject "free money" if the deal feels unfair.</p>
+            <div class="flex flex-col md:flex-row items-center gap-8">
+                <canvas id="pizzaCanvas" width="250" height="250" class="bg-white rounded-full shadow-xl border-4 border-gray-200"></canvas>
+                <div class="flex-1 w-full max-w-md">
+                    <label class="font-bold text-lg">Offer to Stranger: <span id="offer-val" class="text-purple-600 text-2xl">5</span> slices</label>
+                    <input type="range" id="pizzaSlider" min="0" max="10" value="5" oninput="drawPizza()" class="my-4">
+                    <div class="flex justify-between text-sm text-gray-500 font-bold mb-4">
+                        <span>Greedy (Keep All)</span>
+                        <span>Generous (Give All)</span>
+                    </div>
+                    <button onclick="makeOffer()" class="retro-btn w-full btn-purple">MAKE THE OFFER</button>
+                    <div id="pizza-result" class="mt-4 font-bold text-xl h-8 text-center border-t-2 border-dashed border-gray-300 pt-2"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 7. The Centipede Game -->
+    <section class="mb-16">
+        <div class="flex items-center gap-4 mb-4">
+            <div class="section-number">7</div>
+            <h2 class="text-3xl text-brown-800">High Stakes Table (Centipede)</h2>
+        </div>
+        <div class="retro-box p-6 bg-green-50">
+            <p class="mb-4"><strong>Lesson:</strong> Backward Induction says "Take now". Trust says "Wait for more".</p>
+            <canvas id="centipedeCanvas" width="600" height="150" class="w-full bg-green-800 border-8 border-yellow-700 rounded-xl mb-4 shadow-inner"></canvas>
+            <div class="flex justify-center gap-6">
+                <div class="text-center">
+                    <div class="text-sm font-bold mb-1">TRUST</div>
+                    <button onclick="centipedeAction('pass')" class="retro-btn btn-blue w-32" id="btn-pass">PASS ➡️</button>
+                </div>
+                <div class="text-center">
+                    <div class="text-sm font-bold mb-1">BETRAY</div>
+                    <button onclick="centipedeAction('take')" class="retro-btn btn-orange w-32" id="btn-take">TAKE 💰</button>
+                </div>
+            </div>
+            <div id="centipede-msg" class="text-center mt-4 font-bold text-2xl h-8 font-mono text-green-900">Current Pot: $2</div>
+        </div>
+    </section>
+
+    <!-- 8. The Dollar Auction -->
+    <section class="mb-16">
+        <div class="flex items-center gap-4 mb-4">
+            <div class="section-number">8</div>
+            <h2 class="text-3xl text-brown-800">The Escalation (Dollar Auction)</h2>
+        </div>
+        <div class="retro-box p-6 bg-red-50">
+            <p class="mb-4"><strong>Lesson:</strong> Sunk Cost Fallacy. The winner gets the dollar, but the loser <em>still pays their bid</em>.</p>
+            
+            <div class="relative h-24 bg-gray-200 rounded-full border-4 border-black overflow-hidden mb-6">
+                <div id="auction-thermometer" class="absolute top-0 left-0 h-full bg-gradient-to-r from-green-400 via-yellow-400 to-red-600 transition-all duration-500" style="width: 0%"></div>
+                <div class="absolute inset-0 flex items-center justify-between px-8 font-bold text-xl z-10 mix-blend-multiply">
+                    <span>You: $<span id="my-bid">0.00</span></span>
+                    <span>Bot: $<span id="bot-bid">0.00</span></span>
+                </div>
+            </div>
+
+            <div class="flex gap-4">
+                <button onclick="bidAuction()" class="retro-btn btn-red flex-1 text-xl hover:scale-105" id="bid-btn">BID +$0.10</button>
+                <button onclick="foldAuction()" class="retro-btn bg-gray-600 text-white flex-1">FOLD</button>
+            </div>
+            <div id="auction-msg" class="text-center mt-4 text-red-600 font-bold h-6"></div>
+        </div>
+    </section>
+
+    <!-- 9. Schelling Points -->
+    <section class="mb-16">
+        <div class="flex items-center gap-4 mb-4">
+            <div class="section-number">9</div>
+            <h2 class="text-3xl text-brown-800">The Meeting Place (Schelling Points)</h2>
+        </div>
+        <div class="retro-box p-6 bg-indigo-50">
+            <p class="mb-4"><strong>Lesson:</strong> Focal Points. Without talking, we gravitate towards the "obvious" choice.</p>
+            <p class="mb-4 text-center italic font-serif text-xl">"Meet me in New York City at noon. We cannot communicate."</p>
+            
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <!-- Cards -->
+                <button onclick="checkSchelling('statue')" class="retro-btn bg-white text-black flex flex-col items-center p-4 h-40 justify-center hover:bg-yellow-100 hover:-translate-y-2 border-b-8 border-r-8 border-black">
+                    <span class="text-5xl mb-2">🗽</span>
+                    <span class="font-bold">The Statue</span>
+                </button>
+                <button onclick="checkSchelling('subway')" class="retro-btn bg-white text-black flex flex-col items-center p-4 h-40 justify-center hover:bg-yellow-100 hover:-translate-y-2 border-b-8 border-r-8 border-black">
+                    <span class="text-5xl mb-2">🚇</span>
+                    <span class="font-bold">Subway Stop</span>
+                </button>
+                <button onclick="checkSchelling('park')" class="retro-btn bg-white text-black flex flex-col items-center p-4 h-40 justify-center hover:bg-yellow-100 hover:-translate-y-2 border-b-8 border-r-8 border-black">
+                    <span class="text-5xl mb-2">🌳</span>
+                    <span class="font-bold">Park Bench</span>
+                </button>
+                <button onclick="checkSchelling('coffee')" class="retro-btn bg-white text-black flex flex-col items-center p-4 h-40 justify-center hover:bg-yellow-100 hover:-translate-y-2 border-b-8 border-r-8 border-black">
+                    <span class="text-5xl mb-2">☕</span>
+                    <span class="font-bold">Starbucks</span>
+                </button>
+            </div>
+            <div id="schelling-result" class="text-center font-bold text-xl mt-4 h-8"></div>
+        </div>
+    </section>
+
+    <!-- 10. El Farol Bar -->
+    <section class="mb-16">
+        <div class="flex items-center gap-4 mb-4">
+            <div class="section-number">10</div>
+            <h2 class="text-3xl text-brown-800">The Hipster Club (Minority Game)</h2>
+        </div>
+        <div class="retro-box p-6 bg-pink-50">
+            <p class="mb-4"><strong>Lesson:</strong> If everyone goes, it sucks. If nobody goes, it's cool. You want to be in the minority.</p>
+            <canvas id="barCanvas" width="600" height="150" class="bg-black border-4 border-purple-500 rounded-xl mb-4 w-full shadow-[0_0_20px_rgba(168,85,247,0.5)]"></canvas>
+            <div class="flex gap-4 justify-center">
+                <button onclick="goToBar(true)" class="retro-btn btn-purple">ENTER CLUB</button>
+                <button onclick="goToBar(false)" class="retro-btn bg-gray-500 text-white">STAY HOME</button>
+            </div>
+            <div id="bar-result" class="text-center font-bold text-xl mt-4 h-8 text-purple-800"></div>
+        </div>
+    </section>
+
+    <!-- 11. Stag Hunt (Grid Mode) -->
+    <section class="mb-16">
+        <div class="flex items-center gap-4 mb-4">
+            <div class="section-number">11</div>
+            <h2 class="text-3xl text-brown-800">The Forest Hunt (Stag Hunt)</h2>
+        </div>
+        <div class="retro-box p-6 bg-green-100">
+            <p class="mb-4"><strong>Lesson:</strong> Coordination Risk. Move your hunter (blue) to the Stag. But if the other hunter (red) goes for a Rabbit, you get nothing.</p>
+            <div class="flex gap-4 justify-center">
+                <canvas id="stagCanvas" width="300" height="300" class="bg-white border-4 border-green-800 rounded-lg shadow-lg"></canvas>
+                <div class="flex flex-col justify-center gap-4">
+                    <div class="bg-white p-4 border-2 border-black rounded">
+                        <div class="font-bold">Controls:</div>
+                        <div>Use Buttons to Move Blue Hunter</div>
+                    </div>
+                    <div class="grid grid-cols-3 gap-2 w-32 mx-auto">
+                        <div></div><button onclick="moveHunter(0,-1)" class="retro-btn p-2">⬆️</button><div></div>
+                        <button onclick="moveHunter(-1,0)" class="retro-btn p-2">⬅️</button><div></div><button onclick="moveHunter(1,0)" class="retro-btn p-2">➡️</button>
+                        <div></div><button onclick="moveHunter(0,1)" class="retro-btn p-2">⬇️</button><div></div>
+                    </div>
+                    <div id="stag-msg" class="font-bold text-center h-12">Catch the Stag!</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 12. Signaling Game -->
+    <section class="mb-16">
+        <div class="flex items-center gap-4 mb-4">
+            <div class="section-number">12</div>
+            <h2 class="text-3xl text-brown-800">The Peacock's Display (Signaling)</h2>
+        </div>
+        <div class="retro-box p-6 bg-teal-50">
+            <p class="mb-4"><strong>Lesson:</strong> Costly Signaling. A huge tail is a handicap. If you can survive with it, you must be strong.</p>
+            
+            <div class="flex flex-col items-center">
+                <canvas id="peacockCanvas" width="400" height="250" class="mb-4"></canvas>
+                
+                <div class="w-full max-w-md mb-4 bg-white p-4 rounded border-2 border-black">
+                    <label class="font-bold block mb-2">Tail Size (Energy Cost)</label>
+                    <input type="range" id="tailSlider" min="10" max="150" value="20" oninput="drawPeacock()">
+                    <div class="flex justify-between text-xs mt-1 font-bold text-gray-500">
+                        <span>Efficient (Weak Signal)</span>
+                        <span>Exhausting (Strong Signal)</span>
+                    </div>
+                </div>
+                
+                <button onclick="signalMate()" class="retro-btn btn-purple w-full max-w-xs">ATTEMPT COURTSHIP</button>
+                <div id="signal-result" class="mt-2 font-bold text-center h-8 text-teal-800"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 13. Pareto Efficiency -->
+    <section class="mb-16">
+        <div class="flex items-center gap-4 mb-4">
+            <div class="section-number">13</div>
+            <h2 class="text-3xl text-brown-800">The Trading Post (Pareto)</h2>
+        </div>
+        <div class="retro-box p-6 bg-yellow-100">
+            <p class="mb-4"><strong>Lesson:</strong> Pareto Improvement. Trade items until no one can get happier without hurting the other.</p>
+            <div class="flex justify-center items-center gap-4 mb-6">
+                <!-- P1 -->
+                <div class="bg-white border-4 border-blue-500 p-4 rounded-xl text-center w-1/3 relative">
+                    <h3 class="font-bold text-blue-600">YOU</h3>
+                    <div class="text-xs text-gray-500 mb-2">Likes Chocolate (x2)</div>
+                    <div id="p1-inv" class="text-2xl flex flex-wrap justify-center gap-1 min-h-[3rem]"></div>
+                    <div class="font-bold mt-2 border-t pt-1">Happiness: <span id="p1-score">0</span></div>
+                </div>
+                
+                <!-- Controls -->
+                <div class="flex flex-col gap-2">
+                    <button onclick="trade('give_gum')" class="retro-btn btn-orange text-sm">➡️ Give 🍬 Get 🍫</button>
+                    <button onclick="trade('give_choc')" class="retro-btn btn-blue text-sm">⬅️ Give 🍫 Get 🍬</button>
+                </div>
+
+                <!-- P2 -->
+                <div class="bg-white border-4 border-red-500 p-4 rounded-xl text-center w-1/3 relative">
+                    <h3 class="font-bold text-red-600">BOT</h3>
+                    <div class="text-xs text-gray-500 mb-2">Likes Gummies (x2)</div>
+                    <div id="p2-inv" class="text-2xl flex flex-wrap justify-center gap-1 min-h-[3rem]"></div>
+                    <div class="font-bold mt-2 border-t pt-1">Happiness: <span id="p2-score">0</span></div>
+                </div>
+            </div>
+            <div id="pareto-msg" class="text-center mt-2 font-bold text-xl h-8 text-brown-800">Start Trading!</div>
+        </div>
+    </section>
+
+    <!-- 14. Public Goods Game -->
+    <section class="mb-16">
+        <div class="flex items-center gap-4 mb-4">
+            <div class="section-number">14</div>
+            <h2 class="text-3xl text-brown-800">The Magic Pot (Public Goods)</h2>
+        </div>
+        <div class="retro-box p-6 bg-gray-100">
+            <p class="mb-4"><strong>Lesson:</strong> The Free Rider Problem. The pot triples contributions, but it's shared equally regardless of who paid.</p>
+            
+            <canvas id="potCanvas" width="400" height="200" class="w-full bg-white border-4 border-black rounded-xl mb-4"></canvas>
+
+            <div class="flex gap-4 items-center justify-center mb-4 bg-white p-4 border-2 border-black rounded">
+                <div class="font-bold">Your Contribution: $<span id="contrib-display">0</span></div>
+                <input type="range" id="pg-contrib" min="0" max="10" value="0" oninput="document.getElementById('contrib-display').innerText=this.value">
+            </div>
+            
+            <button onclick="playPublicGoods()" class="retro-btn w-full bg-green-600">THROW MONEY IN POT</button>
+            <div id="pg-result" class="mt-4 text-center font-bold text-lg min-h-[2rem]"></div>
+        </div>
+    </section>
+
+    <!-- 15. Iterated Dilemma (Tournament) -->
+    <section class="mb-16">
+        <div class="flex items-center gap-4 mb-4">
+            <div class="section-number">15</div>
+            <h2 class="text-3xl text-brown-800">The Tournament (Reputation)</h2>
+        </div>
+        <div class="retro-box p-6 bg-blue-100">
+            <p class="mb-4"><strong>Lesson:</strong> "Tit-for-Tat". In the long run, reciprocity beats pure selfishness.</p>
+            
+            <canvas id="tournamentCanvas" width="600" height="250" class="bg-white border-4 border-black rounded-xl mb-4 shadow-lg"></canvas>
+            
+            <div class="flex flex-col md:flex-row gap-4 items-center">
+                <label class="font-bold">Your Strategy:</label>
+                <select id="tourney-strat" class="p-2 border-2 border-black rounded font-mono bg-white">
+                    <option value="tft">Tit-for-Tat (Copycat)</option>
+                    <option value="coop">Always Cooperate (Saint)</option>
+                    <option value="cheat">Always Cheat (Devil)</option>
+                    <option value="random">Random (Chaos)</option>
+                    <option value="grudger">Grudger (Unforgiving)</option>
+                </select>
+                <button onclick="runTournament()" class="retro-btn btn-blue flex-1">RUN 100 GENERATIONS</button>
+            </div>
+            <div id="tourney-result" class="mt-2 font-bold text-blue-800 text-center h-6"></div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="text-center text-gray-600 py-12 border-t-4 border-dotted border-purple-300">
+        <p class="font-bold text-lg">Made for The Celestica Initiative</p>
+        <p>Lecture 3 - Game Theory</p>
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        lucide.createIcons();
+
+        // --- 1. PRISONER'S DILEMMA ---
+        function playPD(choice) {
+            const aiChoice = Math.random() > 0.3 ? 'snitch' : 'silent';
+            const resDiv = document.getElementById('pd-result');
+            const oppDiv = document.getElementById('pd-opponent-move');
+            const cells = ['pd-cc', 'pd-cd', 'pd-dc', 'pd-dd'];
+            
+            // Reset visual
+            cells.forEach(c => document.getElementById(c).classList.remove('matrix-highlight'));
+            
+            // Animation Delay
+            oppDiv.innerText = "Thinking...";
+            setTimeout(() => {
+                oppDiv.innerText = aiChoice === 'snitch' ? "SNITCH! 😈" : "SILENT 🤐";
+                
+                let resId = '';
+                if(choice === 'silent' && aiChoice === 'silent') { resId = 'pd-cc'; resDiv.innerText = "Cooperation! You both serve 1 year."; }
+                if(choice === 'silent' && aiChoice === 'snitch') { resId = 'pd-cd'; resDiv.innerText = "Betrayed! You serve 5 years."; }
+                if(choice === 'snitch' && aiChoice === 'silent') { resId = 'pd-dc'; resDiv.innerText = "Victory! You go free."; }
+                if(choice === 'snitch' && aiChoice === 'snitch') { resId = 'pd-dd'; resDiv.innerText = "Nash Equilibrium. Both serve 3 years."; }
+                
+                document.getElementById(resId).classList.add('matrix-highlight');
+            }, 400);
+        }
+
+        // --- 2. EVOLUTIONARY RPS (Complex Physics) ---
+        const rpsCanvas = document.getElementById('rpsCanvas');
+        const rpsCtx = rpsCanvas.getContext('2d');
+        let rpsParticles = [];
+        
+        function initRPS() {
+            rpsParticles = [];
+            for(let i=0; i<60; i++) {
+                const types = ['r','p','s'];
+                rpsParticles.push({
+                    x: Math.random()*380 + 10, 
+                    y: Math.random()*280 + 10,
+                    vx: (Math.random()-0.5)*3, 
+                    vy: (Math.random()-0.5)*3,
+                    type: types[Math.floor(Math.random()*3)],
+                    radius: 8
+                });
+            }
+        }
+        initRPS();
+
+        function loopRPS() {
+            rpsCtx.clearRect(0,0,400,300);
+            
+            let counts = {r:0, p:0, s:0};
+            
+            for(let i=0; i<rpsParticles.length; i++) {
+                let p = rpsParticles[i];
+                p.x += p.vx; p.y += p.vy;
+                
+                // Wall Bounce
+                if(p.x < p.radius || p.x > 400-p.radius) p.vx *= -1;
+                if(p.y < p.radius || p.y > 300-p.radius) p.vy *= -1;
+                
+                // Draw
+                rpsCtx.font = "16px Arial";
+                rpsCtx.textAlign = "center";
+                rpsCtx.textBaseline = "middle";
+                let icon = p.type === 'r' ? '🪨' : (p.type === 'p' ? '📜' : '✂️');
+                rpsCtx.fillText(icon, p.x, p.y);
+                counts[p.type]++;
+
+                // Collision Logic
+                for(let j=i+1; j<rpsParticles.length; j++) {
+                    let p2 = rpsParticles[j];
+                    let dx = p.x - p2.x; 
+                    let dy = p.y - p2.y;
+                    let dist = Math.sqrt(dx*dx + dy*dy);
+                    
+                    if(dist < p.radius*2.5) { 
+                        // Physics Bounce
+                        let angle = Math.atan2(dy, dx);
+                        let speed1 = Math.sqrt(p.vx*p.vx + p.vy*p.vy);
+                        let speed2 = Math.sqrt(p2.vx*p2.vx + p2.vy*p2.vy);
+                        p.vx = Math.cos(angle) * speed2; p.vy = Math.sin(angle) * speed2;
+                        p2.vx = -Math.cos(angle) * speed1; p2.vy = -Math.sin(angle) * speed1;
+
+                        // Game Logic (Win/Convert)
+                        if(p.type === 'r' && p2.type === 's') p2.type = 'r';
+                        else if(p.type === 'r' && p2.type === 'p') p.type = 'p';
+                        else if(p.type === 'p' && p2.type === 'r') p2.type = 'p';
+                        else if(p.type === 'p' && p2.type === 's') p.type = 's';
+                        else if(p.type === 's' && p2.type === 'p') p2.type = 's';
+                        else if(p.type === 's' && p2.type === 'r') p.type = 'r';
+                        
+                        // Separate to prevent sticking
+                        p.x += p.vx * 0.5; p.y += p.vy * 0.5;
+                    }
+                }
+            }
+            
+            document.getElementById('count-rock').innerText = counts.r;
+            document.getElementById('count-paper').innerText = counts.p;
+            document.getElementById('count-scissor').innerText = counts.s;
+            
+            requestAnimationFrame(loopRPS);
+        }
+        loopRPS();
+        function resetRPS() { initRPS(); }
+
+        // --- 3. CHICKEN (Smooth Animation) ---
+        const chkCanvas = document.getElementById('chickenCanvas');
+        const chkCtx = chkCanvas.getContext('2d');
+        let c1 = 50, c2 = 550;
+        let chickenAnim;
+        
+        function playChicken(strat) {
+            if(chickenAnim) cancelAnimationFrame(chickenAnim);
+            c1 = 50; c2 = 550;
+            const aiStrat = Math.random() > 0.5 ? 'straight' : 'swerve';
+            const feedback = document.getElementById('chicken-feedback');
+            let gameOver = false;
+            
+            function animate() {
+                chkCtx.clearRect(0,0,600,150);
+                
+                // Road Details
+                chkCtx.fillStyle = '#333'; chkCtx.fillRect(0,40,600,70);
+                chkCtx.strokeStyle='yellow'; chkCtx.setLineDash([20,20]); chkCtx.lineWidth=4;
+                chkCtx.beginPath(); chkCtx.moveTo(0,75); chkCtx.lineTo(600,75); chkCtx.stroke();
+                
+                // Cars
+                chkCtx.font = "40px Arial";
+                chkCtx.fillStyle = "white";
+                
+                // P1
+                chkCtx.save();
+                if(gameOver && strat === 'swerve') chkCtx.translate(c1, 120); // Swerve down
+                else chkCtx.translate(c1, 85);
+                chkCtx.fillText("🏎️", 0, 0);
+                chkCtx.restore();
+
+                // AI
+                chkCtx.save();
+                if(gameOver && aiStrat === 'swerve') chkCtx.translate(c2, 30); // Swerve up
+                else chkCtx.translate(c2, 85);
+                chkCtx.scale(-1,1); 
+                chkCtx.fillText("🏎️", -40, 0);
+                chkCtx.restore();
+
+                if(gameOver) return;
+
+                // Acceleration
+                c1 += 8;
+                c2 -= 8;
+                
+                // Collision Point
+                if(c1 >= c2 - 40) {
+                    gameOver = true;
+                    if(strat === 'straight' && aiStrat === 'straight') {
+                        chkCtx.font="60px Arial"; chkCtx.fillText("💥", 270, 90);
+                        feedback.innerText = "TOTAL WRECK. You both lose."; feedback.style.color = "red";
+                    } else if (strat === 'swerve' && aiStrat === 'straight') {
+                        feedback.innerText = "CHICKEN! You swerved. They win."; feedback.style.color = "orange";
+                    } else if (strat === 'straight' && aiStrat === 'swerve') {
+                         feedback.innerText = "HERO! They chickened out. You win."; feedback.style.color = "green";
+                    } else {
+                        feedback.innerText = "Boring... both swerved."; feedback.style.color = "gray";
+                    }
+                    // Render one last frame to show final positions
+                    requestAnimationFrame(animate); 
+                } else {
+                    chickenAnim = requestAnimationFrame(animate);
+                }
+            }
+            animate();
+        }
+
+        // --- 4. HOTELLING (Dynamic Territory) ---
+        const beachCanvas = document.getElementById('beachCanvas');
+        const bCtx = beachCanvas.getContext('2d');
+        let p1Loc = -1; let p2Loc = -1;
+        
+        function drawBeach() {
+            bCtx.clearRect(0,0,600,250);
+            
+            // Draw Sand & Ocean
+            bCtx.fillStyle = '#FEF3C7'; bCtx.fillRect(0,50,600,200); 
+            bCtx.fillStyle = '#60A5FA'; bCtx.fillRect(0,0,600,50); 
+            
+            // Territory Overlay
+            if(p1Loc > 0 && p2Loc > 0) {
+                let mid = (p1Loc + p2Loc) / 2;
+                // P1 Territory
+                bCtx.fillStyle = 'rgba(37, 99, 235, 0.2)'; // Blue tint
+                if(p1Loc < p2Loc) bCtx.fillRect(0, 50, mid, 200);
+                else bCtx.fillRect(mid, 50, 600-mid, 200);
+
+                // P2 Territory
+                bCtx.fillStyle = 'rgba(220, 38, 38, 0.2)'; // Red tint
+                if(p2Loc < p1Loc) bCtx.fillRect(0, 50, mid, 200);
+                else bCtx.fillRect(mid, 50, 600-mid, 200);
+                
+                // Midpoint line
+                bCtx.beginPath(); bCtx.moveTo(mid, 50); bCtx.lineTo(mid, 250); 
+                bCtx.strokeStyle='black'; bCtx.setLineDash([5,5]); bCtx.stroke();
+            }
+
+            // People
+            bCtx.fillStyle = '#4B5563';
+            for(let i=10; i<600; i+=15) {
+                let y = 70 + Math.sin(i)*20 + Math.random()*150;
+                if(y>240) y=240;
+                bCtx.beginPath(); bCtx.arc(i, y, 2, 0, Math.PI*2); bCtx.fill();
+            }
+            
+            // Stands
+            if(p1Loc > 0) {
+                bCtx.font="30px Arial"; bCtx.fillText("🏪", p1Loc-15, 100);
+                bCtx.fillStyle="blue"; bCtx.fillText("YOU", p1Loc-15, 130);
+            }
+            if(p2Loc > 0) {
+                bCtx.font="30px Arial"; bCtx.fillText("🏪", p2Loc-15, 100);
+                bCtx.fillStyle="red"; bCtx.fillText("AI", p2Loc-15, 130);
+            }
+        }
+        drawBeach();
+        
+        beachCanvas.addEventListener('mousedown', (e) => {
+            const rect = beachCanvas.getBoundingClientRect();
+            const scaleX = beachCanvas.width / rect.width;
+            p1Loc = (e.clientX - rect.left) * scaleX;
+            
+            // AI Logic: Aggressive Clustering
+            if(p1Loc < 300) p2Loc = p1Loc + 50; 
+            else p2Loc = p1Loc - 50;
+            
+            // Calc Share
+            let mid = (p1Loc + p2Loc) / 2;
+            let p1Score, p2Score;
+            if(p1Loc < p2Loc) { p1Score = mid; p2Score = 600-mid; }
+            else { p2Score = mid; p1Score = 600-mid; }
+            
+            document.getElementById('hotelling-p1').innerText = Math.round((p1Score/600)*100) + "%";
+            document.getElementById('hotelling-p2').innerText = Math.round((p2Score/600)*100) + "%";
+            
+            drawBeach();
+        });
+
+        // --- 5. COMMONS (Ecosystem) ---
+        const pondC = document.getElementById('pondCanvas');
+        const pC = pondC.getContext('2d');
+        
+        // Increase resolution for visibility
+        pondC.width = 600;
+        pondC.height = 300;
+
+        let fish = []; 
+        let catchParticles = []; // Visual effects for catching
+        let myBoats=1; 
+        let aiBoats=1;
+        let pondFrame = 0;
+        
+        function initFish() { 
+            fish = []; 
+            for(let i=0;i<60;i++) fish.push({
+                x:Math.random()*600, 
+                y:Math.random()*300, 
+                vx:(Math.random()-0.5)*2, // Faster movement
+                vy:(Math.random()-0.5)*2,
+                angle: Math.random() * 6.28
+            }); 
+        }
+        initFish();
+        
+        function loopPond() {
+            pC.clearRect(0,0,600,300);
+            
+            // Beautiful Water Gradient
+            let grd = pC.createLinearGradient(0, 0, 0, 300);
+            grd.addColorStop(0, "#60A5FA");
+            grd.addColorStop(1, "#1E3A8A");
+            pC.fillStyle = grd; 
+            pC.fillRect(0,0,600,300);
+            
+            // Reproduction (Slow & Steady)
+            // 2% chance per frame to spawn a baby if under cap
+            if(Math.random() < 0.02 && fish.length < 200) {
+                fish.push({x:Math.random()*600, y:Math.random()*300, vx:(Math.random()-0.5)*2, vy:(Math.random()-0.5)*2});
+            }
+            
+            // Fishing Logic (Rebalanced)
+            let totalBoats = myBoats + aiBoats;
+            // Chance to catch per frame is lower so you can see it happening
+            let catchChance = totalBoats * 0.01; 
+            
+            if(Math.random() < catchChance && fish.length > 0) {
+                // Catch random fish
+                let idx = Math.floor(Math.random() * fish.length);
+                let deadFish = fish[idx];
+                
+                // Spawn "Catch" Particle
+                catchParticles.push({x: deadFish.x, y: deadFish.y, life: 30, text: "🎣"});
+                
+                fish.splice(idx, 1);
+            }
+
+            // Draw Fish (High Visibility)
+            fish.forEach(f => {
+                f.x+=f.vx; f.y+=f.vy;
+                // Smooth Wrap around screen
+                if(f.x < -20) f.x = 620; if(f.x > 620) f.x = -20;
+                if(f.y < -20) f.y = 320; if(f.y > 320) f.y = -20;
+                
+                let angle = Math.atan2(f.vy, f.vx);
+                
+                pC.save();
+                pC.translate(f.x, f.y);
+                pC.rotate(angle);
+                
+                // Fish Body (Bright Orange with White Outline)
+                pC.fillStyle = '#FF781F';
+                pC.strokeStyle = 'white';
+                pC.lineWidth = 2;
+                
+                pC.beginPath();
+                pC.moveTo(10,0); // Nose
+                pC.lineTo(-6, -6); // Top Fin
+                pC.lineTo(-6, 6); // Bottom Fin
+                pC.closePath();
+                pC.fill();
+                pC.stroke();
+                
+                // Tail
+                pC.beginPath();
+                pC.moveTo(-6,0);
+                pC.lineTo(-12, -4);
+                pC.lineTo(-12, 4);
+                pC.fillStyle = '#CC5500';
+                pC.fill();
+                
+                pC.restore();
+            });
+
+            // Draw Catch Particles
+            for(let i=catchParticles.length-1; i>=0; i--) {
+                let p = catchParticles[i];
+                p.y -= 1; // Float up
+                p.life--;
+                pC.font = "24px Arial";
+                pC.fillStyle = `rgba(255, 255, 255, ${p.life/30})`;
+                pC.fillText(p.text, p.x, p.y);
+                if(p.life <= 0) catchParticles.splice(i, 1);
+            }
+            
+            // Draw Boats (On top)
+            for(let i=0; i<myBoats; i++) {
+                let bx = 50 + i*40; 
+                let by = 40 + Math.sin(pondFrame*0.1 + i)*5;
+                pC.font="30px Arial"; pC.fillText("⛵", bx, by);
+                pC.fillStyle="#22c55e"; pC.fillRect(bx, by+5, 30, 4); // Green Underline
+            }
+            for(let i=0; i<aiBoats; i++) {
+                let bx = 50 + i*40; 
+                let by = 260 + Math.sin(pondFrame*0.1 + i)*5;
+                pC.font="30px Arial"; pC.fillText("🏴‍☠️", bx, by);
+                pC.fillStyle="#ef4444"; pC.fillRect(bx, by+5, 30, 4); // Red Underline
+            }
+
+            // UI Updates
+            document.getElementById('fish-count').innerText = fish.length;
+            let pct = Math.min(100, (fish.length / 60)*100);
+            let bar = document.getElementById('fish-bar');
+            bar.style.width = pct + "%";
+            
+            // Dynamic Bar Color
+            if(pct < 25) bar.className = "bg-red-600 h-2 rounded-full transition-all shadow-[0_0_10px_red]";
+            else if(pct < 50) bar.className = "bg-yellow-500 h-2 rounded-full transition-all";
+            else bar.className = "bg-blue-500 h-2 rounded-full transition-all";
+
+            if(fish.length === 0) document.getElementById('pond-msg').innerText = "💀 EXTINCTION EVENT 💀";
+            else if(fish.length < 20) document.getElementById('pond-msg').innerText = "CRITICAL DANGER!";
+            else document.getElementById('pond-msg').innerText = "";
+
+            pondFrame++;
+            requestAnimationFrame(loopPond);
+        }
+        loopPond();
+        
+        function addBoat() { myBoats++; document.getElementById('my-boats').innerText = myBoats; checkAI(); }
+        function removeBoat() { if(myBoats>0) myBoats--; document.getElementById('my-boats').innerText = myBoats; checkAI(); }
+        function resetPond() { myBoats=1; aiBoats=1; initFish(); }
+        function checkAI() {
+            // AI mimics you with delay
+            if(myBoats > aiBoats) setTimeout(()=> { aiBoats++; document.getElementById('ai-boats').innerText=aiBoats; }, 1000);
+            if(myBoats < aiBoats && aiBoats > 1) setTimeout(()=> { aiBoats--; document.getElementById('ai-boats').innerText=aiBoats; }, 1500);
+        }
+
+        // --- 6. ULTIMATUM ---
+        const pzCanvas = document.getElementById('pizzaCanvas');
+        const pzCtx = pzCanvas.getContext('2d');
+        function drawPizza() {
+            let val = document.getElementById('pizzaSlider').value;
+            document.getElementById('offer-val').innerText = val;
+            pzCtx.clearRect(0,0,250,250);
+            
+            let cx=125, cy=125, r=100;
+            
+            // Base Pizza
+            pzCtx.beginPath(); pzCtx.arc(cx,cy,r,0,Math.PI*2); pzCtx.fillStyle='#FCD34D'; pzCtx.fill(); pzCtx.stroke();
+            // Pepperoni
+            pzCtx.fillStyle='#EF4444';
+            for(let i=0; i<8; i++) {
+                pzCtx.beginPath(); pzCtx.arc(cx + Math.cos(i)*60, cy+Math.sin(i)*60, 8, 0, Math.PI*2); pzCtx.fill();
+            }
+
+            // Cut
+            if(val > 0 && val < 10) {
+                let angle = (val/10) * Math.PI*2 - Math.PI/2;
+                pzCtx.beginPath(); pzCtx.moveTo(cx,cy); pzCtx.arc(cx,cy,r+10, -Math.PI/2, angle); 
+                pzCtx.lineWidth=4; pzCtx.strokeStyle='white'; pzCtx.stroke();
+                pzCtx.lineWidth=1; pzCtx.strokeStyle='black';
+                
+                // Highlight Offer
+                pzCtx.globalAlpha = 0.3;
+                pzCtx.fillStyle = 'blue';
+                pzCtx.beginPath(); pzCtx.moveTo(cx,cy); pzCtx.arc(cx,cy,r, -Math.PI/2, angle); pzCtx.fill();
+                pzCtx.globalAlpha = 1.0;
+            }
+        }
+        drawPizza();
+        
+        function makeOffer() {
+            let val = parseInt(document.getElementById('pizzaSlider').value);
+            let res = document.getElementById('pizza-result');
+            // Stranger accepts 4+, rejects lower
+            if(val >= 4) { 
+                res.innerText = `OFFER ACCEPTED. You eat ${10-val} slices.`; 
+                res.className = "mt-4 font-bold text-xl h-8 text-center text-green-600";
+            } else { 
+                res.innerText = "OFFER REJECTED! 'Too unfair'. You both starve."; 
+                res.className = "mt-4 font-bold text-xl h-8 text-center text-red-600";
+            }
+        }
+
+        // --- 7. CENTIPEDE ---
+        const ccCanvas = document.getElementById('centipedeCanvas');
+        const ccCtx = ccCanvas.getContext('2d');
+        let pot = 2;
+        let currentTurn = 'p1'; // p1 or p2
+        
+        function drawCentipede() {
+            ccCtx.clearRect(0,0,600,150);
+            // Table
+            ccCtx.fillStyle = '#064E3B'; ccCtx.fillRect(0,0,600,150);
+            
+            // Money Stack
+            let stackSize = Math.min(pot, 50); // cap visual stack
+            for(let i=0; i<stackSize; i++) {
+                ccCtx.fillStyle = '#10B981';
+                ccCtx.fillRect(270, 100 - (i*3), 60, 10);
+                ccCtx.strokeRect(270, 100 - (i*3), 60, 10);
+            }
+            
+            // Marker
+            ccCtx.fillStyle = 'white';
+            ccCtx.font = "20px Arial";
+            if(currentTurn === 'p1') ccCtx.fillText("YOUR TURN", 100, 50);
+            else ccCtx.fillText("BOT THINKING...", 400, 50);
+            
+            ccCtx.fillText(`$${pot}`, 290, 140);
+        }
+        drawCentipede();
+
+        function centipedeAction(act) {
+            if(act === 'take') {
+                document.getElementById('centipede-msg').innerText = `GAME OVER. You took $${pot}.`;
+                pot = 2; currentTurn='p1'; drawCentipede();
+            } else {
+                pot *= 2;
+                currentTurn = 'p2';
+                drawCentipede();
+                document.getElementById('btn-pass').disabled = true;
+                document.getElementById('btn-take').disabled = true;
+                
+                // Bot Delay
+                setTimeout(() => {
+                    // Bot Strategy
+                    if(pot > 32 || Math.random() > 0.9) {
+                        document.getElementById('centipede-msg').innerText = `BOT TOOK THE POT! You get $0.`;
+                        pot = 2; currentTurn='p1';
+                    } else {
+                        pot *= 2;
+                        currentTurn = 'p1';
+                        document.getElementById('centipede-msg').innerText = `Bot Passed! Pot is $${pot}.`;
+                    }
+                    drawCentipede();
+                    document.getElementById('btn-pass').disabled = false;
+                    document.getElementById('btn-take').disabled = false;
+                }, 1500);
+            }
+            document.getElementById('centipede-msg').innerText = `Current Pot: $${pot}`;
+        }
+
+        // --- 8. DOLLAR AUCTION ---
+        let myBid = 0; let botBid = 0;
+        function bidAuction() {
+            myBid = botBid + 0.10;
+            updateAuction();
+            
+            if(myBid >= 2.0) {
+                document.getElementById('auction-msg').innerText = "INSANITY! You paid $2 for a $1 bill.";
+                return;
+            }
+            
+            // Bot auto-bid
+            setTimeout(() => {
+                if(Math.random() > 0.1) {
+                    botBid = myBid + 0.10;
+                    updateAuction();
+                    document.getElementById('auction-msg').innerText = "Bot raised you! Sunk costs are rising...";
+                } else {
+                    document.getElementById('auction-msg').innerText = "Bot Folded. You win $1 (minus your bid).";
+                }
+            }, 500);
+        }
+        function foldAuction() {
+            document.getElementById('auction-msg').innerText = `You folded. You lost $${myBid.toFixed(2)}.`;
+            myBid=0; botBid=0; updateAuction();
+        }
+        function updateAuction() {
+            document.getElementById('my-bid').innerText = myBid.toFixed(2);
+            document.getElementById('bot-bid').innerText = botBid.toFixed(2);
+            
+            // Thermometer logic
+            let max = 2.0;
+            let pct = (Math.max(myBid, botBid) / max) * 100;
+            document.getElementById('auction-thermometer').style.width = pct + "%";
+        }
+
+        // --- 9. SCHELLING ---
+        function checkSchelling(place) {
+            let res = document.getElementById('schelling-result');
+            if(place === 'statue' || place === 'coffee') {
+                res.innerText = "SUCCESS! A common focal point.";
+                res.style.color = "#15803d";
+            } else {
+                res.innerText = "MISSED. Too obscure.";
+                res.style.color = "#b91c1c";
+            }
+        }
+
+        // --- 10. BAR (Crowd Sim) ---
+        const barCanvas = document.getElementById('barCanvas');
+        const barCtx = barCanvas.getContext('2d');
+        function goToBar(go) {
+            let crowd = Math.floor(Math.random() * 150); // 0 to 150 people
+            let isCrowded = crowd > 90;
+            
+            barCtx.clearRect(0,0,600,150);
+            
+            // Draw Club
+            barCtx.fillStyle = '#333';
+            barCtx.fillRect(50, 20, 500, 110); // Building
+            barCtx.fillStyle = 'black';
+            barCtx.fillRect(280, 80, 40, 50); // Door
+            
+            // Draw Crowd Particles
+            for(let i=0; i<crowd; i++) {
+                barCtx.fillStyle = `hsl(${Math.random()*360}, 70%, 50%)`;
+                let x = 60 + Math.random() * 480;
+                let y = 30 + Math.random() * 90;
+                barCtx.beginPath(); barCtx.arc(x,y,3,0,Math.PI*2); barCtx.fill();
+            }
+
+            // Neon Sign
+            barCtx.font = "20px Arial";
+            barCtx.fillStyle = "#d946ef";
+            barCtx.shadowColor = "#d946ef";
+            barCtx.shadowBlur = 10;
+            barCtx.fillText("CLUB EL FAROL", 220, 50);
+            barCtx.shadowBlur = 0;
+
+            let msg = document.getElementById('bar-result');
+            if(go) {
+                if(isCrowded) msg.innerText = "Ugh! Too crowded. Terrible night.";
+                else msg.innerText = "Nice! Not too crowded. Great night.";
+            } else {
+                if(isCrowded) msg.innerText = "Smart choice. It's a zoo in there.";
+                else msg.innerText = "FOMO. It was empty and you missed it.";
+            }
+        }
+
+        // --- 11. STAG HUNT (Grid) ---
+        const stagCanvas = document.getElementById('stagCanvas');
+        const sCtx = stagCanvas.getContext('2d');
+        let hunter = {x:0, y:0};
+        let stag = {x:4, y:4};
+        let rabbit = {x:4, y:0};
+        let aiHunter = {x:0, y:4};
+        
+        function drawStagGrid() {
+            sCtx.clearRect(0,0,300,300);
+            // Grid
+            let s = 300/5;
+            sCtx.strokeStyle='#ccc';
+            for(let i=0; i<5; i++) {
+                for(let j=0; j<5; j++) {
+                    sCtx.strokeRect(i*s, j*s, s, s);
+                }
+            }
+            
+            // Actors
+            sCtx.font = "40px Arial";
+            sCtx.fillText("🔵", hunter.x*s + 10, hunter.y*s + 45);
+            sCtx.fillText("🔴", aiHunter.x*s + 10, aiHunter.y*s + 45);
+            sCtx.fillText("🦌", stag.x*s + 10, stag.y*s + 45);
+            sCtx.fillText("🐇", rabbit.x*s + 10, rabbit.y*s + 45);
+        }
+        drawStagGrid();
+
+        function moveHunter(dx, dy) {
+            hunter.x = Math.max(0, Math.min(4, hunter.x+dx));
+            hunter.y = Math.max(0, Math.min(4, hunter.y+dy));
+            
+            // AI Move (Random walk towards Rabbit usually)
+            if(Math.random() > 0.3) { // Risk averse AI
+                if(aiHunter.x < rabbit.x) aiHunter.x++;
+                else if(aiHunter.y > rabbit.y) aiHunter.y--;
+            } else { // Cooperative AI
+                if(aiHunter.x < stag.x) aiHunter.x++;
+            }
+            
+            drawStagGrid();
+            checkHunt();
+        }
+        
+        function checkHunt() {
+            // Stag Check
+            if(hunter.x === stag.x && hunter.y === stag.y && aiHunter.x === stag.x) {
+                document.getElementById('stag-msg').innerText = "SUCCESS! You both cornered the Stag!";
+                document.getElementById('stag-msg').style.color = "green";
+            }
+            // Rabbit Check
+            else if(hunter.x === rabbit.x && hunter.y === rabbit.y) {
+                document.getElementById('stag-msg').innerText = "You caught a Rabbit. Safe but small reward.";
+                document.getElementById('stag-msg').style.color = "blue";
+            }
+            // AI Rabbit Check
+            else if(aiHunter.x === rabbit.x && aiHunter.y === rabbit.y) {
+                document.getElementById('stag-msg').innerText = "Partner left you for a Rabbit! Hunt Failed.";
+                document.getElementById('stag-msg').style.color = "red";
+            }
+        }
+
+        // --- 12. SIGNALING (Peacock) ---
+        const peaCanvas = document.getElementById('peacockCanvas');
+        const peaCtx = peaCanvas.getContext('2d');
+        function drawPeacock() {
+            let v = document.getElementById('tailSlider').value;
+            peaCtx.clearRect(0,0,400,250);
+            
+            let cx=200, cy=200;
+            // Tail Fan
+            let rad = parseInt(v) + 50;
+            peaCtx.beginPath();
+            peaCtx.moveTo(cx,cy);
+            peaCtx.arc(cx, cy, rad, Math.PI, 0);
+            peaCtx.fillStyle = `hsl(${v}, 70%, 50%)`; // Color shift with effort
+            peaCtx.fill();
+            
+            // Eyes on tail
+            let spots = Math.floor(v/10);
+            peaCtx.fillStyle = 'yellow';
+            for(let i=0; i<spots; i++) {
+                let angle = Math.PI + (Math.PI/spots)*i + 0.1;
+                let ex = cx + Math.cos(angle)*(rad-10);
+                let ey = cy + Math.sin(angle)*(rad-10);
+                peaCtx.beginPath(); peaCtx.arc(ex,ey,5,0,Math.PI*2); peaCtx.fill();
+            }
+
+            // Body
+            peaCtx.fillStyle = 'blue';
+            peaCtx.beginPath(); peaCtx.arc(cx, cy, 20, 0, Math.PI*2); peaCtx.fill();
+            
+            // Energy Bar
+            peaCtx.fillStyle = 'red';
+            peaCtx.fillRect(10, 10, v, 10);
+            peaCtx.fillStyle = 'black';
+            peaCtx.fillText("Energy Cost", 10, 35);
+        }
+        drawPeacock();
+        function signalMate() {
+            let v = parseInt(document.getElementById('tailSlider').value);
+            let res = document.getElementById('signal-result');
+            if(v > 100) {
+                res.innerText = "Mate Attracted! (High cost signal verified)";
+            } else {
+                res.innerText = "Ignored. Tail too small (Signal fake?)";
+            }
+        }
+
+        // --- 13. PARETO ---
+        let p1Inv = {c:5, g:5}; let p2Inv = {c:5, g:5};
+        function renderInv() {
+            document.getElementById('p1-inv').innerHTML = "🍫".repeat(p1Inv.c) + "🍬".repeat(p1Inv.g);
+            document.getElementById('p2-inv').innerHTML = "🍫".repeat(p2Inv.c) + "🍬".repeat(p2Inv.g);
+            
+            // Scores: P1 likes Choc (2pts). P2 likes Gum (2pts).
+            document.getElementById('p1-score').innerText = p1Inv.c*2 + p1Inv.g;
+            document.getElementById('p2-score').innerText = p2Inv.c + p2Inv.g*2;
+        }
+        renderInv();
+        function trade(type) {
+            let msg = document.getElementById('pareto-msg');
+            if(type === 'give_gum') {
+                if(p1Inv.g > 0 && p2Inv.c > 0) {
+                    p1Inv.g--; p1Inv.c++;
+                    p2Inv.g++; p2Inv.c--;
+                    msg.innerText = "Good Trade! Both happier.";
+                } else msg.innerText = "Can't trade.";
+            } else {
+                // Bad trade
+                if(p1Inv.c > 0 && p2Inv.g > 0) {
+                    p1Inv.c--; p1Inv.g++;
+                    p2Inv.c++; p2Inv.g--;
+                    msg.innerText = "Bad Trade! You gave away what you love.";
+                }
+            }
+            renderInv();
+        }
+
+        // --- 14. PUBLIC GOODS ---
+        const potCanvas = document.getElementById('potCanvas');
+        const potCtx = potCanvas.getContext('2d');
+        let pgCoins = [];
+        
+        function playPublicGoods() {
+            let myC = parseInt(document.getElementById('pg-contrib').value);
+            let bots = [Math.floor(Math.random()*10), Math.floor(Math.random()*10), Math.floor(Math.random()*10)];
+            let total = myC + bots.reduce((a,b)=>a+b,0);
+            
+            // Animate Coins
+            pgCoins = [];
+            for(let i=0; i<total; i++) {
+                pgCoins.push({x: Math.random()*400, y: -20, vy: Math.random()*5+2});
+            }
+            
+            function animCoins() {
+                potCtx.clearRect(0,0,400,200);
+                potCtx.fillStyle = 'gold';
+                let active = false;
+                pgCoins.forEach(c => {
+                    c.y += c.vy;
+                    if(c.y < 180) active = true;
+                    else c.y = 180; // land
+                    potCtx.beginPath(); potCtx.arc(c.x, c.y, 5, 0, Math.PI*2); potCtx.fill();
+                });
+                if(active) requestAnimationFrame(animCoins);
+            }
+            animCoins();
+            
+            let share = (total * 3) / 4;
+            let profit = (10 - myC) + share;
+            document.getElementById('pg-result').innerText = `Pot: $${total} -> x3 = $${total*3}. Your Share: $${share.toFixed(1)}. Total: $${profit.toFixed(1)}`;
+        }
+
+        // --- 15. TOURNAMENT (Canvas Graph) ---
+        const tCanvas = document.getElementById('tournamentCanvas');
+        const tCtx = tCanvas.getContext('2d');
+        function runTournament() {
+            let strat = document.getElementById('tourney-strat').value;
+            let score = 0;
+            let history = [];
+            let oppHist = []; // For Grudger/TFT
+            let oppDefected = false;
+
+            // Strategies
+            const strats = {
+                tft: (i) => (i===0) ? 'coop' : oppHist[i-1],
+                coop: () => 'coop',
+                cheat: () => 'cheat',
+                random: () => Math.random()>0.5?'coop':'cheat',
+                grudger: (i) => oppDefected ? 'cheat' : 'coop'
+            };
+
+            // Opponent is always TFT for this demo to see how YOU do against it
+            for(let i=0; i<100; i++) {
+                // Your Move
+                let myMove = 'coop';
+                if(strat === 'tft') myMove = (i===0) ? 'coop' : oppHist[i-1];
+                else if(strat === 'grudger') myMove = oppDefected ? 'cheat' : 'coop';
+                else if(strat === 'random') myMove = Math.random()>0.5?'coop':'cheat';
+                else myMove = strat; // coop/cheat direct
+
+                // Opponent Move (TFT)
+                let oppMove = (i===0) ? 'coop' : history[i-1];
+                
+                // Update State
+                history.push(myMove);
+                oppHist.push(oppMove);
+                if(oppMove === 'cheat') oppDefected = true;
+
+                // Score
+                if(myMove==='coop' && oppMove==='coop') score+=3;
+                if(myMove==='coop' && oppMove==='cheat') score+=0;
+                if(myMove==='cheat' && oppMove==='coop') score+=5;
+                if(myMove==='cheat' && oppMove==='cheat') score+=1;
+            }
+
+            // Draw Graph
+            tCtx.clearRect(0,0,600,250);
+            tCtx.beginPath();
+            tCtx.strokeStyle = '#2563EB';
+            tCtx.lineWidth = 2;
+            tCtx.moveTo(0, 250);
+            
+            let runningScore = 0;
+            for(let i=0; i<100; i++) {
+                // Recalc running score for graph
+                let m = history[i];
+                let o = oppHist[i];
+                if(m==='coop' && o==='coop') runningScore+=3;
+                if(m==='coop' && o==='cheat') runningScore+=0;
+                if(m==='cheat' && o==='coop') runningScore+=5;
+                if(m==='cheat' && o==='cheat') runningScore+=1;
+                
+                let x = i * 6;
+                let y = 250 - (runningScore * 0.5); // Scale
+                tCtx.lineTo(x, y);
+            }
+            tCtx.stroke();
+            
+            // Draw Grid
+            tCtx.strokeStyle = '#e5e7eb';
+            tCtx.beginPath();
+            for(let i=0; i<250; i+=50) {
+                tCtx.moveTo(0,i); tCtx.lineTo(600,i);
+            }
+            tCtx.stroke();
+
+            document.getElementById('tourney-result').innerText = `Final Score: ${score}`;
+        }
+    </script>
+</body>
+</html>

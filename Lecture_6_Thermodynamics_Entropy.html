@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Celestica: Thermodynamics & Entropy</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Rye&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --steam-bg: #1a1814;
+            --brass: #eebb4d;
+            --copper: #b87333;
+            --iron: #4a4a4a;
+            --fire: #ff4500;
+            --steam: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            background-color: var(--steam-bg);
+            color: #d4c5b0;
+            font-family: 'Courier Prime', monospace;
+            background-image: 
+                repeating-linear-gradient(45deg, #1a1814 25%, transparent 25%, transparent 75%, #1a1814 75%, #1a1814),
+                repeating-linear-gradient(45deg, #1a1814 25%, #221f1a 25%, #221f1a 75%, #1a1814 75%, #1a1814);
+            background-position: 0 0, 10px 10px;
+            background-size: 20px 20px;
+        }
+
+        h1, h2, .steampunk-font {
+            font-family: 'Rye', serif;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--brass);
+            text-shadow: 2px 2px 0px #000;
+        }
+
+        .machine-panel {
+            background: #2b2620;
+            border: 4px solid var(--copper);
+            border-radius: 4px;
+            box-shadow: 
+                inset 0 0 20px #000,
+                0 0 0 2px #000,
+                0 10px 20px rgba(0,0,0,0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Screws in corners */
+        .machine-panel::before, .machine-panel::after {
+            content: '+';
+            position: absolute;
+            color: var(--brass);
+            font-family: sans-serif;
+            font-size: 20px;
+            top: 5px;
+            z-index: 10;
+        }
+        .machine-panel::before { left: 5px; }
+        .machine-panel::after { right: 5px; }
+
+        /* Brass Buttons */
+        .brass-btn {
+            background: linear-gradient(to bottom, #f6d365 0%, #fda085 100%);
+            border: 2px solid #8b4513;
+            color: #3e2723;
+            font-family: 'Rye', serif;
+            padding: 8px 16px;
+            cursor: pointer;
+            box-shadow: 0 4px 0 #8b4513, 0 5px 10px rgba(0,0,0,0.5);
+            transition: all 0.1s;
+            text-transform: uppercase;
+            border-radius: 4px;
+        }
+        .brass-btn:active {
+            transform: translateY(4px);
+            box-shadow: 0 0 0 #8b4513;
+        }
+        
+        /* Custom Range Slider (Lever style) */
+        input[type=range] {
+            -webkit-appearance: none; width: 100%; background: transparent;
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%; height: 8px; background: #000; border: 1px solid var(--brass); border-radius: 4px;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none; height: 24px; width: 12px;
+            background: var(--brass); border: 1px solid #fff;
+            margin-top: -9px; cursor: ew-resize;
+            border-radius: 2px;
+            box-shadow: 1px 1px 5px black;
+        }
+
+        canvas {
+            background: #111;
+            border: 2px solid #444;
+            box-shadow: inset 0 0 20px #000;
+        }
+        
+        .gauge-text {
+            font-family: 'Courier Prime', monospace;
+            color: var(--brass);
+            font-weight: bold;
+        }
+
+        .steam-overlay {
+            pointer-events: none;
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 50% 100%, rgba(255,255,255,0.1) 0%, transparent 60%);
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body class="max-w-6xl mx-auto px-4 py-12 pb-32">
+
+    <!-- Header -->
+    <header class="text-center mb-16 relative">
+        <div class="border-b-4 border-double border-copper mb-6 inline-block px-12 pb-2">
+            <span class="text-copper tracking-widest">CELESTICA INITIATIVE // MODULE 06</span>
+        </div>
+        <h1 class="text-5xl md:text-7xl mb-4 animate-pulse text-transparent bg-clip-text bg-gradient-to-b from-yellow-400 to-red-600" style="-webkit-text-stroke: 1px var(--brass);">
+            THERMODYNAMICS
+        </h1>
+        <p class="text-xl text-gray-400 max-w-2xl mx-auto">
+            The Science of Heat, Work, and Chaos.
+        </p>
+    </header>
+
+    <!-- 1. Kinetic Theory -->
+    <section class="mb-24 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <div class="lg:col-span-4">
+            <div class="text-6xl font-bold text-red-900/50 mb-[-20px] ml-[-10px] select-none steampunk-font">01</div>
+            <h2 class="text-2xl mb-4 relative z-10">Kinetic Theory</h2>
+            <p class="mb-4 text-sm">Temperature is just the average speed of particles. Hotter = Faster.</p>
+            <div class="bg-black/50 p-4 border border-copper rounded">
+                <label class="gauge-text">Heat Intensity</label>
+                <input type="range" id="tempSlider" min="1" max="100" value="20" oninput="updateKinetic()">
+            </div>
+        </div>
+        <div class="lg:col-span-8 machine-panel p-4">
+            <canvas id="kineticCanvas" width="800" height="300" class="w-full h-[300px]"></canvas>
+            <div class="steam-overlay"></div>
+        </div>
+    </section>
+
+    <!-- 2. Brownian Motion -->
+    <section class="mb-24 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <div class="lg:col-span-8 machine-panel p-4">
+            <canvas id="brownianCanvas" width="800" height="300" class="w-full h-[300px]"></canvas>
+        </div>
+        <div class="lg:col-span-4">
+            <div class="text-6xl font-bold text-red-900/50 mb-[-20px] ml-[-10px] select-none steampunk-font">02</div>
+            <h2 class="text-2xl mb-4 relative z-10">Brownian Motion</h2>
+            <p class="mb-4 text-sm">The visible pollen grain jiggles because millions of invisible water molecules are kicking it.</p>
+            <button onclick="resetBrownian()" class="brass-btn w-full">RESET SIMULATION</button>
+        </div>
+    </section>
+
+    <!-- 3. Ideal Gas Law (Piston) -->
+    <section class="mb-24 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <div class="lg:col-span-4">
+            <div class="text-6xl font-bold text-red-900/50 mb-[-20px] ml-[-10px] select-none steampunk-font">03</div>
+            <h2 class="text-2xl mb-4 relative z-10">Ideal Gas Law (PV=nRT)</h2>
+            <p class="mb-4 text-sm">Compressing the gas (Volume ↓) creates more collisions (Pressure ↑). Heating it (Temp ↑) also increases Pressure.</p>
+            <div class="flex flex-col gap-4 bg-black/50 p-4 border border-copper">
+                <div>
+                    <label class="gauge-text">Piston Height (Vol)</label>
+                    <input type="range" id="volSlider" min="50" max="250" value="200" oninput="updateGasLaw()">
+                </div>
+                <div>
+                    <label class="gauge-text">Burner Heat (Temp)</label>
+                    <input type="range" id="gasTempSlider" min="1" max="10" value="3" oninput="updateGasLaw()">
+                </div>
+            </div>
+        </div>
+        <div class="lg:col-span-8 machine-panel p-4 flex justify-center relative">
+            <canvas id="gasCanvas" width="300" height="300" class="border-4 border-iron bg-gray-900"></canvas>
+            <div class="absolute bottom-4 right-4 text-right font-mono text-green-400 bg-black p-2 border border-green-800">
+                <div id="pressure-gauge">P: 0.0 atm</div>
+                <div id="temp-gauge">T: 300 K</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. Thermal Expansion -->
+    <section class="mb-24 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <div class="lg:col-span-8 machine-panel p-4">
+            <canvas id="expansionCanvas" width="800" height="200" class="w-full h-[200px]"></canvas>
+            <div class="mt-4 text-center gauge-text text-xl" id="expansion-status">Gap: Open</div>
+        </div>
+        <div class="lg:col-span-4">
+            <div class="text-6xl font-bold text-red-900/50 mb-[-20px] ml-[-10px] select-none steampunk-font">04</div>
+            <h2 class="text-2xl mb-4 relative z-10">Thermal Expansion</h2>
+            <p class="mb-4 text-sm">Atoms vibrate more when hot, taking up more space. This creates immense force that can buckle bridges.</p>
+            <label class="gauge-text">Heat the Bar</label>
+            <input type="range" id="expandSlider" min="0" max="100" value="0" oninput="updateExpansion()">
+        </div>
+    </section>
+
+    <!-- 5. Conduction -->
+    <section class="mb-24 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <div class="lg:col-span-4">
+            <div class="text-6xl font-bold text-red-900/50 mb-[-20px] ml-[-10px] select-none steampunk-font">05</div>
+            <h2 class="text-2xl mb-4 relative z-10">Heat Conduction</h2>
+            <p class="mb-4 text-sm">Heat travels through solids as atoms pass their vibration energy to neighbors. Like a domino effect.</p>
+            <button onclick="startConduction()" class="brass-btn w-full">APPLY FLAME</button>
+        </div>
+        <div class="lg:col-span-8 machine-panel p-4">
+            <canvas id="conductionCanvas" width="800" height="200" class="w-full h-[200px]"></canvas>
+        </div>
+    </section>
+
+    <!-- 6. Convection -->
+    <section class="mb-24 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <div class="lg:col-span-8 machine-panel p-4">
+            <canvas id="convectionCanvas" width="600" height="300" class="w-full h-[300px]"></canvas>
+        </div>
+        <div class="lg:col-span-4">
+            <div class="text-6xl font-bold text-red-900/50 mb-[-20px] ml-[-10px] select-none steampunk-font">06</div>
+            <h2 class="text-2xl mb-4 relative z-10">Convection Currents</h2>
+            <p class="mb-4 text-sm">Hot fluids are less dense and rise. Cold fluids sink. This creates circular currents (like in a boiling pot).</p>
+            <div class="flex gap-4">
+                <button onclick="setConvection(true)" class="brass-btn flex-1">HEAT ON</button>
+                <button onclick="setConvection(false)" class="brass-btn flex-1">HEAT OFF</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 7. Blackbody Radiation -->
+    <section class="mb-24 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <div class="lg:col-span-4">
+            <div class="text-6xl font-bold text-red-900/50 mb-[-20px] ml-[-10px] select-none steampunk-font">07</div>
+            <h2 class="text-2xl mb-4 relative z-10">Blackbody Radiation</h2>
+            <p class="mb-4 text-sm">Everything glows. As temperature rises, the glow shifts: IR (Invisible) &rarr; Red &rarr; Orange &rarr; White &rarr; Blue.</p>
+            <input type="range" id="radSlider" min="1000" max="12000" value="3000" oninput="updateRadiation()">
+            <div id="rad-readout" class="gauge-text mt-2 text-center">3000 K</div>
+        </div>
+        <div class="lg:col-span-8 machine-panel p-8 flex justify-center">
+            <div id="rad-orb" class="w-48 h-48 rounded-full shadow-[0_0_50px_rgba(0,0,0,0.5)] transition-colors duration-200 bg-black border-4 border-iron"></div>
+        </div>
+    </section>
+
+    <!-- 8. Entropy (Diffusion) -->
+    <section class="mb-24 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <div class="lg:col-span-8 machine-panel p-4">
+            <canvas id="diffCanvas" width="800" height="300" class="w-full h-[300px]"></canvas>
+        </div>
+        <div class="lg:col-span-4">
+            <div class="text-6xl font-bold text-red-900/50 mb-[-20px] ml-[-10px] select-none steampunk-font">08</div>
+            <h2 class="text-2xl mb-4 relative z-10">Entropy (Diffusion)</h2>
+            <p class="mb-4 text-sm">Second Law: Systems tend towards disorder. Once the perfume leaves the bottle, you can't put it back.</p>
+            <button onclick="releaseGas()" class="brass-btn w-full">OPEN VALVE</button>
+            <button onclick="resetDiff()" class="brass-btn w-full mt-2" style="background: linear-gradient(to bottom, #aaa, #777);">RESET</button>
+        </div>
+    </section>
+
+    <!-- 9. Mixing Entropy -->
+    <section class="mb-24 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <div class="lg:col-span-4">
+            <div class="text-6xl font-bold text-red-900/50 mb-[-20px] ml-[-10px] select-none steampunk-font">09</div>
+            <h2 class="text-2xl mb-4 relative z-10">Mixing Entropy</h2>
+            <p class="mb-4 text-sm">Separated gases are "ordered". Removing the divider increases entropy as they mix irreversibly.</p>
+            <button onclick="removeDivider()" class="brass-btn w-full">REMOVE DIVIDER</button>
+        </div>
+        <div class="lg:col-span-8 machine-panel p-4">
+            <canvas id="mixCanvas" width="800" height="300" class="w-full h-[300px]"></canvas>
+        </div>
+    </section>
+
+    <!-- 10. Maxwell's Demon -->
+    <section class="mb-24 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <div class="lg:col-span-8 machine-panel p-4 relative">
+            <canvas id="demonCanvas" width="800" height="300" class="w-full h-[300px] cursor-pointer" onmousedown="toggleDemonGate()"></canvas>
+            <div class="absolute top-2 left-1/2 -translate-x-1/2 text-xs text-gray-500">CLICK TO OPEN/CLOSE GATE</div>
+        </div>
+        <div class="lg:col-span-4">
+            <div class="text-6xl font-bold text-red-900/50 mb-[-20px] ml-[-10px] select-none steampunk-font">10</div>
+            <h2 class="text-2xl mb-4 relative z-10">Maxwell's Demon</h2>
+            <p class="mb-4 text-sm">A thought experiment. Can you lower entropy by sorting hot particles to the right and cold to the left? Try it!</p>
+        </div>
+    </section>
+
+    <!-- 11. Heat Engine -->
+    <section class="mb-24 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <div class="lg:col-span-4">
+            <div class="text-6xl font-bold text-red-900/50 mb-[-20px] ml-[-10px] select-none steampunk-font">11</div>
+            <h2 class="text-2xl mb-4 relative z-10">The Heat Engine</h2>
+            <p class="mb-4 text-sm">Turning heat into work. Gas expands (Power stroke), does work, cools down, and compresses again.</p>
+            <button onclick="toggleEngine()" class="brass-btn w-full">START/STOP ENGINE</button>
+        </div>
+        <div class="lg:col-span-8 machine-panel p-4 flex justify-center">
+            <canvas id="engineCanvas" width="400" height="300" class="bg-gray-900 border-4 border-iron"></canvas>
+        </div>
+    </section>
+
+    <!-- 12. Phase Change -->
+    <section class="mb-24 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <div class="lg:col-span-8 machine-panel p-4">
+            <canvas id="phaseCanvas" width="800" height="300" class="w-full h-[300px]"></canvas>
+        </div>
+        <div class="lg:col-span-4">
+            <div class="text-6xl font-bold text-red-900/50 mb-[-20px] ml-[-10px] select-none steampunk-font">12</div>
+            <h2 class="text-2xl mb-4 relative z-10">Phase Transitions</h2>
+            <p class="mb-4 text-sm">Adding energy breaks atomic bonds. Solid (Lattice) &rarr; Liquid (Flow) &rarr; Gas (Chaos).</p>
+            <input type="range" id="phaseSlider" min="0" max="200" value="50" oninput="updatePhase()">
+            <div id="phase-label" class="text-center gauge-text text-xl mt-2">Solid</div>
+        </div>
+    </section>
+
+    <!-- 13. Specific Heat Capacity -->
+    <section class="mb-24 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <div class="lg:col-span-4">
+            <div class="text-6xl font-bold text-red-900/50 mb-[-20px] ml-[-10px] select-none steampunk-font">13</div>
+            <h2 class="text-2xl mb-4 relative z-10">Specific Heat</h2>
+            <p class="mb-4 text-sm">Different materials store heat differently. Water takes FOREVER to heat up compared to Gold.</p>
+            <button onclick="heatCapacity()" class="brass-btn w-full">APPLY EQUAL HEAT</button>
+        </div>
+        <div class="lg:col-span-8 machine-panel p-8 flex justify-around">
+            <div class="text-center">
+                <div class="h-40 w-20 bg-gray-800 border-2 border-gray-600 relative rounded-b overflow-hidden">
+                    <div id="water-level" class="absolute bottom-0 w-full h-full bg-blue-500 opacity-50"></div>
+                    <div id="water-temp" class="absolute bottom-2 w-full text-center text-white font-bold">20°C</div>
+                </div>
+                <div class="mt-2 text-blue-400 font-bold">WATER</div>
+            </div>
+            <div class="text-center">
+                <div class="h-40 w-20 bg-gray-800 border-2 border-gray-600 relative rounded-b overflow-hidden">
+                    <div id="gold-level" class="absolute bottom-0 w-full h-full bg-yellow-500 opacity-50"></div>
+                    <div id="gold-temp" class="absolute bottom-2 w-full text-center text-white font-bold">20°C</div>
+                </div>
+                <div class="mt-2 text-yellow-400 font-bold">GOLD</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 14. Absolute Zero -->
+    <section class="mb-24 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <div class="lg:col-span-8 machine-panel p-4">
+            <canvas id="zeroCanvas" width="800" height="300" class="w-full h-[300px]"></canvas>
+        </div>
+        <div class="lg:col-span-4">
+            <div class="text-6xl font-bold text-red-900/50 mb-[-20px] ml-[-10px] select-none steampunk-font">14</div>
+            <h2 class="text-2xl mb-4 relative z-10">Absolute Zero</h2>
+            <p class="mb-4 text-sm">At 0 Kelvin (-273.15°C), all thermal motion stops. It is the theoretical limit of cold.</p>
+            <input type="range" id="zeroSlider" min="0" max="300" value="300" oninput="updateZero()">
+            <div id="zero-readout" class="text-center gauge-text text-xl mt-2">300 K</div>
+        </div>
+    </section>
+
+    <!-- 15. The Heat Death -->
+    <section class="mb-24 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <div class="lg:col-span-4">
+            <div class="text-6xl font-bold text-red-900/50 mb-[-20px] ml-[-10px] select-none steampunk-font">15</div>
+            <h2 class="text-2xl mb-4 relative z-10">Heat Death</h2>
+            <p class="mb-4 text-sm">Entropy always increases. Eventually, energy spreads out so evenly that no work can be done. The universe freezes.</p>
+            <button onclick="startHeatDeath()" class="brass-btn w-full">ACCELERATE TIME</button>
+            <button onclick="initHeatDeath()" class="brass-btn w-full mt-2" style="background: linear-gradient(#333,#111); color:white; border-color:#555">RESET UNIVERSE</button>
+        </div>
+        <div class="lg:col-span-8 machine-panel p-4">
+            <canvas id="deathCanvas" width="800" height="300" class="w-full h-[300px]"></canvas>
+        </div>
+    </section>
+
+    <footer class="text-center py-12 border-t-4 border-copper bg-black text-brass">
+        <div class="steampunk-font text-2xl mb-2">The Celestica Initiative</div>
+        <div class="text-xs font-mono">Engineered for Discovery</div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+        
+        const PI2 = Math.PI * 2;
+        function rand(min, max) { return Math.random() * (max - min) + min; }
+
+        // === 1. KINETIC THEORY ===
+        const kC = document.getElementById('kineticCanvas');
+        const kCtx = kC.getContext('2d');
+        let kParticles = [];
+        for(let i=0; i<100; i++) kParticles.push({x:rand(0,800), y:rand(0,300), vx:rand(-1,1), vy:rand(-1,1)});
+        
+        function updateKinetic() {
+            let temp = document.getElementById('tempSlider').value;
+            // Speed factor
+            let speed = temp / 10;
+            kParticles.forEach(p => {
+                let angle = Math.atan2(p.vy, p.vx);
+                p.vx = Math.cos(angle) * speed;
+                p.vy = Math.sin(angle) * speed;
+            });
+        }
+
+        function animKinetic() {
+            kCtx.fillStyle = 'rgba(0,0,0,0.2)'; kCtx.fillRect(0,0,800,300);
+            let temp = document.getElementById('tempSlider').value;
+            
+            kParticles.forEach(p => {
+                p.x += p.vx; p.y += p.vy;
+                if(p.x<0||p.x>800) p.vx *= -1;
+                if(p.y<0||p.y>300) p.vy *= -1;
+                
+                let hue = temp * 2.5; // Red to Yellowish
+                kCtx.fillStyle = `hsl(${hue}, 100%, 50%)`;
+                kCtx.beginPath(); kCtx.arc(p.x, p.y, 3, 0, PI2); kCtx.fill();
+            });
+            requestAnimationFrame(animKinetic);
+        }
+        animKinetic();
+
+        // === 2. BROWNIAN ===
+        const bC = document.getElementById('brownianCanvas');
+        const bCtx = bC.getContext('2d');
+        let bigP = {x: 400, y: 150, vx:0, vy:0};
+        let smallP = [];
+        function resetBrownian() {
+            bigP = {x: 400, y: 150, vx:0, vy:0};
+            smallP = [];
+            for(let i=0; i<300; i++) smallP.push({x:rand(0,800), y:rand(0,300), vx:rand(-3,3), vy:rand(-3,3)});
+        }
+        resetBrownian();
+
+        function animBrownian() {
+            bCtx.fillStyle = '#111'; bCtx.fillRect(0,0,800,300);
+            
+            // Draw Small (Invisible forces essentially)
+            bCtx.fillStyle = '#444';
+            smallP.forEach(p => {
+                p.x += p.vx; p.y += p.vy;
+                if(p.x<0||p.x>800) p.vx*=-1;
+                if(p.y<0||p.y>300) p.vy*=-1;
+                bCtx.beginPath(); bCtx.arc(p.x, p.y, 1, 0, PI2); bCtx.fill();
+                
+                // Collide with Big
+                let dx = p.x - bigP.x;
+                let dy = p.y - bigP.y;
+                let dist = Math.sqrt(dx*dx + dy*dy);
+                if(dist < 21) {
+                    // Transfer Momentum
+                    bigP.vx -= dx*0.005;
+                    bigP.vy -= dy*0.005;
+                    p.vx *= -1; p.vy *= -1;
+                }
+            });
+
+            // Draw Big
+            bigP.x += bigP.vx; bigP.y += bigP.vy;
+            bigP.vx *= 0.98; bigP.vy *= 0.98; // Friction
+            if(bigP.x<20||bigP.x>780) bigP.vx*=-1;
+            if(bigP.y<20||bigP.y>280) bigP.vy*=-1;
+
+            bCtx.fillStyle = '#eebb4d';
+            bCtx.strokeStyle = '#fff';
+            bCtx.beginPath(); bCtx.arc(bigP.x, bigP.y, 20, 0, PI2); bCtx.fill(); bCtx.stroke();
+            
+            requestAnimationFrame(animBrownian);
+        }
+        animBrownian();
+
+        // === 3. IDEAL GAS ===
+        const gC = document.getElementById('gasCanvas');
+        const gCtx = gC.getContext('2d');
+        let gParts = [];
+        for(let i=0; i<20; i++) gParts.push({x:rand(10,290), y:rand(150,290), vx:rand(-2,2), vy:rand(-2,2)});
+        
+        function updateGasLaw() {
+            // Just read values in loop
+        }
+
+        function animGas() {
+            gCtx.fillStyle = '#1a1814'; gCtx.fillRect(0,0,300,300);
+            
+            let pistonH = document.getElementById('volSlider').value; // 50 (compressed) to 250 (expanded)
+            // The canvas height is 300. Piston moves from top.
+            // Input value is "Volume" -> Height of chamber.
+            // If val is 200, chamber is 200px high (from bottom), piston is at y=100.
+            
+            let chamberH = parseInt(pistonH);
+            let pistonY = 300 - chamberH;
+            
+            let temp = document.getElementById('gasTempSlider').value;
+            
+            // Piston
+            gCtx.fillStyle = '#b87333';
+            gCtx.fillRect(0, pistonY-20, 300, 20); // The piston head
+            gCtx.fillStyle = '#555';
+            gCtx.fillRect(140, 0, 20, pistonY-20); // Rod
+            
+            // Particles
+            let speed = temp;
+            let pressure = 0;
+            
+            gParts.forEach(p => {
+                // Normalize speed to temp
+                let ang = Math.atan2(p.vy, p.vx);
+                p.vx = Math.cos(ang) * speed;
+                p.vy = Math.sin(ang) * speed;
+                
+                p.x += p.vx; p.y += p.vy;
+                
+                // Walls
+                if(p.x < 5 || p.x > 295) { p.vx *= -1; pressure += speed; }
+                if(p.y > 295) { p.vy *= -1; pressure += speed; }
+                
+                // Piston Hit
+                if(p.y < pistonY) {
+                    p.y = pistonY + 5;
+                    p.vy = Math.abs(p.vy); // Push down
+                    pressure += speed * 2;
+                }
+                
+                gCtx.fillStyle = '#eebb4d';
+                gCtx.beginPath(); gCtx.arc(p.x, p.y, 4, 0, PI2); gCtx.fill();
+            });
+            
+            // Calc visual pressure (simplistic)
+            let P = (pressure + (300-chamberH)*0.5) / 10; 
+            document.getElementById('pressure-gauge').innerText = `P: ${P.toFixed(1)} atm`;
+            document.getElementById('temp-gauge').innerText = `T: ${(temp*100).toFixed(0)} K`;
+            
+            // Flame
+            if(temp > 3) {
+                gCtx.fillStyle = `rgba(255, 69, 0, ${(temp-3)/7})`;
+                gCtx.beginPath(); gCtx.arc(150, 320, 40, 0, PI2); gCtx.fill();
+            }
+
+            requestAnimationFrame(animGas);
+        }
+        animGas();
+
+        // === 4. EXPANSION ===
+        const eC = document.getElementById('expansionCanvas');
+        const eCtx = eC.getContext('2d');
+        let gap = 20;
+        
+        function updateExpansion() {
+            let heat = document.getElementById('expandSlider').value;
+            gap = 20 - (heat * 0.2); // Max expansion closes gap
+            if(gap <= 0) {
+                gap = 0;
+                document.getElementById('expansion-status').innerText = "CRITICAL FAILURE: BUCKLING!";
+                document.getElementById('expansion-status').style.color = "red";
+            } else {
+                document.getElementById('expansion-status').innerText = `Gap: ${gap.toFixed(1)} mm`;
+                document.getElementById('expansion-status').style.color = "#eebb4d";
+            }
+        }
+        
+        function animExpansion() {
+            eCtx.clearRect(0,0,800,200);
+            let heat = document.getElementById('expandSlider').value;
+            
+            // Left Bar
+            let w = 390 + (20-gap); 
+            let colorVal = Math.floor(heat * 2);
+            let color = `rgb(${100 + colorVal}, ${100 - colorVal/2}, 100)`;
+            
+            eCtx.fillStyle = color;
+            eCtx.fillRect(0, 80, w, 40);
+            eCtx.fillStyle = color;
+            eCtx.fillRect(800-w, 80, w, 40); // Right Bar mirroring
+            
+            // Particles vibrating
+            eCtx.fillStyle = 'rgba(0,0,0,0.5)';
+            for(let i=0; i<w; i+=20) {
+                let vib = (Math.random()-0.5) * (heat/10);
+                eCtx.beginPath(); eCtx.arc(i+10, 100+vib, 2, 0, PI2); eCtx.fill();
+                eCtx.beginPath(); eCtx.arc(800-i-10, 100+vib, 2, 0, PI2); eCtx.fill();
+            }
+            
+            requestAnimationFrame(animExpansion);
+        }
+        animExpansion();
+
+        // === 5. CONDUCTION ===
+        const ccC = document.getElementById('conductionCanvas');
+        const ccCtx = ccC.getContext('2d');
+        let rods = Array(40).fill(0); // Heat value 0-100
+        let flameOn = false;
+        
+        function startConduction() { flameOn = true; setTimeout(()=>flameOn=false, 2000); }
+        
+        function animConduction() {
+            ccCtx.clearRect(0,0,800,200);
+            
+            // Heat Source
+            if(flameOn) rods[0] = 100;
+            else rods[0] *= 0.95;
+            
+            // Propagate
+            for(let i=1; i<rods.length; i++) {
+                rods[i] += (rods[i-1] - rods[i]) * 0.1; // Transfer
+                rods[i] *= 0.99; // Loss
+            }
+            
+            // Draw
+            for(let i=0; i<rods.length; i++) {
+                let h = rods[i];
+                ccCtx.fillStyle = `rgb(${50 + h*2}, ${50}, ${50})`;
+                ccCtx.fillRect(i*20, 80, 18, 40);
+                
+                // Vibration
+                let vib = (Math.random()-0.5) * (h/5);
+                ccCtx.fillStyle = '#fff';
+                ccCtx.beginPath(); ccCtx.arc(i*20+9+vib, 100+vib, 3, 0, PI2); ccCtx.fill();
+            }
+            
+            // Flame
+            if(flameOn) {
+                ccCtx.fillStyle = 'orange';
+                ccCtx.beginPath(); ccCtx.moveTo(0, 130); ccCtx.lineTo(10, 80); ccCtx.lineTo(20, 130); ccCtx.fill();
+            }
+            
+            requestAnimationFrame(animConduction);
+        }
+        animConduction();
+
+        // === 6. CONVECTION ===
+        const cvC = document.getElementById('convectionCanvas');
+        const cvCtx = cvC.getContext('2d');
+        let cvParts = [];
+        for(let i=0; i<100; i++) cvParts.push({x:rand(0,600), y:rand(0,300), t:0});
+        let cvHeat = false;
+        function setConvection(s) { cvHeat = s; }
+        
+        function animConvection() {
+            cvCtx.fillStyle = 'rgba(0,0,0,0.1)'; cvCtx.fillRect(0,0,600,300);
+            
+            cvParts.forEach(p => {
+                // Physics:
+                // If near bottom center and heat ON -> Gain Temp
+                // If Hot -> Rise (y--)
+                // If Cold -> Sink (y++)
+                // Side movement to cycle
+                
+                if(cvHeat && p.y > 250 && p.x > 200 && p.x < 400) p.t += 2;
+                p.t *= 0.99; // Cool down
+                
+                // Rise/Sink
+                p.y -= p.t * 0.5; 
+                p.y += 1; // Gravity
+                
+                // Cycle logic
+                if(p.y < 50) { 
+                    // Spread out at top
+                    if(p.x < 300) p.x -= 1; else p.x += 1;
+                }
+                if(p.y > 250) {
+                    // Converge at bottom
+                    if(p.x < 300) p.x += 1; else p.x -= 1;
+                }
+                
+                // Bounds
+                if(p.x < 0) p.x = 0; if(p.x > 600) p.x = 600;
+                if(p.y < 0) p.y = 0; if(p.y > 300) p.y = 300;
+                
+                let color = p.t > 20 ? 'red' : 'blue';
+                cvCtx.fillStyle = color;
+                cvCtx.beginPath(); cvCtx.arc(p.x, p.y, 3+p.t/10, 0, PI2); cvCtx.fill();
+            });
+            
+            if(cvHeat) {
+                cvCtx.fillStyle = 'red';
+                cvCtx.fillRect(200, 290, 200, 10);
+            }
+            
+            requestAnimationFrame(animConvection);
+        }
+        animConvection();
+
+        // === 7. RADIATION ===
+        function updateRadiation() {
+            let temp = document.getElementById('radSlider').value;
+            document.getElementById('rad-readout').innerText = temp + " K";
+            
+            let orb = document.getElementById('rad-orb');
+            let r=0, g=0, b=0, glow='';
+            
+            if(temp < 3000) { r=temp/12; g=0; b=0; }
+            else if(temp < 6000) { r=255; g=(temp-3000)/12; b=0; } // Orange/Yellow
+            else if(temp < 9000) { r=255; g=255; b=(temp-6000)/12; } // White
+            else { r=100; g=100; b=255; } // Blueish
+            
+            orb.style.backgroundColor = `rgb(${r},${g},${b})`;
+            orb.style.boxShadow = `0 0 ${temp/100}px rgb(${r},${g},${b})`;
+        }
+        updateRadiation();
+
+        // === 8. ENTROPY (DIFFUSION) ===
+        const dC = document.getElementById('diffCanvas');
+        const dCtx = dC.getContext('2d');
+        let dParts = [];
+        // Init packed
+        for(let i=0; i<100; i++) dParts.push({x:rand(50,150), y:rand(100,200), vx:rand(-2,2), vy:rand(-2,2)});
+        let dOpen = false;
+        
+        function releaseGas() { dOpen = true; }
+        function resetDiff() { dOpen = false; dParts.forEach(p=>{p.x=rand(50,150); p.y=rand(100,200);}); }
+        
+        function animDiff() {
+            dCtx.fillStyle = '#222'; dCtx.fillRect(0,0,800,300);
+            
+            // Bottle
+            dCtx.strokeStyle = '#b87333'; dCtx.lineWidth=4;
+            dCtx.strokeRect(50, 100, 100, 100); // Box
+            if(!dOpen) {
+                dCtx.beginPath(); dCtx.moveTo(150, 100); dCtx.lineTo(150, 200); dCtx.stroke();
+            }
+            
+            dParts.forEach(p => {
+                p.x += p.vx; p.y += p.vy;
+                
+                // Walls
+                if(p.y<0||p.y>300) p.vy*=-1;
+                if(p.x<0||p.x>800) p.vx*=-1;
+                
+                // Bottle Logic
+                if(!dOpen) {
+                    if(p.x > 150) p.vx = -Math.abs(p.vx);
+                    if(p.x < 50) p.vx = Math.abs(p.vx);
+                    if(p.y < 100) p.vy = Math.abs(p.vy);
+                    if(p.y > 200) p.vy = -Math.abs(p.vy);
+                }
+                
+                dCtx.fillStyle = '#0aff68';
+                dCtx.beginPath(); dCtx.arc(p.x, p.y, 3, 0, PI2); dCtx.fill();
+            });
+            requestAnimationFrame(animDiff);
+        }
+        animDiff();
+
+        // === 9. MIXING ===
+        const mC = document.getElementById('mixCanvas');
+        const mCtx = mC.getContext('2d');
+        let blueP = [], redP = [];
+        for(let i=0; i<50; i++) blueP.push({x:rand(0,390), y:rand(0,300), vx:rand(-2,2), vy:rand(-2,2)});
+        for(let i=0; i<50; i++) redP.push({x:rand(410,800), y:rand(0,300), vx:rand(-2,2), vy:rand(-2,2)});
+        let mixDivider = true;
+        function removeDivider() { mixDivider = false; }
+        
+        function animMix() {
+            mCtx.clearRect(0,0,800,300);
+            
+            // Divider
+            if(mixDivider) {
+                mCtx.fillStyle = '#fff'; mCtx.fillRect(395, 0, 10, 300);
+                
+                blueP.forEach(p => { if(p.x > 390) p.vx = -Math.abs(p.vx); });
+                redP.forEach(p => { if(p.x < 410) p.vx = Math.abs(p.vx); });
+            }
+            
+            [...blueP, ...redP].forEach(p => {
+                p.x += p.vx; p.y += p.vy;
+                if(p.x<0||p.x>800) p.vx*=-1;
+                if(p.y<0||p.y>300) p.vy*=-1;
+            });
+            
+            mCtx.fillStyle = 'cyan';
+            blueP.forEach(p => { mCtx.beginPath(); mCtx.arc(p.x, p.y, 4, 0, PI2); mCtx.fill(); });
+            mCtx.fillStyle = 'magenta';
+            redP.forEach(p => { mCtx.beginPath(); mCtx.arc(p.x, p.y, 4, 0, PI2); mCtx.fill(); });
+            
+            requestAnimationFrame(animMix);
+        }
+        animMix();
+
+        // === 10. MAXWELL'S DEMON ===
+        const demC = document.getElementById('demonCanvas');
+        const demCtx = demC.getContext('2d');
+        let demP = [];
+        for(let i=0; i<40; i++) demP.push({x:rand(0,800), y:rand(0,300), vx:rand(-5,5), vy:rand(-3,3)});
+        let gateOpen = false;
+        function toggleDemonGate() { gateOpen = !gateOpen; }
+        
+        function animDemon() {
+            demCtx.fillStyle = '#000'; demCtx.fillRect(0,0,800,300);
+            
+            // Wall
+            demCtx.fillStyle = '#555';
+            demCtx.fillRect(395, 0, 10, 100);
+            demCtx.fillRect(395, 200, 10, 100);
+            
+            // Gate
+            if(gateOpen) {
+                demCtx.fillStyle = 'green';
+                demCtx.fillRect(395, 100, 10, 100); // Open visually (green light)
+            } else {
+                demCtx.fillStyle = 'red';
+                demCtx.fillRect(395, 100, 10, 100); // Closed
+            }
+            
+            demP.forEach(p => {
+                p.x += p.vx; p.y += p.vy;
+                if(p.x<0||p.x>800) p.vx*=-1;
+                if(p.y<0||p.y>300) p.vy*=-1;
+                
+                // Wall Hit
+                if(p.x > 390 && p.x < 410) {
+                    // If gate closed or hitting solid wall parts
+                    if(!gateOpen || p.y < 100 || p.y > 200) {
+                        p.vx *= -1;
+                    }
+                }
+                
+                let speed = Math.sqrt(p.vx*p.vx + p.vy*p.vy);
+                demCtx.fillStyle = speed > 3 ? 'red' : 'blue';
+                demCtx.beginPath(); demCtx.arc(p.x, p.y, 4, 0, PI2); demCtx.fill();
+            });
+            requestAnimationFrame(animDemon);
+        }
+        animDemon();
+
+        // === 11. ENGINE ===
+        const engC = document.getElementById('engineCanvas');
+        const engCtx = engC.getContext('2d');
+        let engRunning = false;
+        let engCycle = 0; // 0-PI2
+        function toggleEngine() { engRunning = !engRunning; }
+        
+        function animEngine() {
+            engCtx.clearRect(0,0,400,300);
+            if(engRunning) engCycle += 0.1;
+            
+            let pistonY = 150 + Math.sin(engCycle)*50;
+            
+            // Chamber
+            engCtx.strokeStyle = '#aaa'; engCtx.lineWidth=5;
+            engCtx.strokeRect(100, 50, 200, 200);
+            
+            // Piston
+            engCtx.fillStyle = '#555';
+            engCtx.fillRect(105, pistonY, 190, 40);
+            
+            // Rod
+            engCtx.beginPath();
+            engCtx.moveTo(200, pistonY+20);
+            engCtx.lineTo(200 + Math.sin(engCycle)*50, 280); // Crank
+            engCtx.stroke();
+            
+            // Gas Color (Cycle phase)
+            // Compression (moving up) -> Hot
+            // Expansion (moving down) -> Cool (Power stroke actually hot, but let's visualize pressure)
+            let phase = engCycle % PI2;
+            let color = 'rgba(200,200,200,0.5)';
+            if(Math.sin(engCycle) < 0 && Math.cos(engCycle) < 0) color = 'rgba(255,0,0,0.8)'; // Combustion
+            
+            engCtx.fillStyle = color;
+            engCtx.fillRect(105, 55, 190, pistonY-55);
+            
+            requestAnimationFrame(animEngine);
+        }
+        animEngine();
+
+        // === 12. PHASE CHANGE ===
+        const phC = document.getElementById('phaseCanvas');
+        const phCtx = phC.getContext('2d');
+        let phParts = [];
+        // Create Lattice
+        for(let y=0; y<10; y++) {
+            for(let x=0; x<20; x++) {
+                phParts.push({
+                    ix: 200 + x*20, iy: 100 + y*20, // Initial Lattice pos
+                    x: 200 + x*20, y: 100 + y*20,
+                    vx: 0, vy: 0
+                });
+            }
+        }
+        
+        function updatePhase() {
+            // Just reading slider
+        }
+        
+        function animPhase() {
+            phCtx.fillStyle = '#111'; phCtx.fillRect(0,0,800,300);
+            let energy = document.getElementById('phaseSlider').value;
+            let state = "Solid";
+            if(energy > 80) state = "Liquid";
+            if(energy > 150) state = "Gas";
+            document.getElementById('phase-label').innerText = state;
+            
+            phParts.forEach(p => {
+                if(state === "Solid") {
+                    // Vibrate around lattice
+                    let vib = energy / 10;
+                    p.x = p.ix + (Math.random()-0.5)*vib;
+                    p.y = p.iy + (Math.random()-0.5)*vib;
+                } else if (state === "Liquid") {
+                    // Flow but stay somewhat together (gravity)
+                    p.x += (Math.random()-0.5)*2;
+                    p.y += (Math.random()-0.5)*2 + 0.5; // Sink
+                    if(p.y > 280) p.y = 280;
+                    if(p.x < 100) p.x = 100; if(p.x > 700) p.x = 700;
+                } else {
+                    // Gas - fly free
+                    if(p.vx === 0) { p.vx = rand(-2,2); p.vy = rand(-2,2); }
+                    p.x += p.vx; p.y += p.vy;
+                    if(p.x<0||p.x>800) p.vx*=-1;
+                    if(p.y<0||p.y>300) p.vy*=-1;
+                }
+                
+                phCtx.fillStyle = '#00f3ff';
+                phCtx.beginPath(); phCtx.arc(p.x, p.y, 3, 0, PI2); phCtx.fill();
+            });
+            requestAnimationFrame(animPhase);
+        }
+        animPhase();
+
+        // === 13. SPECIFIC HEAT ===
+        function heatCapacity() {
+            let wH = document.getElementById('water-level');
+            let gH = document.getElementById('gold-level');
+            let wT = document.getElementById('water-temp');
+            let gT = document.getElementById('gold-temp');
+            
+            // Gold heats 30x faster roughly
+            wH.style.transition = "height 5s linear";
+            gH.style.transition = "height 0.5s linear"; // Fast
+            
+            wH.style.height = "100%";
+            gH.style.height = "100%";
+            
+            // Mock counters
+            let t=20;
+            let int = setInterval(() => {
+                t++;
+                if(t>100) clearInterval(int);
+                gT.innerText = (20 + (t-20)*10) + "°C"; // Gold shoots up
+                wT.innerText = t + "°C";
+            }, 50);
+        }
+
+        // === 14. ABSOLUTE ZERO ===
+        const zC = document.getElementById('zeroCanvas');
+        const zCtx = zC.getContext('2d');
+        let zParts = [];
+        for(let i=0; i<50; i++) zParts.push({x:rand(0,800), y:rand(0,300)});
+        
+        function updateZero() {
+            let t = document.getElementById('zeroSlider').value;
+            document.getElementById('zero-readout').innerText = t + " K";
+        }
+        
+        function animZero() {
+            zCtx.clearRect(0,0,800,300);
+            let t = document.getElementById('zeroSlider').value;
+            let speed = t / 50;
+            
+            zParts.forEach(p => {
+                p.x += (Math.random()-0.5)*speed;
+                p.y += (Math.random()-0.5)*speed;
+                
+                let color = `rgb(${t}, ${t}, 255)`;
+                if(t < 10) color = '#555'; // Frozen grey
+                
+                zCtx.fillStyle = color;
+                zCtx.beginPath(); zCtx.arc(p.x, p.y, 4, 0, PI2); zCtx.fill();
+            });
+            requestAnimationFrame(animZero);
+        }
+        animZero();
+
+        // === 15. HEAT DEATH ===
+        const hdC = document.getElementById('deathCanvas');
+        const hdCtx = hdC.getContext('2d');
+        let hdParts = [];
+        let heatDeathActive = false;
+
+        // Initialize universe
+        function initHeatDeath() {
+            hdParts = [];
+            // Galaxy clusters
+            for(let i=0; i<150; i++) {
+                let angle = Math.random() * PI2;
+                let dist = Math.random() * 50;
+                // Spiral galaxy shape approx
+                if(Math.random()>0.5) dist += rand(50, 150); 
+                
+                hdParts.push({
+                    x: 400 + Math.cos(angle)*dist, 
+                    y: 150 + Math.sin(angle)*dist * 0.6, // Flattened
+                    vx: -Math.sin(angle)*dist*0.02, // Orbiting speed
+                    vy: Math.cos(angle)*dist*0.02,
+                    life: 1.0,
+                    temp: 1.0, // 1.0 = Hot/White, 0.0 = Cold/Black
+                    size: rand(1, 3)
+                });
+            }
+            heatDeathActive = false;
+        }
+        initHeatDeath();
+        
+        function startHeatDeath() {
+            heatDeathActive = true;
+            // Explosion/Expansion impulse
+            hdParts.forEach(p => {
+                let dx = p.x - 400;
+                let dy = p.y - 150;
+                let d = Math.sqrt(dx*dx + dy*dy);
+                if(d === 0) d = 1;
+                // Expansion velocity proportional to distance (Hubble's Law style)
+                p.vx = (dx/d) * (d * 0.05) + (Math.random()-0.5);
+                p.vy = (dy/d) * (d * 0.05) + (Math.random()-0.5);
+            });
+        }
+        
+        function animDeath() {
+            // Deep space background clearing with trails
+            hdCtx.fillStyle = 'rgba(10, 5, 10, 0.2)'; 
+            hdCtx.fillRect(0,0,800,300);
+            
+            hdCtx.globalCompositeOperation = 'lighter'; // Glow effect
+
+            hdParts.forEach(p => {
+                p.x += p.vx; p.y += p.vy;
+                
+                if(heatDeathActive) {
+                    // Universe Expansion -> Cooling
+                    // Particles slow down slightly but never stop moving apart
+                    // p.vx *= 1.01; p.vy *= 1.01; // Actually dark energy accelerates expansion
+                    
+                    // Cooling logic
+                    p.temp -= 0.002; 
+                    if(p.temp < 0) p.temp = 0;
+                    
+                    // Life/Opacity
+                    if(p.temp < 0.3) p.life -= 0.005;
+                    if(p.life < 0) p.life = 0;
+                } else {
+                    // Orbit logic (Before heat death)
+                    // Simple rotation around center
+                    let dx = p.x - 400;
+                    let dy = p.y - 150;
+                    let dist = Math.sqrt(dx*dx + dy*dy);
+                    // Gravity pull
+                    if(dist > 10) {
+                        p.vx -= (dx/dist) * 0.05;
+                        p.vy -= (dy/dist) * 0.05;
+                    }
+                }
+
+                if(p.life > 0) {
+                    // Color shift based on Temp
+                    // Hot (1.0) = White/Blue
+                    // Med (0.5) = Yellow/Orange
+                    // Cold (0.1) = Red/Brown
+                    
+                    let r, g, b;
+                    if(p.temp > 0.8) { // White/Blue
+                        r=200; g=200; b=255;
+                    } else if(p.temp > 0.5) { // Yellow
+                        r=255; g=255; b=100;
+                    } else if(p.temp > 0.2) { // Red
+                        r=255; g=50; b=50;
+                    } else { // Brown fading to black
+                        r=50; g=20; b=20;
+                    }
+                    
+                    let size = p.size * p.life;
+                    // Pulsate if dying
+                    if(heatDeathActive && p.temp > 0.1) {
+                        size += Math.sin(Date.now()*0.05)*0.5;
+                    }
+
+                    hdCtx.fillStyle = `rgba(${r}, ${g}, ${b}, ${p.life})`;
+                    hdCtx.beginPath(); 
+                    hdCtx.arc(p.x, p.y, Math.max(0.1, size), 0, PI2); 
+                    hdCtx.fill();
+                    
+                    // Add glow for hot stars
+                    if(p.temp > 0.8) {
+                        hdCtx.shadowBlur = 10;
+                        hdCtx.shadowColor = 'white';
+                        hdCtx.fill();
+                        hdCtx.shadowBlur = 0;
+                    }
+                }
+            });
+            
+            hdCtx.globalCompositeOperation = 'source-over';
+            
+            // Overlay text if dead
+            if(heatDeathActive && hdParts[0].life <= 0.1) {
+                hdCtx.fillStyle = 'rgba(0,0,0,0.05)'; // Fade to black slowly
+                hdCtx.fillRect(0,0,800,300);
+                hdCtx.fillStyle = `rgba(255, 255, 255, ${1 - hdParts[0].life * 10})`;
+                hdCtx.font = "30px 'Rye'";
+                hdCtx.textAlign = "center";
+                hdCtx.fillText("MAXIMUM ENTROPY REACHED", 400, 150);
+            }
+
+            requestAnimationFrame(animDeath);
+        }
+        animDeath();
+
+    </script>
+</body>
+</html>

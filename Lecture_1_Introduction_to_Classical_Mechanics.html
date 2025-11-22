@@ -1,0 +1,1455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Celestica Initiative - Lecture 1</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Changa+One&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --retro-cream: #FFFDD0;
+            --retro-orange: #E85D04;
+            --retro-yellow: #FFBA08;
+            --retro-brown: #3F2E3E;
+            --retro-green: #588157;
+            --retro-blue: #219EBC;
+            --retro-red: #D00000;
+            --retro-purple: #7209b7;
+        }
+
+        body {
+            background-color: var(--retro-cream);
+            color: var(--retro-brown);
+            font-family: 'Space Mono', monospace;
+            background-image: radial-gradient(var(--retro-yellow) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Changa One', cursive;
+        }
+
+        .retro-box {
+            background-color: #fff;
+            border: 4px solid var(--retro-brown);
+            box-shadow: 8px 8px 0px var(--retro-orange);
+            border-radius: 1rem;
+            transition: transform 0.2s;
+        }
+
+        .retro-box:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 10px 10px 0px var(--retro-orange);
+        }
+
+        .retro-btn {
+            background-color: var(--retro-green);
+            color: white;
+            border: 3px solid var(--retro-brown);
+            padding: 10px 20px;
+            font-family: 'Changa One', cursive;
+            font-size: 1.2rem;
+            cursor: pointer;
+            box-shadow: 4px 4px 0px var(--retro-brown);
+            transition: all 0.1s;
+        }
+
+        .retro-btn:active {
+            transform: translate(4px, 4px);
+            box-shadow: 0px 0px 0px var(--retro-brown);
+        }
+
+        .btn-orange { background-color: var(--retro-orange); }
+        .btn-blue { background-color: var(--retro-blue); }
+        .btn-red { background-color: var(--retro-red); }
+        .btn-purple { background-color: var(--retro-purple); }
+
+        /* Custom Range Slider Styling */
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+        }
+
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 24px;
+            width: 24px;
+            border-radius: 50%;
+            background: var(--retro-orange);
+            border: 2px solid var(--retro-brown);
+            margin-top: -10px;
+            cursor: pointer;
+        }
+
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 8px;
+            cursor: pointer;
+            background: var(--retro-brown);
+            border-radius: 4px;
+        }
+
+        .section-number {
+            background-color: var(--retro-orange); 
+            color: white; 
+            width: 3rem; 
+            height: 3rem; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            border-radius: 9999px; 
+            border: 4px solid var(--retro-brown); 
+            font-weight: bold; 
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+        
+        canvas {
+            image-rendering: pixelated; 
+            /* Gives it that sharp retro look */
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8 max-w-6xl mx-auto">
+
+    <!-- Header -->
+    <header class="text-center mb-12">
+        <div class="inline-block bg-orange-600 text-white px-6 py-2 rounded-full border-4 border-gray-800 mb-4 font-bold transform -rotate-2">
+            The Celestica Initiative
+        </div>
+        <h1 class="text-5xl md:text-7xl text-yellow-500 text-stroke-brown drop-shadow-retro mb-2" style="-webkit-text-stroke: 2px var(--retro-brown);">
+            CLASSICAL MECHANICS
+        </h1>
+        <p class="text-xl md:text-2xl text-gray-700 font-bold">The Ultimate Lecture: 20 Interactive Toys</p>
+    </header>
+
+    <!-- Intro -->
+    <section class="retro-box p-8 mb-12 bg-white">
+        <h2 class="text-3xl text-orange-600 mb-2">Welcome, Future Physicist!</h2>
+        <p class="text-lg">
+            Physics isn't just boring equations. It's the hidden code that runs the universe. 
+            We've prepared <strong>20 interactive toys</strong> for you to explore. 
+            No math required—just vibes.
+        </p>
+    </section>
+
+    <!-- 1. Newton's 2nd Law (F=ma) -->
+    <section class="mb-16">
+        <div class="flex items-center gap-4 mb-4">
+            <div class="section-number">1</div>
+            <h2 class="text-3xl text-brown-800">The Heavy Metal Van (Force & Mass)</h2>
+        </div>
+        <div class="retro-box p-6 bg-blue-50">
+            <p class="mb-4"><strong>Lesson:</strong> Pushing heavy things is hard. Pushing with more power is effective.</p>
+            <div class="bg-white border-4 border-gray-800 h-40 rounded-xl relative mb-6 overflow-hidden">
+                <div class="absolute bottom-0 w-full h-4 bg-gray-800"></div>
+                <div id="van" class="absolute bottom-4 left-0" style="width: 100px;">
+                    <div class="bg-orange-500 h-16 w-24 rounded-lg border-4 border-black flex items-center justify-center relative">
+                        <div id="luggage-pile" class="absolute -top-6 left-0 flex gap-1"></div>
+                        <i data-lucide="flower" class="text-yellow-300 w-8 h-8 animate-spin"></i>
+                    </div>
+                    <div class="flex justify-between px-2 -mt-3 relative z-20">
+                        <div class="w-6 h-6 bg-black rounded-full border-2 border-gray-500" id="wheel1"></div>
+                        <div class="w-6 h-6 bg-black rounded-full border-2 border-gray-500" id="wheel2"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 bg-yellow-100 p-4 rounded-xl border-2 border-black border-dashed">
+                <div><label class="font-bold">Mass (Luggage)</label><input type="range" id="massSlider" min="1" max="5" value="1"></div>
+                <div><label class="font-bold">Force (Engine)</label><input type="range" id="forceSlider" min="1" max="5" value="3"></div>
+                <button onclick="driveVan()" class="retro-btn">DRIVE!</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 2. Gravity (Orbit) -->
+    <section class="mb-16">
+        <div class="flex items-center gap-4 mb-4">
+            <div class="section-number">2</div>
+            <h2 class="text-3xl text-brown-800">The Disco Orbit (Gravity)</h2>
+        </div>
+        <div class="retro-box p-6 bg-gray-900 text-white">
+            <p class="mb-4 text-yellow-100"><strong>Lesson:</strong> Gravity pulls in. Speed throws out. Balance them to orbit.</p>
+            <div class="flex flex-col md:flex-row gap-4">
+                <canvas id="orbitCanvas" width="500" height="250" class="bg-black border-4 border-yellow-500 rounded w-full"></canvas>
+                <div class="flex flex-col gap-4 w-full md:w-48">
+                    <label class="font-bold text-yellow-400">Launch Speed</label>
+                    <input type="range" id="orbitSpeed" min="1" max="10" value="5">
+                    <button onclick="resetOrbit()" class="retro-btn bg-yellow-500 text-black">LAUNCH</button>
+                    <div id="orbit-feedback" class="text-center font-bold min-h-[20px]"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. Energy Conservation -->
+    <section class="mb-16">
+        <div class="flex items-center gap-4 mb-4">
+            <div class="section-number">3</div>
+            <h2 class="text-3xl text-brown-800">The Energy Half-Pipe</h2>
+        </div>
+        <div class="retro-box p-6 bg-green-50">
+            <p class="mb-4"><strong>Lesson:</strong> Energy swaps between Height (Potential) and Speed (Kinetic).</p>
+            <div class="flex flex-col md:flex-row gap-4">
+                <canvas id="skateCanvas" width="500" height="200" class="bg-white border-4 border-black rounded w-full"></canvas>
+                <div class="w-full md:w-48 bg-gray-200 p-4 rounded border-4 border-black">
+                    <div class="mb-2 font-bold text-blue-600">Height Energy</div>
+                    <div class="h-4 bg-gray-300 border border-black mb-4"><div id="pe-bar" class="h-full bg-blue-500 w-0"></div></div>
+                    <div class="mb-2 font-bold text-red-600">Speed Energy</div>
+                    <div class="h-4 bg-gray-300 border border-black"><div id="ke-bar" class="h-full bg-red-500 w-0"></div></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. Inertia (Newton's 1st Law) -->
+    <section class="mb-16">
+        <div class="flex items-center gap-4 mb-4">
+            <div class="section-number">4</div>
+            <h2 class="text-3xl text-brown-800">The Sudden Stop (Inertia)</h2>
+        </div>
+        <div class="retro-box p-6 bg-pink-50">
+            <p class="mb-4"><strong>Lesson:</strong> Objects in motion WANT to stay in motion. If the car stops, the loose luggage keeps going!</p>
+            
+            <div class="relative h-40 border-4 border-black bg-white rounded-xl overflow-hidden mb-4">
+                <div class="absolute bottom-0 w-full h-4 bg-gray-700"></div>
+                <div class="absolute bottom-4 right-20 w-4 h-32 bg-gray-400"></div>
+                <div class="absolute bottom-32 right-16 bg-red-600 text-white w-12 h-12 flex items-center justify-center rounded-full border-2 border-white font-bold shadow-lg z-10">STOP</div>
+
+                <div id="inertia-bus-container" class="absolute bottom-4 left-0" style="transition: left 2s linear;">
+                    <div id="inertia-box" class="w-8 h-8 bg-brown-600 border-2 border-black bg-yellow-700 absolute -top-8 left-4 transition-transform"></div>
+                    <div class="w-32 h-16 bg-blue-500 border-4 border-black rounded-lg flex items-center justify-center text-white font-bold">BUS</div>
+                    <div class="flex justify-between px-4 -mt-3">
+                        <div class="w-6 h-6 bg-black rounded-full animate-spin"></div>
+                        <div class="w-6 h-6 bg-black rounded-full animate-spin"></div>
+                    </div>
+                </div>
+            </div>
+            <button onclick="runInertiaDemo()" class="retro-btn btn-red w-full">SLAM THE BRAKES!</button>
+        </div>
+    </section>
+
+    <!-- 5. Action / Reaction (Newton's 3rd Law) -->
+    <section class="mb-16">
+        <div class="flex items-center gap-4 mb-4">
+            <div class="section-number">5</div>
+            <h2 class="text-3xl text-brown-800">The Rocket Skater</h2>
+        </div>
+        <div class="retro-box p-6 bg-indigo-50">
+            <p class="mb-4"><strong>Lesson:</strong> Every action has an equal and opposite reaction. Throw something left, you roll right!</p>
+            <div class="relative h-40 border-4 border-black bg-white rounded-xl overflow-hidden mb-4 flex items-end justify-center">
+                <div class="absolute bottom-0 w-full h-4 bg-gray-700"></div>
+                <div id="skater" class="relative mb-4 transition-all duration-1000 ease-out">
+                    <div class="w-12 h-24 bg-green-600 border-4 border-black rounded-full flex items-center justify-center relative">
+                        <span class="text-2xl">😎</span>
+                        <div id="skater-ball" class="w-6 h-6 bg-black rounded-full absolute top-8 -left-4"></div>
+                    </div>
+                    <div class="w-16 h-4 bg-gray-400 rounded mt-1 border-2 border-black"></div> 
+                </div>
+            </div>
+            <button onclick="throwBall()" class="retro-btn btn-blue w-full">THROW THE HEAVY BALL!</button>
+        </div>
+    </section>
+
+    <!-- 6. Friction -->
+    <section class="mb-16">
+        <div class="flex items-center gap-4 mb-4">
+            <div class="section-number">6</div>
+            <h2 class="text-3xl text-brown-800">The Funky Floor (Friction)</h2>
+        </div>
+        <div class="retro-box p-6 bg-yellow-50">
+            <p class="mb-4"><strong>Lesson:</strong> Rough surfaces grab onto objects and slow them down. Smooth surfaces let them slide.</p>
+            <div id="friction-floor" class="relative h-32 border-4 border-black bg-blue-200 rounded-xl overflow-hidden mb-4 transition-colors duration-300">
+                <div id="friction-texture" class="absolute inset-0 opacity-20"></div>
+                <div id="friction-block" class="absolute bottom-4 left-4 w-16 h-16 bg-orange-500 border-4 border-black flex items-center justify-center font-bold text-white">SLIDER</div>
+            </div>
+            <div class="flex gap-4 items-center">
+                <select id="surface-select" class="p-2 border-4 border-black rounded font-family-inherit text-lg bg-white">
+                    <option value="ice">Slippery Ice</option>
+                    <option value="wood">Polished Wood</option>
+                    <option value="shag">70s Shag Carpet</option>
+                </select>
+                <button onclick="pushBlock()" class="retro-btn flex-1">GIVE IT A PUSH</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 7. Momentum (Collisions) -->
+    <section class="mb-16">
+        <div class="flex items-center gap-4 mb-4">
+            <div class="section-number">7</div>
+            <h2 class="text-3xl text-brown-800">The Bumper Cars (Momentum)</h2>
+        </div>
+        <div class="retro-box p-6 bg-red-50">
+            <p class="mb-4"><strong>Lesson:</strong> Momentum depends on Mass and Speed. A tiny car bounces off a big car.</p>
+            <canvas id="collisionCanvas" width="600" height="150" class="w-full bg-white border-4 border-black rounded-xl mb-4"></canvas>
+            <div class="flex gap-4 items-center justify-center">
+                <div class="font-bold">Player 1 Size:</div>
+                <button onclick="setP1Size(10)" class="retro-btn text-sm py-1 px-3">Small</button>
+                <button onclick="setP1Size(25)" class="retro-btn text-sm py-1 px-3 btn-orange">Medium</button>
+                <button onclick="setP1Size(50)" class="retro-btn text-sm py-1 px-3 btn-red">HUGE</button>
+                <button onclick="runCollision()" class="retro-btn ml-4">CRASH!</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 8. Levers (Torque) - FIXED -->
+    <section class="mb-16">
+        <div class="flex items-center gap-4 mb-4">
+            <div class="section-number">8</div>
+            <h2 class="text-3xl text-brown-800">The Heavy Lift (Levers)</h2>
+        </div>
+        <div class="retro-box p-6 bg-purple-50">
+            <p class="mb-4"><strong>Lesson:</strong> A lever makes heavy work easy. Move the pivot point (fulcrum) closer to the heavy rock to lift it with less effort.</p>
+            
+            <div class="relative h-48 border-4 border-black bg-sky-100 rounded-xl overflow-hidden mb-4">
+                <!-- Background Elements -->
+                <div class="absolute bottom-0 w-full h-8 bg-green-700 border-t-4 border-black"></div>
+
+                <!-- The Plank -->
+                <div id="lever-plank" class="absolute bottom-12 left-1/2 w-3/4 h-6 bg-orange-900 -translate-x-1/2 transition-transform origin-bottom rounded-full border-2 border-black shadow-lg flex items-center justify-center z-10" style="background: linear-gradient(90deg, #5D4037 0%, #8D6E63 100%);">
+                    <div class="w-full h-1 bg-white opacity-20"></div>
+                </div>
+                
+                <!-- The Fulcrum (Triangle) -->
+                <div id="lever-fulcrum" class="absolute bottom-8 w-0 h-0 border-l-[25px] border-l-transparent border-r-[25px] border-r-transparent border-b-[50px] border-b-gray-800 transition-all left-1/2 -ml-6 drop-shadow-lg z-0">
+                    <div class="absolute top-6 -left-2 w-4 h-4 bg-gray-400 rounded-full border border-black"></div>
+                </div>
+
+                <!-- Heavy Rock (Left side) -->
+                <div id="lever-rock" class="absolute bottom-16 w-20 h-20 bg-gray-600 border-4 border-black flex items-center justify-center text-white text-xs font-bold transition-all shadow-xl z-20" style="border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; background: radial-gradient(circle at 30% 30%, #9e9e9e, #424242);">
+                    HEAVY
+                </div>
+
+                <!-- You (Right side) -->
+                <div id="lever-you" class="absolute bottom-16 w-16 flex flex-col items-center transition-all z-20">
+                    <div class="text-xs font-bold bg-white px-2 border-2 border-black rounded mb-1">PUSH</div>
+                    <i data-lucide="arrow-down" class="w-12 h-12 text-red-600 stroke-[4px] animate-bounce"></i>
+                </div>
+            </div>
+
+            <div class="flex flex-col gap-4 bg-white p-4 rounded-xl border-2 border-black">
+                <div>
+                    <label class="font-bold flex justify-between">
+                        <span>Move the Pivot Point (Fulcrum)</span>
+                        <span class="text-purple-600 text-sm">Slide LEFT for more power</span>
+                    </label>
+                    <input type="range" id="fulcrum-slider" min="20" max="80" value="50" class="mt-2">
+                    <div class="flex justify-between text-xs font-bold text-gray-400 mt-1">
+                        <span>&larr; Closer to Rock (Easy)</span>
+                        <span>Farther (Hard) &rarr;</span>
+                    </div>
+                </div>
+                
+                <div class="flex items-center gap-4">
+                    <button onclick="tryLift()" class="retro-btn flex-1">ATTEMPT LIFT</button>
+                    <div id="lever-result" class="flex-1 text-center font-bold text-xl h-8"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 9. Projectile Motion -->
+    <section class="mb-16">
+        <div class="flex items-center gap-4 mb-4">
+            <div class="section-number">9</div>
+            <h2 class="text-3xl text-brown-800">The Daredevil Jump (Projectiles)</h2>
+        </div>
+        <div class="retro-box p-6 bg-cyan-50">
+            <p class="mb-4"><strong>Lesson:</strong> Whatever goes up, must come down in a curve (Parabola). Angle matters!</p>
+            <canvas id="projectileCanvas" width="600" height="250" class="w-full bg-sky-100 border-4 border-black rounded-xl mb-4"></canvas>
+            <div class="flex flex-col md:flex-row gap-4 items-center bg-white p-4 rounded border-2 border-black">
+                <div class="w-full"><label class="font-bold">Cannon Angle</label><input type="range" id="angleSlider" min="10" max="80" value="45"></div>
+                <div class="w-full"><label class="font-bold">Power</label><input type="range" id="powerSlider" min="5" max="15" value="10"></div>
+                <button onclick="fireCannon()" class="retro-btn btn-red">FIRE!</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 10. Springs (Oscillation) -->
+    <section class="mb-16">
+        <div class="flex items-center gap-4 mb-4">
+            <div class="section-number">10</div>
+            <h2 class="text-3xl text-brown-800">The Funky Spring (Oscillation)</h2>
+        </div>
+        <div class="retro-box p-6 bg-pink-100">
+            <p class="mb-4"><strong>Lesson:</strong> Springs have a "Restoring Force". Pull them down, they pull up, creating a bounce.</p>
+            <div class="flex gap-8 items-start">
+                <canvas id="springCanvas" width="200" height="300" class="bg-white border-4 border-black rounded-xl"></canvas>
+                <div class="flex-1 pt-8">
+                    <h3 class="text-xl mb-2">Pull the weight!</h3>
+                    <p class="mb-4 text-sm">See how it bounces forever? (In a perfect world). Here we added a little air resistance so it eventually stops.</p>
+                    <button onclick="pullSpring()" class="retro-btn w-full mb-2">PULL DOWN</button>
+                    <button onclick="stopSpring()" class="retro-btn bg-gray-500 w-full">STOP</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 11. Buoyancy -->
+    <section class="mb-16">
+        <div class="flex items-center gap-4 mb-4">
+            <div class="section-number">11</div>
+            <h2 class="text-3xl text-brown-800">The Lava Lamp Tank (Buoyancy)</h2>
+        </div>
+        <div class="retro-box p-6 bg-orange-50">
+            <p class="mb-4"><strong>Lesson:</strong> Objects lighter (less dense) than the liquid will float. Heavier ones sink.</p>
+            
+            <div class="flex flex-col md:flex-row gap-6 items-center">
+                <!-- Tank -->
+                <div class="relative w-48 h-64 border-4 border-black rounded-xl overflow-hidden bg-white">
+                    <!-- Liquid -->
+                    <div id="buoyancy-liquid" class="absolute bottom-0 w-full h-3/4 bg-blue-400 transition-colors duration-500 bg-opacity-70 border-t-2 border-white"></div>
+                    <!-- Object -->
+                    <div id="buoyancy-obj" class="absolute left-1/2 transform -translate-x-1/2 transition-all duration-1000 ease-in-out w-12 h-12 bg-black rounded-full border-2 border-white shadow-lg flex items-center justify-center text-xs font-bold text-white z-10" style="top: 10px;">?</div>
+                </div>
+
+                <!-- Controls -->
+                <div class="flex-1 flex flex-col gap-4 w-full">
+                    <div class="grid grid-cols-2 gap-4">
+                        <button onclick="setBuoyancyObj('duck')" class="retro-btn bg-yellow-400 text-black border-2"> Rubber Duck</button>
+                        <button onclick="setBuoyancyObj('ball')" class="retro-btn bg-gray-800 text-white border-2"> Bowling Ball</button>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <button onclick="setBuoyancyLiq('water')" class="retro-btn bg-blue-400 text-white border-2"> Water</button>
+                        <button onclick="setBuoyancyLiq('honey')" class="retro-btn bg-yellow-600 text-white border-2"> Honey</button>
+                    </div>
+                    <div id="buoyancy-feedback" class="font-bold text-xl min-h-[2rem] text-center text-brown-800">Select an object...</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 12. Pulleys -->
+    <section class="mb-16">
+        <div class="flex items-center gap-4 mb-4">
+            <div class="section-number">12</div>
+            <h2 class="text-3xl text-brown-800">The Disco Crane (Pulleys)</h2>
+        </div>
+        <div class="retro-box p-6 bg-gray-100">
+            <p class="mb-4"><strong>Lesson:</strong> More pulleys = Less force needed to lift! But you have to pull more rope.</p>
+            
+            <div class="flex gap-4">
+                <canvas id="pulleyCanvas" width="300" height="300" class="bg-white border-4 border-black rounded-xl"></canvas>
+                <div class="flex-1 flex flex-col justify-center gap-4">
+                    <h3 class="text-xl">Pulleys System:</h3>
+                    <button onclick="setPulley(1)" class="retro-btn btn-red">1 Pulley (Hard)</button>
+                    <button onclick="setPulley(2)" class="retro-btn btn-orange">2 Pulleys (Medium)</button>
+                    <button onclick="setPulley(4)" class="retro-btn btn-green">4 Pulleys (Easy)</button>
+                    <hr class="border-gray-400">
+                    <button onclick="liftPulley()" class="retro-btn bg-black text-white">PULL ROPE!</button>
+                    <div id="pulley-feedback" class="font-bold text-lg">Force Needed: 100%</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 13. Centripetal Force -->
+    <section class="mb-16">
+        <div class="flex items-center gap-4 mb-4">
+            <div class="section-number">13</div>
+            <h2 class="text-3xl text-brown-800">The Merry-Go-Round</h2>
+        </div>
+        <div class="retro-box p-6 bg-yellow-100">
+            <p class="mb-4"><strong>Lesson:</strong> Spinning requires force to hold on. The faster you spin, or the further out you are, the harder it is to hold on!</p>
+            
+            <div class="flex flex-col md:flex-row gap-6 items-center">
+                <canvas id="centripetalCanvas" width="300" height="300" class="bg-green-100 border-4 border-black rounded-full"></canvas>
+                
+                <div class="flex-1 w-full">
+                    <label class="font-bold">Spin Speed</label>
+                    <input type="range" id="spinSlider" min="1" max="10" value="1">
+                    
+                    <div class="flex gap-4 mt-4">
+                        <button onclick="setRiderPos('center')" class="retro-btn btn-blue text-sm">Sit Center (Safe)</button>
+                        <button onclick="setRiderPos('edge')" class="retro-btn btn-red text-sm">Sit Edge (Danger)</button>
+                    </div>
+                    <button onclick="startSpin()" class="retro-btn mt-4 w-full">SPIN IT!</button>
+                    <div id="spin-feedback" class="mt-2 font-bold text-red-600 h-6"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 14. Terminal Velocity -->
+    <section class="mb-16">
+        <div class="flex items-center gap-4 mb-4">
+            <div class="section-number">14</div>
+            <h2 class="text-3xl text-brown-800">The Skydiver (Air Resistance)</h2>
+        </div>
+        <div class="retro-box p-6 bg-sky-200">
+            <p class="mb-4"><strong>Lesson:</strong> Gravity speeds you up. Air pushes back. Eventually, they balance out (Terminal Velocity). A parachute adds HUGE air resistance.</p>
+            
+            <div class="relative h-80 border-4 border-black bg-sky-100 rounded-xl overflow-hidden mb-4">
+                <!-- Clouds scrolling -->
+                <div id="clouds" class="absolute w-full h-full top-0 left-0"></div>
+                
+                <!-- Skydiver -->
+                <div id="skydiver" class="absolute left-1/2 transform -translate-x-1/2 top-10 transition-all duration-100">
+                    <div class="w-12 h-20 bg-orange-600 border-2 border-black flex items-center justify-center text-white rounded">:)</div>
+                    <!-- Chute -->
+                    <div id="parachute" class="absolute -top-16 -left-10 w-32 h-16 bg-red-500 rounded-t-full border-4 border-black hidden"></div>
+                </div>
+
+                <div class="absolute bottom-2 left-2 font-bold text-xl">Speed: <span id="fall-speed">0</span> mph</div>
+                <div id="skydiver-feedback" class="absolute top-2 left-2 font-bold text-lg text-blue-800">Ready to Jump</div>
+            </div>
+
+            <div class="flex gap-4">
+                <button onclick="jumpSkydiver()" class="retro-btn btn-green">JUMP!</button>
+                <button onclick="openChute()" class="retro-btn btn-red">OPEN CHUTE!</button>
+                <button onclick="resetSkydiver()" class="retro-btn bg-gray-500 text-white">RESET</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 15. Gears -->
+    <section class="mb-16">
+        <div class="flex items-center gap-4 mb-4">
+            <div class="section-number">15</div>
+            <h2 class="text-3xl text-brown-800">The 10-Speed Bike (Gears)</h2>
+        </div>
+        <div class="retro-box p-6 bg-teal-50">
+            <p class="mb-4"><strong>Lesson:</strong> Gears trade Speed for Power (Torque). Low gear = Easy climb, slow. High gear = Hard climb, fast.</p>
+            
+            <canvas id="gearCanvas" width="600" height="200" class="bg-white border-4 border-black rounded-xl mb-4"></canvas>
+
+            <div class="flex gap-4 items-center">
+                <div class="font-bold text-xl">Select Gear:</div>
+                <button onclick="setGear('low')" class="retro-btn btn-green">Low (Small Gear)</button>
+                <button onclick="setGear('high')" class="retro-btn btn-red">High (Big Gear)</button>
+                <button onclick="startBike()" class="retro-btn bg-black text-white">PEDAL UP HILL!</button>
+            </div>
+            <div id="gear-feedback" class="mt-2 font-bold text-xl h-8"></div>
+        </div>
+    </section>
+
+    <!-- 16. Doppler Effect -->
+    <section class="mb-16">
+        <div class="flex items-center gap-4 mb-4">
+            <div class="section-number">16</div>
+            <h2 class="text-3xl text-brown-800">The Ambulance Chase (Doppler Effect)</h2>
+        </div>
+        <div class="retro-box p-6 bg-purple-100">
+            <p class="mb-4"><strong>Lesson:</strong> Sound waves get "squished" when a siren runs towards you (High Pitch) and "stretched" when it runs away (Low Pitch).</p>
+            
+            <canvas id="dopplerCanvas" width="600" height="200" class="bg-white border-4 border-black rounded-xl mb-4"></canvas>
+
+            <div class="flex gap-4 items-center">
+                <label class="font-bold">Ambulance Speed:</label>
+                <input type="range" id="dopplerSpeed" min="0" max="5" value="2" class="w-48">
+                <button onclick="toggleDoppler()" class="retro-btn btn-purple">START / STOP</button>
+            </div>
+            <div class="text-sm text-gray-600 mt-2">Watch the waves bunch up in front!</div>
+        </div>
+    </section>
+
+    <!-- 17. Magnetism -->
+    <section class="mb-16">
+        <div class="flex items-center gap-4 mb-4">
+            <div class="section-number">17</div>
+            <h2 class="text-3xl text-brown-800">The Magic Magnets</h2>
+        </div>
+        <div class="retro-box p-6 bg-blue-100">
+            <p class="mb-4"><strong>Lesson:</strong> Opposite Poles (N-S) Attract. Like Poles (N-N) Repel.</p>
+            
+            <div class="relative h-40 border-4 border-black bg-white rounded-xl overflow-hidden mb-4 flex items-center justify-center gap-2">
+                <!-- Magnet 1 (Fixed) -->
+                <div class="w-32 h-16 flex border-2 border-black">
+                    <div class="w-1/2 bg-red-600 flex items-center justify-center text-white font-bold">N</div>
+                    <div class="w-1/2 bg-blue-600 flex items-center justify-center text-white font-bold">S</div>
+                </div>
+
+                <!-- Magnet 2 (Movable) -->
+                <div id="mag2" class="w-32 h-16 flex border-2 border-black transition-all duration-500">
+                    <div id="mag2-left" class="w-1/2 bg-red-600 flex items-center justify-center text-white font-bold">N</div>
+                    <div id="mag2-right" class="w-1/2 bg-blue-600 flex items-center justify-center text-white font-bold">S</div>
+                </div>
+                
+                <div id="magnet-force" class="absolute top-4 font-bold text-xl text-gray-400">...</div>
+            </div>
+
+            <div class="flex justify-center gap-4">
+                <button onclick="flipMagnet()" class="retro-btn bg-gray-800 text-white">FLIP RIGHT MAGNET</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 18. Refraction -->
+    <section class="mb-16">
+        <div class="flex items-center gap-4 mb-4">
+            <div class="section-number">18</div>
+            <h2 class="text-3xl text-brown-800">The Pink Floyd Prism (Refraction)</h2>
+        </div>
+        <div class="retro-box p-6 bg-black text-white">
+            <p class="mb-4 text-gray-300"><strong>Lesson:</strong> Light slows down and bends when it enters glass or water.</p>
+            
+            <canvas id="refractionCanvas" width="600" height="300" class="bg-gray-900 border-4 border-white rounded-xl mb-4"></canvas>
+            
+            <div class="flex gap-4 items-center">
+                <label class="font-bold text-white">Laser Angle:</label>
+                <input type="range" id="laserAngle" min="10" max="80" value="45">
+            </div>
+        </div>
+    </section>
+
+    <!-- 19. Electrostatics -->
+    <section class="mb-16">
+        <div class="flex items-center gap-4 mb-4">
+            <div class="section-number">19</div>
+            <h2 class="text-3xl text-brown-800">The Static Balloon</h2>
+        </div>
+        <div class="retro-box p-6 bg-yellow-50">
+            <p class="mb-4"><strong>Lesson:</strong> Rubbing the balloon steals electrons (negative charge). It now sticks to the neutral wall!</p>
+            
+            <div class="flex gap-8 h-64">
+                <!-- Wall -->
+                <div class="w-24 h-full bg-gray-300 border-4 border-black flex flex-col items-center justify-center">
+                    <div class="font-bold text-gray-500 rotate-90">WALL</div>
+                </div>
+                
+                <!-- Area -->
+                <div class="flex-1 relative border-4 border-dashed border-gray-400 rounded-xl bg-white overflow-hidden" id="static-area">
+                    <div class="absolute top-2 right-2 text-gray-400 text-sm">Click Rub to Charge</div>
+                    
+                    <!-- Sweater -->
+                    <div class="absolute right-10 top-1/2 -translate-y-1/2 w-32 h-32 bg-orange-200 rounded-full border-4 border-orange-400 flex items-center justify-center">
+                        <span class="font-bold text-orange-800">WOOL</span>
+                    </div>
+
+                    <!-- Balloon -->
+                    <div id="balloon" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-32 bg-red-500 rounded-full border-4 border-black flex items-center justify-center transition-all duration-700">
+                        <div class="text-white font-bold opacity-0" id="electrons">---</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex gap-4 mt-4 justify-center">
+                <button onclick="rubBalloon()" class="retro-btn btn-orange">RUB ON WOOL</button>
+                <button onclick="stickBalloon()" class="retro-btn btn-red">STICK TO WALL</button>
+                <button onclick="resetBalloon()" class="retro-btn bg-gray-500 text-white">RESET</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 20. Diffusion -->
+    <section class="mb-16">
+        <div class="flex items-center gap-4 mb-4">
+            <div class="section-number">20</div>
+            <h2 class="text-3xl text-brown-800">The Hot Pizza Room (Diffusion)</h2>
+        </div>
+        <div class="retro-box p-6 bg-orange-100">
+            <p class="mb-4"><strong>Lesson:</strong> Heat makes particles move faster. That's why you smell hot pizza faster than cold pizza!</p>
+            
+            <div class="flex gap-4">
+                <canvas id="diffusionCanvas" width="300" height="300" class="bg-white border-4 border-black rounded-xl"></canvas>
+                <div class="flex-1 flex flex-col justify-center gap-4">
+                    <h3 class="text-xl font-bold">Temperature Control:</h3>
+                    <button onclick="setTemp('cold')" class="retro-btn bg-blue-400 text-white">Cold (Slow)</button>
+                    <button onclick="setTemp('hot')" class="retro-btn bg-red-500 text-white">HOT (Fast)</button>
+                    <div id="diffusion-feedback" class="font-bold mt-2">Particles are: Slow</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="text-center text-gray-600 py-12 border-t-4 border-dotted border-orange-300">
+        <p class="font-bold text-lg">Made for The Celestica Initiative</p>
+        <p>by Shayan Khan Javed</p>
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        lucide.createIcons();
+
+        // --- 1. VAN LOGIC ---
+        const massSlider = document.getElementById('massSlider');
+        const forceSlider = document.getElementById('forceSlider');
+        const luggagePile = document.getElementById('luggage-pile');
+        const van = document.getElementById('van');
+        const wheel1 = document.getElementById('wheel1');
+        const wheel2 = document.getElementById('wheel2');
+
+        massSlider.addEventListener('input', () => {
+            luggagePile.innerHTML = '';
+            for(let i=0; i<massSlider.value; i++) {
+                const box = document.createElement('div');
+                box.className = 'w-4 h-4 bg-yellow-700 border border-black rounded-sm';
+                luggagePile.appendChild(box);
+            }
+        });
+        massSlider.dispatchEvent(new Event('input'));
+
+        function driveVan() {
+            van.style.transition = 'none';
+            van.style.left = '0px';
+            
+            setTimeout(() => {
+                const speedFactor = forceSlider.value / massSlider.value; 
+                const duration = 4 / speedFactor; 
+                van.style.transition = `left ${duration}s linear`;
+                van.style.left = '80%';
+            }, 50);
+        }
+
+        // --- 2. ORBIT LOGIC ---
+        const orbitCanvas = document.getElementById('orbitCanvas');
+        const ctxOrbit = orbitCanvas.getContext('2d');
+        let planet = { x: 100, y: 125, vx: 0, vy: 2 };
+        let sun = { x: 250, y: 125, radius: 20 };
+        let orbitId;
+
+        function runOrbit() {
+            ctxOrbit.fillStyle = 'rgba(0,0,0,0.1)';
+            ctxOrbit.fillRect(0,0,orbitCanvas.width, orbitCanvas.height);
+
+            ctxOrbit.beginPath();
+            ctxOrbit.arc(sun.x, sun.y, sun.radius, 0, Math.PI*2);
+            ctxOrbit.fillStyle = '#FFBA08';
+            ctxOrbit.fill();
+
+            let dx = sun.x - planet.x;
+            let dy = sun.y - planet.y;
+            let dist = Math.sqrt(dx*dx + dy*dy);
+
+            if(dist < 30) {
+                document.getElementById('orbit-feedback').innerText = "CRASH! Too Slow.";
+                document.getElementById('orbit-feedback').className = "text-center font-bold min-h-[20px] text-red-500";
+                return;
+            }
+            if(dist > 350) {
+                document.getElementById('orbit-feedback').innerText = "DRIFTED AWAY! Too Fast.";
+                document.getElementById('orbit-feedback').className = "text-center font-bold min-h-[20px] text-blue-300";
+                return;
+            }
+
+            let force = 1000 / (dist*dist);
+            planet.vx += (dx/dist)*force;
+            planet.vy += (dy/dist)*force;
+            planet.x += planet.vx;
+            planet.y += planet.vy;
+
+            ctxOrbit.beginPath();
+            ctxOrbit.arc(planet.x, planet.y, 8, 0, Math.PI*2);
+            ctxOrbit.fillStyle = '#219EBC';
+            ctxOrbit.fill();
+
+            orbitId = requestAnimationFrame(runOrbit);
+        }
+
+        function resetOrbit() {
+            cancelAnimationFrame(orbitId);
+            ctxOrbit.clearRect(0,0,orbitCanvas.width, orbitCanvas.height);
+            document.getElementById('orbit-feedback').innerText = "";
+            let speed = document.getElementById('orbitSpeed').value * 0.4;
+            planet = { x: 100, y: 125, vx: 0, vy: speed };
+            runOrbit();
+        }
+
+        // --- 3. SKATE LOGIC ---
+        const skateCanvas = document.getElementById('skateCanvas');
+        const ctxSkate = skateCanvas.getContext('2d');
+        let skateTick = 0;
+        function runSkate() {
+            ctxSkate.clearRect(0,0,500,200);
+            ctxSkate.beginPath();
+            ctxSkate.moveTo(20,20);
+            ctxSkate.quadraticCurveTo(250, 350, 480, 20);
+            ctxSkate.lineWidth = 6;
+            ctxSkate.strokeStyle = '#555';
+            ctxSkate.stroke();
+
+            let t = (Math.cos(skateTick * 0.05) + 1) / 2; 
+            let x = Math.pow(1-t, 2)*20 + 2*(1-t)*t*250 + Math.pow(t, 2)*480;
+            let y = Math.pow(1-t, 2)*20 + 2*(1-t)*t*350 + Math.pow(t, 2)*20;
+
+            ctxSkate.beginPath();
+            ctxSkate.arc(x, y-10, 10, 0, Math.PI*2);
+            ctxSkate.fillStyle = '#E85D04';
+            ctxSkate.fill();
+
+            let hPct = (185 - y)/1.65;
+            document.getElementById('pe-bar').style.width = hPct + '%';
+            document.getElementById('ke-bar').style.width = (100-hPct) + '%';
+
+            skateTick++;
+            requestAnimationFrame(runSkate);
+        }
+        runSkate();
+
+        // --- 4. INERTIA ---
+        function runInertiaDemo() {
+            const container = document.getElementById('inertia-bus-container');
+            const box = document.getElementById('inertia-box');
+            container.style.transition = 'none';
+            container.style.left = '0';
+            box.style.transition = 'none';
+            box.style.transform = 'translate(0,0) rotate(0deg)';
+            box.style.opacity = '1';
+            setTimeout(() => {
+                container.style.transition = 'left 1.5s linear';
+                container.style.left = '60%'; 
+                setTimeout(() => {
+                    box.style.transition = 'transform 0.5s ease-out';
+                    box.style.transform = 'translate(150px, 50px) rotate(90deg)';
+                }, 1500);
+            }, 100);
+        }
+
+        // --- 5. ACTION/REACTION ---
+        function throwBall() {
+            const skater = document.getElementById('skater');
+            const ball = document.getElementById('skater-ball');
+            skater.style.transition = 'none';
+            skater.style.left = '0px';
+            ball.style.transition = 'none';
+            ball.style.left = '-16px'; 
+            ball.style.opacity = '1';
+            setTimeout(() => {
+                skater.style.transition = 'left 0.5s ease-out';
+                ball.style.transition = 'left 0.5s ease-out, opacity 0.5s';
+                skater.style.left = '100px';
+                ball.style.left = '-300px'; 
+                ball.style.opacity = '0';
+            }, 50);
+        }
+
+        // --- 6. FRICTION ---
+        function pushBlock() {
+            const block = document.getElementById('friction-block');
+            const floor = document.getElementById('friction-floor');
+            const texture = document.getElementById('friction-texture');
+            const surface = document.getElementById('surface-select').value;
+            block.style.transition = 'none';
+            block.style.left = '16px';
+            if(surface === 'ice') {
+                floor.className = "relative h-32 border-4 border-black bg-cyan-100 rounded-xl overflow-hidden mb-4";
+                texture.style.background = "none";
+            } else if(surface === 'wood') {
+                floor.className = "relative h-32 border-4 border-black bg-orange-200 rounded-xl overflow-hidden mb-4";
+                texture.style.background = "linear-gradient(90deg, transparent 50%, rgba(0,0,0,0.1) 50%)";
+                texture.style.backgroundSize = "20px 100%";
+            } else {
+                floor.className = "relative h-32 border-4 border-black bg-pink-300 rounded-xl overflow-hidden mb-4";
+                texture.style.background = "radial-gradient(circle, rgba(0,0,0,0.1) 2px, transparent 2.5px)";
+                texture.style.backgroundSize = "10px 10px";
+            }
+            setTimeout(() => {
+                let distance = '90%';
+                if(surface === 'wood') distance = '50%';
+                if(surface === 'shag') distance = '20%';
+                block.style.transition = 'left 1s cubic-bezier(0,0,0.2,1)';
+                block.style.left = distance;
+            }, 100);
+        }
+
+        // --- 7. MOMENTUM ---
+        const colCanvas = document.getElementById('collisionCanvas');
+        const colCtx = colCanvas.getContext('2d');
+        let p1 = { x: 50, r: 25, vx: 0, mass: 25, color: '#E85D04' };
+        let p2 = { x: 400, r: 25, vx: 0, mass: 25, color: '#219EBC' };
+        let colId;
+        function setP1Size(size) { p1.r = size; p1.mass = size; drawCollisionScene(); }
+        function drawCollisionScene() {
+            colCtx.clearRect(0,0,600,150);
+            colCtx.beginPath(); colCtx.arc(p1.x, 75, p1.r, 0, Math.PI*2); colCtx.fillStyle = p1.color; colCtx.fill(); colCtx.stroke();
+            colCtx.beginPath(); colCtx.arc(p2.x, 75, p2.r, 0, Math.PI*2); colCtx.fillStyle = p2.color; colCtx.fill(); colCtx.stroke();
+        }
+        function runCollision() {
+            cancelAnimationFrame(colId);
+            p1.x = 50; p1.vx = 10; p2.x = 400; p2.vx = 0;
+            function animate() {
+                colCtx.clearRect(0,0,600,150);
+                p1.x += p1.vx; p2.x += p2.vx;
+                p1.vx *= 0.98; p2.vx *= 0.98;
+                let dist = p2.x - p1.x;
+                let minDist = p1.r + p2.r;
+                if(dist <= minDist) {
+                    let v1 = p1.vx; let v2 = p2.vx; let m1 = p1.mass; let m2 = p2.mass;
+                    p1.vx = ((m1 - m2)*v1 + 2*m2*v2) / (m1 + m2);
+                    p2.vx = ((m2 - m1)*v2 + 2*m1*v1) / (m1 + m2);
+                    p1.x = p2.x - minDist - 1; 
+                }
+                drawCollisionScene();
+                if(Math.abs(p1.vx) > 0.1 || Math.abs(p2.vx) > 0.1) colId = requestAnimationFrame(animate);
+            }
+            animate();
+        }
+        drawCollisionScene();
+
+        // --- 8. LEVERS (FIXED) ---
+        const fulcrumSlider = document.getElementById('fulcrum-slider');
+        const plank = document.getElementById('lever-plank');
+        const fulcrum = document.getElementById('lever-fulcrum');
+        const rock = document.getElementById('lever-rock');
+        const you = document.getElementById('lever-you');
+        const leverResult = document.getElementById('lever-result');
+
+        function updateLeverPositions() {
+            let val = fulcrumSlider.value;
+            fulcrum.style.left = val + '%';
+            plank.style.transform = 'translate(-50%, 0) rotate(0deg)';
+            rock.style.transform = 'translateY(0)';
+            you.style.transform = 'translateY(0)';
+            leverResult.innerText = "";
+        }
+
+        fulcrumSlider.addEventListener('input', updateLeverPositions);
+        
+        // Initialize positions
+        rock.style.left = '10%'; 
+        you.style.left = '80%';
+
+        function tryLift() {
+            let pivot = parseInt(fulcrumSlider.value);
+            let loadArm = pivot - 15;
+            let effortArm = 85 - pivot;
+            if (loadArm < 5) loadArm = 5;
+            let MA = effortArm / loadArm;
+
+            if(MA > 2.0) {
+                // SUCCESS: Push RIGHT down (Clockwise), Left goes UP
+                plank.style.transform = 'translate(-50%, 0) rotate(15deg)'; // Positive rotation = Right Down, Left Up
+                rock.style.transform = 'translateY(-40px)'; // Rock goes UP
+                you.style.transform = 'translateY(40px)';   // You go DOWN
+                leverResult.innerText = "EASY LIFT! Groovy!";
+                leverResult.className = "flex-1 text-center font-bold text-xl h-8 text-green-600";
+            } else {
+                // FAIL: Struggle, maybe slight movement wrong way or just stuck
+                plank.style.transform = 'translate(-50%, 0) rotate(-2deg)'; // Slight counter rotation (rock heavy)
+                rock.style.transform = 'translateY(2px)';
+                you.style.transform = 'translateY(-2px)';
+                setTimeout(() => { 
+                    plank.style.transform = 'translate(-50%, 0) rotate(0deg)'; 
+                    rock.style.transform = 'translateY(0)';
+                    you.style.transform = 'translateY(0)';
+                }, 400);
+                leverResult.innerText = "TOO HEAVY!";
+                leverResult.className = "flex-1 text-center font-bold text-xl h-8 text-red-600";
+            }
+        }
+
+        // --- 9. PROJECTILE ---
+        const projCanvas = document.getElementById('projectileCanvas');
+        const projCtx = projCanvas.getContext('2d');
+        let projBall = {x:0, y:0, vx:0, vy:0, active:false};
+        function drawProjectileScene() {
+            projCtx.clearRect(0,0,600,250);
+            projCtx.fillStyle = '#588157'; projCtx.fillRect(0, 230, 600, 20);
+            projCtx.save(); projCtx.translate(30, 230);
+            let angle = document.getElementById('angleSlider').value;
+            projCtx.rotate(-angle * Math.PI / 180);
+            projCtx.fillStyle = 'black'; projCtx.fillRect(0, -10, 40, 20);
+            projCtx.restore();
+            if(projBall.active) { projCtx.beginPath(); projCtx.arc(projBall.x, projBall.y, 6, 0, Math.PI*2); projCtx.fillStyle = 'red'; projCtx.fill(); }
+        }
+        function fireCannon() {
+            let angle = document.getElementById('angleSlider').value;
+            let power = document.getElementById('powerSlider').value;
+            let rad = angle * Math.PI / 180;
+            projBall.x = 30; projBall.y = 230; projBall.vx = Math.cos(rad) * power; projBall.vy = -Math.sin(rad) * power; projBall.active = true;
+            function animateProj() {
+                if(!projBall.active) return;
+                projBall.x += projBall.vx; projBall.y += projBall.vy; projBall.vy += 0.3; 
+                drawProjectileScene();
+                if(projBall.y > 230) {
+                    projBall.active = false; drawProjectileScene();
+                    projCtx.fillStyle = 'red'; projCtx.font = "20px Arial"; projCtx.fillText("SPLAT", projBall.x - 20, 225);
+                } else { requestAnimationFrame(animateProj); }
+            }
+            animateProj();
+        }
+        drawProjectileScene();
+        ['angleSlider', 'powerSlider'].forEach(id => { document.getElementById(id).addEventListener('input', drawProjectileScene); });
+
+        // --- 10. SPRING ---
+        const sprCanvas = document.getElementById('springCanvas');
+        const sprCtx = sprCanvas.getContext('2d');
+        let springY = 150; let springVel = 0; let springActive = false;
+        function drawSpring() {
+            sprCtx.clearRect(0,0,200,300);
+            sprCtx.fillStyle = 'black'; sprCtx.fillRect(50, 0, 100, 10);
+            sprCtx.beginPath(); sprCtx.moveTo(100, 10);
+            let coils = 10; let segmentHeight = (springY - 10) / coils;
+            for(let i=0; i<=coils; i++) { let x = i%2===0 ? 120 : 80; if(i===0) x=100; if(i===coils) x=100; sprCtx.lineTo(x, 10 + i*segmentHeight); }
+            sprCtx.lineWidth = 4; sprCtx.strokeStyle = '#555'; sprCtx.stroke();
+            sprCtx.fillStyle = '#E85D04'; sprCtx.fillRect(75, springY, 50, 50); sprCtx.strokeRect(75, springY, 50, 50);
+            if(springActive) {
+                let force = (150 - springY) * 0.1; springVel += force; springVel *= 0.98; springY += springVel;
+                if(Math.abs(springVel) < 0.01 && Math.abs(150 - springY) < 0.1) springActive = false;
+                requestAnimationFrame(drawSpring);
+            }
+        }
+        drawSpring();
+        function pullSpring() { springY = 250; springVel = 0; springActive = true; drawSpring(); }
+        function stopSpring() { springActive = false; springY = 150; springVel = 0; drawSpring(); }
+
+        // --- 11. BUOYANCY ---
+        let buoyObjType = ''; let buoyLiqType = '';
+        function setBuoyancyObj(type) {
+            buoyObjType = type;
+            const obj = document.getElementById('buoyancy-obj');
+            if(type === 'duck') { obj.innerText = '🦆'; obj.style.backgroundColor = '#FFD700'; }
+            else { obj.innerText = '⚫'; obj.style.backgroundColor = 'black'; }
+            checkBuoyancy();
+        }
+        function setBuoyancyLiq(type) {
+            buoyLiqType = type;
+            const liq = document.getElementById('buoyancy-liquid');
+            if(type === 'honey') { liq.style.backgroundColor = '#D97706'; }
+            else { liq.style.backgroundColor = '#60A5FA'; }
+            checkBuoyancy();
+        }
+        function checkBuoyancy() {
+            const obj = document.getElementById('buoyancy-obj');
+            const feedback = document.getElementById('buoyancy-feedback');
+            if(!buoyObjType || !buoyLiqType) return;
+            
+            // Duck floats always. Ball floats in Honey (let's say), sinks in water.
+            let floats = false;
+            if(buoyObjType === 'duck') floats = true;
+            if(buoyObjType === 'ball') floats = (buoyLiqType === 'honey');
+
+            if(floats) {
+                obj.style.top = '20px'; // Top of liquid approx
+                feedback.innerText = "IT FLOATS! (Less dense than liquid)";
+                feedback.style.color = "green";
+            } else {
+                obj.style.top = '180px'; // Bottom
+                feedback.innerText = "IT SINKS! (Denser than liquid)";
+                feedback.style.color = "red";
+            }
+        }
+
+        // --- 12. PULLEYS ---
+        let pulleyCount = 1;
+        const pulleyCanvas = document.getElementById('pulleyCanvas');
+        const pCtx = pulleyCanvas.getContext('2d');
+        function setPulley(n) { 
+            pulleyCount = n; 
+            drawPulleySystem(0); 
+            document.getElementById('pulley-feedback').innerText = `Force Needed: ${100/n}%`;
+        }
+        function drawPulleySystem(liftH) {
+            pCtx.clearRect(0,0,300,300);
+            pCtx.fillStyle = '#333'; pCtx.fillRect(50, 10, 200, 10); // Ceiling
+            
+            // Draw Weight Box
+            let boxY = 200 - liftH;
+            pCtx.fillStyle = '#888'; pCtx.fillRect(125, boxY, 50, 50);
+            pCtx.strokeRect(125, boxY, 50, 50);
+            pCtx.fillStyle = 'white'; pCtx.font="12px monospace"; pCtx.fillText("100kg", 130, boxY+30);
+
+            // Simple visual representation of ropes
+            pCtx.beginPath(); pCtx.strokeStyle = '#000'; pCtx.lineWidth = 2;
+            if(pulleyCount === 1) {
+                pCtx.moveTo(150, boxY); pCtx.lineTo(150, 20);
+            } else if (pulleyCount === 2) {
+                pCtx.moveTo(135, boxY); pCtx.lineTo(135, 20);
+                pCtx.moveTo(165, boxY); pCtx.lineTo(165, 20);
+            } else {
+                pCtx.moveTo(130, boxY); pCtx.lineTo(130, 20);
+                pCtx.moveTo(145, boxY); pCtx.lineTo(145, 20);
+                pCtx.moveTo(160, boxY); pCtx.lineTo(160, 20);
+                pCtx.moveTo(170, boxY); pCtx.lineTo(170, 20);
+            }
+            pCtx.stroke();
+        }
+        function liftPulley() {
+            let h = 0;
+            function anim() {
+                h += 2;
+                drawPulleySystem(h);
+                if(h < 100) requestAnimationFrame(anim);
+            }
+            anim();
+        }
+        setPulley(1);
+
+        // --- 13. CENTRIPETAL ---
+        const cenCanvas = document.getElementById('centripetalCanvas');
+        const cCtx = cenCanvas.getContext('2d');
+        let spinAngle = 0; let riderDist = 0; let spinning = false;
+        let riderPos = 'center'; // center or edge
+        
+        function setRiderPos(pos) { riderPos = pos; drawMerryGoRound(); }
+        
+        function drawMerryGoRound() {
+            cCtx.clearRect(0,0,300,300);
+            cCtx.save();
+            cCtx.translate(150, 150);
+            cCtx.rotate(spinAngle);
+            
+            // Plate
+            cCtx.beginPath(); cCtx.arc(0, 0, 120, 0, Math.PI*2);
+            cCtx.fillStyle = '#ddd'; cCtx.fill(); cCtx.stroke();
+            // Stripes
+            cCtx.beginPath(); cCtx.moveTo(0,0); cCtx.lineTo(120,0); cCtx.stroke();
+            cCtx.beginPath(); cCtx.moveTo(0,0); cCtx.lineTo(-120,0); cCtx.stroke();
+            cCtx.beginPath(); cCtx.moveTo(0,0); cCtx.lineTo(0,120); cCtx.stroke();
+            cCtx.beginPath(); cCtx.moveTo(0,0); cCtx.lineTo(0,-120); cCtx.stroke();
+
+            // Rider
+            let r = (riderPos === 'center') ? 20 : riderDist;
+            if(!spinning) r = (riderPos === 'center') ? 20 : 100;
+
+            cCtx.beginPath(); cCtx.arc(r, 0, 15, 0, Math.PI*2);
+            cCtx.fillStyle = '#E85D04'; cCtx.fill(); cCtx.stroke();
+            cCtx.fillStyle = 'white'; cCtx.font="10px Arial"; cCtx.fillText("KID", r-8, 4);
+
+            cCtx.restore();
+        }
+        
+        function startSpin() {
+            if(spinning) return;
+            spinning = true;
+            let speed = document.getElementById('spinSlider').value; // 1 to 10
+            let velocity = speed * 0.05;
+            let currentR = (riderPos === 'center') ? 20 : 100;
+            riderDist = currentR;
+            let flyOff = false;
+
+            if(speed > 6 && riderPos === 'edge') flyOff = true;
+
+            function spinAnim() {
+                spinAngle += velocity;
+                if(flyOff) riderDist += 2; 
+                drawMerryGoRound();
+                if(riderDist > 140) {
+                    document.getElementById('spin-feedback').innerText = "WHOOPS! Too fast, they flew off!";
+                    spinning = false;
+                    return;
+                }
+                if(spinning && velocity > 0) {
+                    velocity *= 0.99; 
+                    if(velocity < 0.001) {
+                         spinning = false; 
+                         document.getElementById('spin-feedback').innerText = "Stopped safely.";
+                    }
+                    requestAnimationFrame(spinAnim);
+                }
+            }
+            document.getElementById('spin-feedback').innerText = flyOff ? "HOLD ON!" : "Wheeee!";
+            spinAnim();
+        }
+        drawMerryGoRound();
+
+        // --- 14. TERMINAL VELOCITY ---
+        let fallSpeed = 0; 
+        let isFalling = false; 
+        let chuteOpen = false;
+        let skydiverAnim;
+        let cloudPos = 0;
+
+        function jumpSkydiver() {
+            if(isFalling) return;
+            isFalling = true;
+            chuteOpen = false;
+            fallSpeed = 0;
+            document.getElementById('parachute').classList.add('hidden');
+            document.getElementById('skydiver-feedback').innerText = "Falling...";
+            
+            function loop() {
+                if(!isFalling) return;
+                let terminal = chuteOpen ? 15 : 120;
+                if(fallSpeed < terminal) {
+                    fallSpeed += 0.5;
+                } else if(fallSpeed > terminal) {
+                    fallSpeed -= 2;
+                }
+                document.getElementById('fall-speed').innerText = Math.floor(fallSpeed);
+                cloudPos += fallSpeed * 0.2;
+                document.getElementById('clouds').style.backgroundPositionY = `${cloudPos}px`;
+                skydiverAnim = requestAnimationFrame(loop);
+            }
+            loop();
+        }
+
+        function openChute() {
+            if(!isFalling) return;
+            chuteOpen = true;
+            document.getElementById('parachute').classList.remove('hidden');
+            document.getElementById('skydiver-feedback').innerText = "Parachute Deployed!";
+        }
+
+        function resetSkydiver() {
+            isFalling = false;
+            cancelAnimationFrame(skydiverAnim);
+            fallSpeed = 0;
+            document.getElementById('fall-speed').innerText = "0";
+            document.getElementById('parachute').classList.add('hidden');
+            document.getElementById('skydiver-feedback').innerText = "Ready to Jump";
+        }
+
+        document.getElementById('clouds').style.backgroundImage = "radial-gradient(circle, white 20px, transparent 21px)";
+        document.getElementById('clouds').style.backgroundSize = "100px 100px";
+
+
+        // --- 15. GEARS ---
+        const gearCanvas = document.getElementById('gearCanvas');
+        const gCtx = gearCanvas.getContext('2d');
+        let gearType = 'low';
+        let bikeX = 50;
+        let bikeY = 150; 
+        
+        function setGear(g) { 
+            gearType = g; 
+            document.getElementById('gear-feedback').innerText = `Gear Selected: ${g.toUpperCase()}`;
+        }
+        
+        function drawBikeScene(progress) {
+            gCtx.clearRect(0,0,600,200);
+            gCtx.beginPath();
+            gCtx.moveTo(0, 200);
+            gCtx.lineTo(600, 50);
+            gCtx.lineTo(600, 200);
+            gCtx.fillStyle = '#b2f7ef';
+            gCtx.fill();
+            gCtx.stroke();
+            
+            let bx = progress;
+            let by = 200 - (progress * (150/600)) - 20; 
+
+            gCtx.save();
+            gCtx.translate(bx, by);
+            gCtx.rotate(-0.25);
+            gCtx.fillStyle = 'black';
+            gCtx.fillRect(0, 0, 40, 20);
+            gCtx.beginPath(); gCtx.arc(0, 20, 10, 0, Math.PI*2); gCtx.stroke();
+            gCtx.beginPath(); gCtx.arc(40, 20, 10, 0, Math.PI*2); gCtx.stroke();
+            gCtx.restore();
+        }
+        drawBikeScene(50);
+
+        function startBike() {
+            let bx = 50;
+            let success = (gearType === 'low');
+            let msg = document.getElementById('gear-feedback');
+            
+            function pedal() {
+                if(success) {
+                    bx += 2;
+                    drawBikeScene(bx);
+                    if(bx < 550) requestAnimationFrame(pedal);
+                    else { msg.innerText = "Made it! Low gear power!"; msg.style.color="green"; }
+                } else {
+                    bx += 5;
+                    drawBikeScene(bx);
+                    if(bx < 200) requestAnimationFrame(pedal);
+                    else { 
+                        msg.innerText = "STALLED! High gear is too hard for hills."; 
+                        msg.style.color="red"; 
+                    }
+                }
+            }
+            pedal();
+        }
+
+        // --- 16. DOPPLER ---
+        const dopCanvas = document.getElementById('dopplerCanvas');
+        const dCtx = dopCanvas.getContext('2d');
+        let ambX = 0;
+        let waves = [];
+        let dopRunning = false;
+        let dopAnim;
+        
+        function toggleDoppler() {
+            if(dopRunning) { cancelAnimationFrame(dopAnim); dopRunning=false; return; }
+            dopRunning = true;
+            loopDoppler();
+        }
+
+        function loopDoppler() {
+            let speed = parseFloat(document.getElementById('dopplerSpeed').value);
+            dCtx.clearRect(0,0,600,200);
+            
+            // Move Ambulance
+            ambX += speed;
+            if(ambX > 600) ambX = 0;
+            
+            // Emit Wave every 20 frames
+            if(Date.now() % 200 < 20) {
+                waves.push({x: ambX, r: 0});
+            }
+            
+            // Draw Waves
+            dCtx.strokeStyle = 'rgba(0,0,255,0.5)';
+            dCtx.lineWidth = 2;
+            for(let i=0; i<waves.length; i++) {
+                waves[i].r += 2; // Sound speed constant
+                dCtx.beginPath();
+                dCtx.arc(waves[i].x, 100, waves[i].r, 0, Math.PI*2);
+                dCtx.stroke();
+            }
+            // Clean up old waves
+            waves = waves.filter(w => w.r < 400);
+
+            // Draw Ambulance
+            dCtx.fillStyle = 'red';
+            dCtx.fillRect(ambX - 15, 90, 30, 20);
+            dCtx.fillStyle = 'white';
+            dCtx.fillRect(ambX - 5, 95, 10, 10);
+            
+            dopAnim = requestAnimationFrame(loopDoppler);
+        }
+
+        // --- 17. MAGNETISM ---
+        let magFlipped = false;
+        function flipMagnet() {
+            magFlipped = !magFlipped;
+            const magRight = document.getElementById('mag2');
+            const magText = document.getElementById('magnet-force');
+            const n = document.getElementById('mag2-left');
+            const s = document.getElementById('mag2-right');
+
+            if(magFlipped) {
+                // Flip visual
+                n.style.backgroundColor = '#2563EB'; n.innerText = 'S';
+                s.style.backgroundColor = '#DC2626'; s.innerText = 'N';
+                // Like poles (S-S faces) -> Repel
+                magRight.style.transform = 'translateX(100px)';
+                magText.innerText = "REPEL! (Like Poles)";
+                magText.style.color = "red";
+            } else {
+                // Reset visual
+                n.style.backgroundColor = '#DC2626'; n.innerText = 'N';
+                s.style.backgroundColor = '#2563EB'; s.innerText = 'S';
+                // Opposite poles (S-N faces) -> Attract
+                magRight.style.transform = 'translateX(0px)';
+                magText.innerText = "ATTRACT! (Opposites)";
+                magText.style.color = "green";
+            }
+        }
+
+        // --- 18. REFRACTION ---
+        const refCanvas = document.getElementById('refractionCanvas');
+        const rCtx = refCanvas.getContext('2d');
+        const laserInput = document.getElementById('laserAngle');
+        
+        function drawRefraction() {
+            rCtx.clearRect(0,0,600,300);
+            
+            // Glass Block
+            rCtx.fillStyle = 'rgba(255, 255, 255, 0.2)';
+            rCtx.fillRect(0, 150, 600, 150);
+            rCtx.strokeStyle = 'white';
+            rCtx.beginPath(); rCtx.moveTo(0, 150); rCtx.lineTo(600, 150); rCtx.stroke();
+            
+            // Normal Line
+            rCtx.strokeStyle = '#555';
+            rCtx.setLineDash([5, 5]);
+            rCtx.beginPath(); rCtx.moveTo(300, 0); rCtx.lineTo(300, 300); rCtx.stroke();
+            rCtx.setLineDash([]);
+
+            // Laser Incident
+            let angleDeg = laserInput.value; // Angle from normal (0 is vertical)
+            let angleRad = angleDeg * Math.PI / 180;
+            
+            let startX = 300 - Math.tan(angleRad) * 150;
+            
+            rCtx.strokeStyle = '#FF00FF'; // Pink Floyd Laser
+            rCtx.lineWidth = 4;
+            rCtx.beginPath(); 
+            rCtx.moveTo(startX, 0); 
+            rCtx.lineTo(300, 150); 
+            rCtx.stroke();
+
+            // Laser Refracted (Snell's Law approx)
+            // n1 sin(th1) = n2 sin(th2) -> Air=1, Glass=1.5
+            // th2 = asin( sin(th1) / 1.5 )
+            let refAngle = Math.asin(Math.sin(angleRad) / 1.5);
+            let endX = 300 + Math.tan(refAngle) * 150;
+            
+            rCtx.beginPath();
+            rCtx.moveTo(300, 150);
+            rCtx.lineTo(endX, 300);
+            rCtx.stroke();
+        }
+        laserInput.addEventListener('input', drawRefraction);
+        drawRefraction();
+
+        // --- 19. ELECTROSTATICS ---
+        let charge = 0;
+        let balloonX = 50; let balloonY = 50; // Center percentage
+        function rubBalloon() {
+            const b = document.getElementById('balloon');
+            const e = document.getElementById('electrons');
+            
+            // Simulate rubbing move
+            b.style.left = '80%';
+            setTimeout(() => {
+                b.style.left = '50%';
+                charge++;
+                e.style.opacity = '1';
+                if(charge > 1) e.innerText = "-----";
+                if(charge > 3) e.innerText = "--------";
+            }, 500);
+        }
+        
+        function stickBalloon() {
+            const b = document.getElementById('balloon');
+            if(charge > 0) {
+                b.style.left = '15%'; // Stick to wall
+            } else {
+                // Fall down
+                b.style.top = '90%';
+            }
+        }
+        
+        function resetBalloon() {
+            charge = 0;
+            const b = document.getElementById('balloon');
+            const e = document.getElementById('electrons');
+            b.style.left = '50%';
+            b.style.top = '50%';
+            e.innerText = "---";
+            e.style.opacity = '0';
+        }
+
+        // --- 20. DIFFUSION ---
+        const difCanvas = document.getElementById('diffusionCanvas');
+        const dfCtx = difCanvas.getContext('2d');
+        let particles = [];
+        let temp = 'cold';
+        
+        // Init particles
+        for(let i=0; i<50; i++) {
+            particles.push({x: 150, y: 150, vx: Math.random()-0.5, vy: Math.random()-0.5, color: 'orange'});
+        }
+        
+        function setTemp(t) {
+            temp = t;
+            let speed = (t === 'hot') ? 5 : 0.5;
+            particles.forEach(p => {
+                p.vx = (Math.random()-0.5) * speed;
+                p.vy = (Math.random()-0.5) * speed;
+            });
+            document.getElementById('diffusion-feedback').innerText = `Particles are: ${t.toUpperCase()}`;
+        }
+        
+        function loopDiffusion() {
+            dfCtx.clearRect(0,0,300,300);
+            particles.forEach(p => {
+                p.x += p.vx;
+                p.y += p.vy;
+                
+                // Bounce
+                if(p.x < 0 || p.x > 300) p.vx *= -1;
+                if(p.y < 0 || p.y > 300) p.vy *= -1;
+                
+                dfCtx.beginPath();
+                dfCtx.arc(p.x, p.y, 4, 0, Math.PI*2);
+                dfCtx.fillStyle = p.color;
+                dfCtx.fill();
+            });
+            requestAnimationFrame(loopDiffusion);
+        }
+        loopDiffusion();
+
+    </script>
+</body>
+</html>

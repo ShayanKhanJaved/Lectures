@@ -1,0 +1,1170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Celestica: The Standard Model</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Teko:wght@300;500&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --lab-bg: #05070a;
+            --lab-grid: rgba(0, 243, 255, 0.05);
+            --neon-cyan: #00f3ff;
+            --neon-pink: #ff0055;
+            --neon-yellow: #ffe600;
+            --neon-green: #00ff66;
+            --glass: rgba(10, 15, 30, 0.6);
+        }
+
+        body {
+            background-color: var(--lab-bg);
+            color: #a0b0c0;
+            font-family: 'Share Tech Mono', monospace;
+            background-image: 
+                linear-gradient(var(--lab-grid) 1px, transparent 1px),
+                linear-gradient(90deg, var(--lab-grid) 1px, transparent 1px);
+            background-size: 40px 40px;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Teko', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .hud-panel {
+            background: var(--glass);
+            border: 1px solid rgba(0, 243, 255, 0.1);
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Tech corners */
+        .hud-panel::after {
+            content: ''; position: absolute; bottom: 0; right: 0;
+            width: 20px; height: 20px;
+            border-bottom: 2px solid var(--neon-cyan);
+            border-right: 2px solid var(--neon-cyan);
+        }
+
+        .hud-btn {
+            background: rgba(0, 243, 255, 0.05);
+            border: 1px solid var(--neon-cyan);
+            color: var(--neon-cyan);
+            padding: 12px 24px;
+            font-family: 'Share Tech Mono', monospace;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: bold;
+            clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+        }
+
+        .hud-btn:hover {
+            background: var(--neon-cyan);
+            color: #000;
+            box-shadow: 0 0 20px var(--neon-cyan);
+        }
+
+        .hud-btn.pink {
+            border-color: var(--neon-pink); color: var(--neon-pink); background: rgba(255, 0, 85, 0.05);
+        }
+        .hud-btn.pink:hover { background: var(--neon-pink); color: white; box-shadow: 0 0 20px var(--neon-pink); }
+
+        canvas {
+            background: radial-gradient(circle at center, #0b1021 0%, #000000 100%);
+            border: 1px solid #1e293b;
+            border-radius: 4px;
+            cursor: crosshair;
+        }
+
+        /* Particle Cards */
+        .zoo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+            gap: 12px;
+        }
+        .particle-card {
+            aspect-ratio: 1;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 1.2rem;
+            font-weight: bold;
+            position: relative;
+            overflow: hidden;
+        }
+        .particle-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.5); border-color: white; }
+        
+        .p-quark { color: var(--neon-pink); }
+        .p-quark:hover { background: rgba(255, 0, 85, 0.2); box-shadow: 0 0 15px var(--neon-pink); }
+        
+        .p-lepton { color: var(--neon-cyan); }
+        .p-lepton:hover { background: rgba(0, 243, 255, 0.2); box-shadow: 0 0 15px var(--neon-cyan); }
+        
+        .p-boson { color: var(--neon-yellow); }
+        .p-boson:hover { background: rgba(255, 230, 0, 0.2); box-shadow: 0 0 15px var(--neon-yellow); }
+
+        input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; }
+        input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 2px; background: #334155; }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none; height: 16px; width: 16px; background: var(--neon-cyan);
+            margin-top: -7px; cursor: pointer; border: 2px solid #000; transform: rotate(45deg);
+        }
+    </style>
+</head>
+<body class="max-w-7xl mx-auto px-4 py-12 pb-32">
+
+    <!-- Hero -->
+    <header class="text-center mb-20 relative">
+        <div class="inline-block border border-cyan-900 bg-cyan-900/20 px-6 py-2 mb-6 text-xs tracking-[0.5em] text-cyan-400 rounded-full animate-pulse">
+            SYSTEM ONLINE // LEVEL 07
+        </div>
+        <h1 class="text-6xl md:text-9xl mb-6 text-white tracking-tighter drop-shadow-[0_0_30px_rgba(0,243,255,0.3)]">
+            STANDARD <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-pink-500">MODEL</span>
+        </h1>
+        <p class="text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed">
+            The ultimate LEGO set of the universe. <br>
+            <span class="text-cyan-400">17 Particles</span>. <span class="text-pink-500">4 Forces</span>. Everything you see is made of this.
+        </p>
+    </header>
+
+    <!-- 1. The Particle Zoo -->
+    <section class="mb-32 grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+        <div class="lg:col-span-5 sticky top-8">
+            <div class="text-8xl font-bold text-white/5 mb-[-40px] ml-[-10px] select-none">01</div>
+            <h2 class="text-4xl text-white mb-6 relative z-10">The Particle Zoo</h2>
+            <p class="mb-6 text-lg">
+                Think of this as the Periodic Table for physics.
+                <br><br>
+                <span class="text-pink-500 font-bold">Quarks:</span> The bricks. They make protons & neutrons.
+                <br>
+                <span class="text-cyan-400 font-bold">Leptons:</span> The loners. Electrons are here.
+                <br>
+                <span class="text-yellow-400 font-bold">Bosons:</span> The glue. They carry forces like gravity and magnetism.
+            </p>
+            <div id="zoo-info" class="hud-panel p-6 min-h-[180px] border-l-4 border-cyan-500">
+                <h3 class="text-2xl text-white mb-2" id="p-name">HOVER A PARTICLE</h3>
+                <div class="text-base space-y-2 font-bold">
+                    <p>Mass: <span id="p-mass" class="text-cyan-400">-</span></p>
+                    <p>Charge: <span id="p-charge" class="text-pink-400">-</span></p>
+                    <p class="text-slate-400 mt-4 font-normal" id="p-desc">Discover the building blocks...</p>
+                </div>
+            </div>
+        </div>
+        <div class="lg:col-span-7 hud-panel p-8">
+            <div class="zoo-grid">
+                <!-- Quarks -->
+                <div class="particle-card p-quark" onmouseover="showPart('UP QUARK', 'Light', '+2/3', 'Protons have 2 of these.')">u</div>
+                <div class="particle-card p-quark" onmouseover="showPart('DOWN QUARK', 'Light', '-1/3', 'Protons have 1 of these.')">d</div>
+                <div class="particle-card p-quark" onmouseover="showPart('CHARM QUARK', 'Heavy', '+2/3', 'Found in high-energy collisions.')">c</div>
+                <div class="particle-card p-quark" onmouseover="showPart('STRANGE QUARK', 'Medium', '-1/3', 'Decays quickly.')">s</div>
+                <div class="particle-card p-quark" onmouseover="showPart('TOP QUARK', 'Super Heavy', '+2/3', 'Heaviest particle known!')">t</div>
+                <div class="particle-card p-quark" onmouseover="showPart('BOTTOM QUARK', 'Heavy', '-1/3', 'Essential for B-physics.')">b</div>
+                <!-- Leptons -->
+                <div class="particle-card p-lepton" onmouseover="showPart('ELECTRON', 'Light', '-1', 'Orbits atoms. Creates electricity.')">e</div>
+                <div class="particle-card p-lepton" onmouseover="showPart('E-NEUTRINO', 'Ghostly', '0', 'Passes through Earth unnoticed.')">νe</div>
+                <div class="particle-card p-lepton" onmouseover="showPart('MUON', 'Heavy', '-1', 'Fat electron from space rays.')">μ</div>
+                <div class="particle-card p-lepton" onmouseover="showPart('MU-NEUTRINO', 'Ghostly', '0', 'Partner to the Muon.')">νμ</div>
+                <div class="particle-card p-lepton" onmouseover="showPart('TAU', 'Super Heavy', '-1', 'Unstable fat electron.')">τ</div>
+                <div class="particle-card p-lepton" onmouseover="showPart('TAU-NEUTRINO', 'Ghostly', '0', 'Partner to the Tau.')">ντ</div>
+                <!-- Bosons -->
+                <div class="particle-card p-boson" onmouseover="showPart('GLUON', 'Massless', '0', 'The Strong Force. Glues quarks.')">g</div>
+                <div class="particle-card p-boson" onmouseover="showPart('PHOTON', 'Massless', '0', 'Light! Carries electromagnetism.')">γ</div>
+                <div class="particle-card p-boson" onmouseover="showPart('Z BOSON', 'Heavy', '0', 'Weak Force carrier.')">Z</div>
+                <div class="particle-card p-boson" onmouseover="showPart('W BOSON', 'Heavy', '±1', 'Changes particle flavors.')">W</div>
+                <div class="particle-card p-boson text-white bg-white/10 border-white" onmouseover="showPart('HIGGS BOSON', 'Heavy', '0', 'The God Particle. Gives mass.')">H</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 2. Quark Confinement -->
+    <section class="mb-32 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <div class="lg:col-span-8 hud-panel p-1">
+            <canvas id="confineCanvas" width="800" height="350" class="w-full h-[350px]"></canvas>
+        </div>
+        <div class="lg:col-span-4">
+            <div class="text-6xl font-bold text-white/5 mb-[-20px]">02</div>
+            <h2 class="text-3xl text-white mb-4 relative z-10">The Rubber Band Trap</h2>
+            <p class="mb-6">
+                <strong class="text-pink-500">Confinement:</strong> You can never pull a quark alone. The force between them behaves like a rubber band—it gets <em>stronger</em> as you pull!
+                <br><br>
+                Eventually, the band snaps, using the energy to create new quarks.
+            </p>
+            <button onclick="pullQuarks()" class="hud-btn pink w-full">PULL THE BAND</button>
+        </div>
+    </section>
+
+    <!-- 3. The Higgs Field -->
+    <section class="mb-32 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <div class="lg:col-span-4">
+            <div class="text-6xl font-bold text-white/5 mb-[-20px]">03</div>
+            <h2 class="text-3xl text-white mb-4 relative z-10">Cosmic Molasses</h2>
+            <p class="mb-6">
+                <strong class="text-cyan-400">The Higgs Field:</strong> Imagine the universe is filled with invisible thick syrup.
+                <br><br>
+                Some particles (like Photons) slice through effortlessly (No Mass). Others (like Electrons) get bogged down (Have Mass).
+            </p>
+            <div class="space-y-3">
+                <button onclick="setHiggsParticle('photon')" class="hud-btn w-full text-sm">PHOTON (Slices through)</button>
+                <button onclick="setHiggsParticle('electron')" class="hud-btn w-full text-sm">ELECTRON (Wades through)</button>
+                <button onclick="setHiggsParticle('top')" class="hud-btn w-full text-sm">TOP QUARK (Stuck in syrup)</button>
+            </div>
+        </div>
+        <div class="lg:col-span-8 hud-panel p-1">
+            <canvas id="higgsCanvas" width="800" height="350" class="w-full h-[350px]"></canvas>
+        </div>
+    </section>
+
+    <!-- 4. Beta Decay -->
+    <section class="mb-32 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <div class="lg:col-span-8 hud-panel p-1">
+            <canvas id="decayCanvas" width="800" height="350" class="w-full h-[350px]"></canvas>
+        </div>
+        <div class="lg:col-span-4">
+            <div class="text-6xl font-bold text-white/5 mb-[-20px]">04</div>
+            <h2 class="text-3xl text-white mb-4 relative z-10">Particle Alchemy</h2>
+            <p class="mb-6">
+                <strong class="text-yellow-400">Beta Decay:</strong> The Weak Force allows particles to change identity!
+                <br><br>
+                Watch a neutron turn into a proton by spitting out an electron. This is how the sun burns.
+            </p>
+            <button onclick="triggerDecayAnim()" class="hud-btn w-full">START DECAY</button>
+        </div>
+    </section>
+
+    <!-- 5. Annihilation -->
+    <section class="mb-32 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <div class="lg:col-span-4">
+            <div class="text-6xl font-bold text-white/5 mb-[-20px]">05</div>
+            <h2 class="text-3xl text-white mb-4 relative z-10">Total Destruction</h2>
+            <p class="mb-6">
+                <strong class="text-pink-500">Matter vs Antimatter:</strong> 
+                When they touch, they vanish completely, turning 100% of their mass into pure energy (Gamma Rays).
+            </p>
+            <button onclick="fireAnnihilation()" class="hud-btn pink w-full">INITIATE COLLISION</button>
+        </div>
+        <div class="lg:col-span-8 hud-panel p-1">
+            <canvas id="antiCanvas" width="800" height="350" class="w-full h-[350px]"></canvas>
+        </div>
+    </section>
+
+    <!-- 6. Color Charge -->
+    <section class="mb-32 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <div class="lg:col-span-8 hud-panel p-1">
+            <canvas id="colorCanvas" width="800" height="350" class="w-full h-[350px]"></canvas>
+        </div>
+        <div class="lg:col-span-4">
+            <div class="text-6xl font-bold text-white/5 mb-[-20px]">06</div>
+            <h2 class="text-3xl text-white mb-4 relative z-10">The Strong Force</h2>
+            <p class="mb-6">
+                Quarks have a property called "Color" (Red, Green, Blue). 
+                <br><br>
+                Inside a proton, they constantly throw <strong>Gluons</strong> back and forth to swap colors. They must always mix to form white.
+            </p>
+        </div>
+    </section>
+
+    <!-- 7. Neutrino Oscillation -->
+    <section class="mb-32 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <div class="lg:col-span-4">
+            <div class="text-6xl font-bold text-white/5 mb-[-20px]">07</div>
+            <h2 class="text-3xl text-white mb-4 relative z-10">The Shape-Shifters</h2>
+            <p class="mb-6">
+                <strong class="text-cyan-400">Neutrinos</strong> are ghost particles that can change their identity as they fly through space.
+                <br><br>
+                An Electron-Neutrino can morph into a Muon-Neutrino!
+            </p>
+            <button onclick="resetNeutrino()" class="hud-btn w-full">LAUNCH NEUTRINO</button>
+        </div>
+        <div class="lg:col-span-8 hud-panel p-1">
+            <canvas id="neutrinoCanvas" width="800" height="250" class="w-full h-[250px]"></canvas>
+        </div>
+    </section>
+
+    <!-- 8. Cyclotron -->
+    <section class="mb-32 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <div class="lg:col-span-8 hud-panel p-2 flex justify-center">
+            <canvas id="cyclotronCanvas" width="400" height="400" class="rounded-full border-2 border-cyan-900 shadow-[0_0_50px_rgba(0,243,255,0.1)]"></canvas>
+        </div>
+        <div class="lg:col-span-4">
+            <div class="text-6xl font-bold text-white/5 mb-[-20px]">08</div>
+            <h2 class="text-3xl text-white mb-4 relative z-10">Particle Smasher</h2>
+            <p class="mb-6">
+                How do we know all this? We smash things!
+                <br><br>
+                Magnets spin particles in circles, faster and faster, until they collide and explode into new particles.
+            </p>
+            <button onclick="fireCyclotron()" class="hud-btn w-full mt-4">INJECT PROTON</button>
+        </div>
+    </section>
+
+    <!-- 9. Feynman Diagrams -->
+    <section class="mb-32 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <div class="lg:col-span-4">
+            <div class="text-6xl font-bold text-white/5 mb-[-20px]">09</div>
+            <h2 class="text-3xl text-white mb-4 relative z-10">Physics Doodles</h2>
+            <p class="mb-6">
+                <strong class="text-yellow-400">Feynman Diagrams:</strong> A simple drawing that represents complex math.
+                <br><br>
+                Straight lines = Matter. Wavy lines = Forces.
+            </p>
+            <div class="space-y-2">
+                <button onclick="drawFeynman('scatter')" class="hud-btn w-full text-sm">Electrons Repelling</button>
+                <button onclick="drawFeynman('annihilate')" class="hud-btn w-full text-sm">Annihilation</button>
+            </div>
+        </div>
+        <div class="lg:col-span-8 hud-panel p-1">
+            <canvas id="feynmanCanvas" width="800" height="300" class="w-full h-[300px]"></canvas>
+        </div>
+    </section>
+
+    <!-- 10. Proton Structure -->
+    <section class="mb-32 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <div class="lg:col-span-8 hud-panel p-1">
+            <canvas id="protonCanvas" width="800" height="350" class="w-full h-[350px]"></canvas>
+        </div>
+        <div class="lg:col-span-4">
+            <div class="text-6xl font-bold text-white/5 mb-[-20px]">10</div>
+            <h2 class="text-3xl text-white mb-4 relative z-10">The Quantum Sea</h2>
+            <p class="mb-6">
+                A proton isn't just 3 quarks sitting still. 
+                <br><br>
+                It's a boiling, chaotic storm of gluons and "virtual" quarks popping in and out of existence.
+            </p>
+            <button onclick="boostProtonEnergy()" class="hud-btn pink w-full">ZOOM IN (ADD ENERGY)</button>
+        </div>
+    </section>
+
+    <!-- 11. Electroweak -->
+    <section class="mb-32 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <div class="lg:col-span-4">
+            <div class="text-6xl font-bold text-white/5 mb-[-20px]">11</div>
+            <h2 class="text-3xl text-white mb-4 relative z-10">Force Unification</h2>
+            <p class="mb-6">
+                At super-high temperatures (like the Big Bang), Electricity and the Weak Force melt together into one super-force.
+            </p>
+            <input type="range" id="energySlider" min="0" max="100" value="0" oninput="updateElectroweak()">
+            <p class="text-center mt-2 text-cyan-400" id="ew-status">Current: Low Energy</p>
+        </div>
+        <div class="lg:col-span-8 hud-panel p-8 flex justify-center items-center gap-12 h-[300px]" id="ew-container">
+            <div class="w-32 h-32 rounded-full border-4 border-cyan-500 flex items-center justify-center text-cyan-500 font-bold text-2xl shadow-[0_0_30px_rgba(0,243,255,0.3)] transition-all duration-500" id="force-em">EM</div>
+            <div class="w-32 h-32 rounded-full border-4 border-pink-500 flex items-center justify-center text-pink-500 font-bold text-2xl shadow-[0_0_30px_rgba(255,0,85,0.3)] transition-all duration-500" id="force-weak">WEAK</div>
+        </div>
+    </section>
+
+    <!-- 12. Gluon Flux -->
+    <section class="mb-32 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <div class="lg:col-span-8 hud-panel p-1">
+            <canvas id="gluonCanvas" width="800" height="250" class="w-full h-[250px]"></canvas>
+        </div>
+        <div class="lg:col-span-4">
+            <div class="text-6xl font-bold text-white/5 mb-[-20px]">12</div>
+            <h2 class="text-3xl text-white mb-4 relative z-10">Flux Tubes</h2>
+            <p class="mb-6">
+                Electric fields spread out. Strong Force fields stay tight in a tube.
+                <br><br>
+                This "Flux Tube" creates the tension that holds quarks together.
+            </p>
+        </div>
+    </section>
+
+    <!-- 13. Dark Matter -->
+    <section class="mb-32 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <div class="lg:col-span-4">
+            <div class="text-6xl font-bold text-white/5 mb-[-20px]">13</div>
+            <h2 class="text-3xl text-white mb-4 relative z-10">Invisible Glue</h2>
+            <p class="mb-6">
+                <strong class="text-slate-400">Dark Matter:</strong> Galaxies spin too fast! They should fly apart.
+                <br><br>
+                There must be invisible matter holding them together. Toggle it to see the difference.
+            </p>
+            <div class="flex gap-2">
+                <button onclick="toggleDarkMatter(false)" class="hud-btn w-full text-xs">Without Glue</button>
+                <button onclick="toggleDarkMatter(true)" class="hud-btn pink w-full text-xs">With Dark Matter</button>
+            </div>
+        </div>
+        <div class="lg:col-span-8 hud-panel p-1">
+            <canvas id="galaxyCanvas" width="800" height="400" class="w-full h-[400px]"></canvas>
+        </div>
+    </section>
+
+    <!-- 14. Supersymmetry -->
+    <section class="mb-32 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <div class="lg:col-span-8 hud-panel p-12 flex justify-around items-center bg-gradient-to-r from-cyan-900/20 to-pink-900/20">
+            <div class="text-center">
+                <div class="text-cyan-400 mb-4 tracking-widest">MATTER</div>
+                <div class="w-24 h-24 bg-cyan-500 rounded-full mx-auto flex items-center justify-center text-black font-bold text-3xl shadow-[0_0_40px_cyan]">e</div>
+                <div class="mt-4 text-sm text-slate-400">Electron</div>
+            </div>
+            <div class="h-32 w-1 bg-slate-700"></div>
+            <div class="text-center opacity-30 transition-all duration-1000 transform scale-90" id="susy-partner">
+                <div class="text-pink-400 mb-4 tracking-widest">SHADOW</div>
+                <div class="w-24 h-24 border-4 border-pink-500 bg-transparent rounded mx-auto flex items-center justify-center text-pink-500 font-bold text-3xl shadow-[0_0_40px_magenta]">ẽ</div>
+                <div class="mt-4 text-sm text-slate-400">Selectron</div>
+            </div>
+        </div>
+        <div class="lg:col-span-4">
+            <div class="text-6xl font-bold text-white/5 mb-[-20px]">14</div>
+            <h2 class="text-3xl text-white mb-4 relative z-10">Supersymmetry</h2>
+            <p class="mb-6">
+                A theory that every particle has a heavier, invisible "shadow" partner. 
+                <br><br>
+                It could explain Dark Matter!
+            </p>
+            <button onclick="toggleSUSY()" class="hud-btn w-full">REVEAL SHADOWS</button>
+        </div>
+    </section>
+
+    <!-- 15. The Master Equation -->
+    <section class="mb-32">
+        <div class="text-center mb-12">
+            <div class="text-6xl font-bold text-white/5 select-none">15</div>
+            <h2 class="text-5xl text-white mb-4">The Source Code</h2>
+            <p class="text-slate-400 max-w-xl mx-auto">The "Lagrangian". It's the rulebook for the universe, written in one master equation. Here is what the math actually says:</p>
+        </div>
+        <div class="hud-panel p-12 relative overflow-hidden group">
+            <div class="absolute inset-0 bg-gradient-to-r from-cyan-500/10 via-transparent to-pink-500/10 animate-pulse"></div>
+            <div class="flex flex-col md:flex-row justify-between items-stretch text-center gap-4 font-sans text-lg relative z-10">
+                
+                <div class="flex-1 p-6 border border-transparent hover:border-cyan-500/50 rounded transition-all duration-500 hover:scale-105 hover:bg-cyan-900/20 cursor-help flex flex-col justify-center">
+                    <div class="text-cyan-400 mb-3 text-xl font-bold tracking-widest uppercase">1. Forces</div>
+                    <div class="text-slate-300 leading-snug">Describes how force carriers (like Photons and Gluons) fly around the universe.</div>
+                </div>
+
+                <div class="text-slate-600 text-4xl self-center">+</div>
+
+                <div class="flex-1 p-6 border border-transparent hover:border-pink-500/50 rounded transition-all duration-500 hover:scale-105 hover:bg-pink-900/20 cursor-help flex flex-col justify-center">
+                    <div class="text-pink-400 mb-3 text-xl font-bold tracking-widest uppercase">2. Matter</div>
+                    <div class="text-slate-300 leading-snug">Describes how matter particles (like Electrons and Quarks) move and spin.</div>
+                </div>
+
+                <div class="text-slate-600 text-4xl self-center">+</div>
+
+                <div class="flex-1 p-6 border border-transparent hover:border-yellow-500/50 rounded transition-all duration-500 hover:scale-105 hover:bg-yellow-900/20 cursor-help flex flex-col justify-center">
+                    <div class="text-yellow-400 mb-3 text-xl font-bold tracking-widest uppercase">3. Mass</div>
+                    <div class="text-slate-300 leading-snug">Describes how matter particles interact with the Higgs field to get heavy.</div>
+                </div>
+
+                <div class="text-slate-600 text-4xl self-center">+</div>
+
+                <div class="flex-1 p-6 border border-transparent hover:border-green-500/50 rounded transition-all duration-500 hover:scale-105 hover:bg-green-900/20 cursor-help flex flex-col justify-center">
+                    <div class="text-green-400 mb-3 text-xl font-bold tracking-widest uppercase">4. Higgs</div>
+                    <div class="text-slate-300 leading-snug">Describes the Higgs Field itself—the invisible energy filling all of space.</div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <footer class="text-center py-20 border-t border-slate-900 text-slate-700 text-sm font-mono">
+        CELESTICA INITIATIVE // END OF LECTURE 07
+    </footer>
+
+    <script>
+        lucide.createIcons();
+        function rand(min, max) { return Math.random() * (max - min) + min; }
+
+        // --- 1. PARTICLE ZOO ---
+        function showPart(name, mass, charge, desc) {
+            document.getElementById('p-name').innerText = name;
+            document.getElementById('p-mass').innerText = mass;
+            document.getElementById('p-charge').innerText = charge;
+            document.getElementById('p-desc').innerText = desc;
+        }
+
+        // --- 2. CONFINEMENT (RUBBER BAND) ---
+        const confC = document.getElementById('confineCanvas');
+        const confCtx = confC.getContext('2d');
+        let q1 = {x: 300, y: 175}, q2 = {x: 500, y: 175};
+        let pullDist = 0;
+        let pulling = false;
+        
+        function pullQuarks() {
+            if(pulling) return;
+            pulling = true;
+            let snap = false;
+            
+            let anim = setInterval(() => {
+                pullDist += 3;
+                q1.x -= 1.5; q2.x += 1.5; // Move apart
+                
+                if(pullDist > 250 && !snap) {
+                    snap = true;
+                    clearInterval(anim);
+                    // SNAP EFFECT
+                    // Create 2 new quarks in the middle
+                    let flash = 10;
+                    let flashInt = setInterval(() => {
+                        flash--;
+                        confCtx.fillStyle = `rgba(255, 255, 255, ${flash/10})`;
+                        confCtx.fillRect(0,0,800,350);
+                        if(flash<=0) clearInterval(flashInt);
+                    }, 30);
+                    
+                    // Reset with delay
+                    setTimeout(() => {
+                        q1.x = 300; q2.x = 500; pullDist = 0; pulling = false;
+                    }, 1000);
+                }
+            }, 16);
+        }
+        
+        function drawConfine() {
+            // Clear with trail
+            confCtx.fillStyle = 'rgba(5, 7, 10, 0.3)';
+            confCtx.fillRect(0,0,800,350);
+            
+            confCtx.globalCompositeOperation = 'lighter';
+
+            // Gluon String (Dynamic visual)
+            let tension = pullDist / 250; // 0 to 1
+            let colors = ['#ff0055', '#ffe600', '#00f3ff'];
+            
+            // Draw multiple vibrating strands
+            for(let i=0; i<5; i++) {
+                confCtx.strokeStyle = colors[i%3];
+                confCtx.lineWidth = 2 + tension*2;
+                confCtx.beginPath();
+                confCtx.moveTo(q1.x, q1.y);
+                
+                let cp1x = q1.x + (q2.x-q1.x)/3;
+                let cp1y = q1.y + Math.sin(Date.now()/50 + i)*20 * (1-tension) + (Math.random()-0.5)*pullDist*0.2;
+                let cp2x = q1.x + 2*(q2.x-q1.x)/3;
+                let cp2y = q1.y - Math.sin(Date.now()/50 + i)*20 * (1-tension) + (Math.random()-0.5)*pullDist*0.2;
+                
+                confCtx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, q2.x, q2.y);
+                confCtx.stroke();
+            }
+
+            // Quarks
+            drawGlowingOrb(confCtx, q1.x, q1.y, 20, '#ff0055');
+            drawGlowingOrb(confCtx, q2.x, q2.y, 20, '#00f3ff');
+            
+            confCtx.globalCompositeOperation = 'source-over';
+            
+            requestAnimationFrame(drawConfine);
+        }
+        
+        function drawGlowingOrb(ctx, x, y, r, color) {
+            let g = ctx.createRadialGradient(x, y, 0, x, y, r*2);
+            g.addColorStop(0, '#fff');
+            g.addColorStop(0.2, color);
+            g.addColorStop(1, 'transparent');
+            ctx.fillStyle = g;
+            ctx.beginPath(); ctx.arc(x, y, r*2, 0, Math.PI*2); ctx.fill();
+        }
+        
+        drawConfine();
+
+        // --- 3. HIGGS (GRID DISTORTION) ---
+        const hCanvas = document.getElementById('higgsCanvas');
+        const hCtx = hCanvas.getContext('2d');
+        let hGrid = [];
+        let hPart = {x:0, y:175, type:'photon', mass:0};
+        
+        // Init Grid
+        for(let x=0; x<=800; x+=20) {
+            for(let y=0; y<=350; y+=20) {
+                hGrid.push({ox:x, oy:y, x:x, y:y}); // Original and current pos
+            }
+        }
+        
+        function setHiggsParticle(type) {
+            hPart.x = 0;
+            hPart.type = type;
+            if(type === 'photon') { hPart.mass = 0; hPart.color = '#00ff66'; }
+            if(type === 'electron') { hPart.mass = 50; hPart.color = '#00f3ff'; }
+            if(type === 'top') { hPart.mass = 150; hPart.color = '#ff0055'; }
+        }
+        
+        function drawHiggs() {
+            hCtx.fillStyle = '#05070a'; hCtx.fillRect(0,0,800,350);
+            
+            // Move Particle
+            let speed = 5 - (hPart.mass/40); 
+            if(speed < 1) speed = 1;
+            hPart.x += speed;
+            if(hPart.x > 850) hPart.x = -50;
+            
+            // Draw Grid
+            hCtx.strokeStyle = 'rgba(0, 243, 255, 0.15)';
+            hCtx.lineWidth = 1;
+            
+            hCtx.beginPath();
+            hGrid.forEach(p => {
+                // Interaction logic: Push points away from particle based on mass
+                let dx = p.ox - hPart.x;
+                let dy = p.oy - hPart.y;
+                let dist = Math.sqrt(dx*dx + dy*dy);
+                
+                // "Drag" effect
+                let force = Math.max(0, (100 - dist) / 100) * hPart.mass * 0.5;
+                
+                // Points dragged TOWARDS particle slightly (Mass gathering)
+                p.x = p.ox - (dx/dist) * force;
+                p.y = p.oy - (dy/dist) * force;
+                
+                // Draw dot
+                hCtx.moveTo(p.x, p.y);
+                hCtx.arc(p.x, p.y, 1, 0, Math.PI*2);
+            });
+            hCtx.stroke();
+            
+            // Draw Particle
+            drawGlowingOrb(hCtx, hPart.x, hPart.y, 10 + hPart.mass/10, hPart.color || '#00ff66');
+            
+            requestAnimationFrame(drawHiggs);
+        }
+        drawHiggs();
+
+        // --- 4. BETA DECAY (PARTICLE SYSTEM) ---
+        const dcC = document.getElementById('decayCanvas');
+        const dcCtx = dcC.getContext('2d');
+        let decayParticles = []; // {x, y, vx, vy, color, life}
+        let neutronState = 'neutron'; // neutron, w-boson, proton
+        
+        function triggerDecayAnim() {
+            if(neutronState !== 'neutron') return;
+            neutronState = 'decaying';
+            
+            // Step 1: Neutron (d) turns to Proton (u) + W-
+            setTimeout(() => {
+                // Spawn W- Boson particles
+                for(let i=0; i<20; i++) {
+                    decayParticles.push({
+                        x: 400, y: 175,
+                        vx: rand(2, 5), vy: rand(-2, 2),
+                        life: 1.0, color: '#ffe600', size: 4
+                    });
+                }
+                neutronState = 'w-boson';
+                
+                // Step 2: W- splits into Electron + Neutrino
+                setTimeout(() => {
+                    neutronState = 'proton';
+                    // Spawn Electron Stream
+                    for(let i=0; i<30; i++) {
+                        decayParticles.push({
+                            x: 550, y: 175,
+                            vx: rand(4, 8), vy: rand(-3, -1), // Up and right
+                            life: 1.5, color: '#00f3ff', size: 3
+                        });
+                    }
+                    // Spawn Neutrino Stream
+                    for(let i=0; i<30; i++) {
+                        decayParticles.push({
+                            x: 550, y: 175,
+                            vx: rand(4, 8), vy: rand(1, 3), // Down and right
+                            life: 1.5, color: '#555', size: 2
+                        });
+                    }
+                    
+                    // Reset
+                    setTimeout(() => neutronState='neutron', 3000);
+                }, 800);
+            }, 500);
+        }
+        
+        function drawDecay() {
+            dcCtx.fillStyle = 'rgba(5, 7, 10, 0.2)';
+            dcCtx.fillRect(0,0,800,350);
+            
+            // Draw Nucleus
+            let coreColor = (neutronState === 'neutron' || neutronState === 'decaying') ? '#aaa' : '#ff0055'; // Grey -> Red (Proton)
+            drawGlowingOrb(dcCtx, 350, 175, 40, coreColor);
+            dcCtx.fillStyle = 'white'; dcCtx.font = "20px Arial"; dcCtx.fillText(neutronState==='neutron'?"n":"p", 345, 180);
+
+            // Update Particles
+            dcCtx.globalCompositeOperation = 'lighter';
+            for(let i=decayParticles.length-1; i>=0; i--) {
+                let p = decayParticles[i];
+                p.x += p.vx; p.y += p.vy;
+                p.life -= 0.02;
+                
+                dcCtx.shadowBlur = 10; dcCtx.shadowColor = p.color;
+                dcCtx.fillStyle = p.color;
+                dcCtx.globalAlpha = p.life;
+                dcCtx.beginPath(); dcCtx.arc(p.x, p.y, p.size, 0, Math.PI*2); dcCtx.fill();
+                
+                if(p.life <= 0) decayParticles.splice(i, 1);
+            }
+            dcCtx.globalAlpha = 1;
+            dcCtx.globalCompositeOperation = 'source-over';
+            
+            requestAnimationFrame(drawDecay);
+        }
+        drawDecay();
+
+        // --- 5. ANNIHILATION ---
+        const antiC = document.getElementById('antiCanvas');
+        const antiCtx = antiC.getContext('2d');
+        let ap1 = {x: 100, y: 175, type: 'matter'}, ap2 = {x: 700, y: 175, type: 'antimatter'};
+        let aMode = 'idle'; // idle, moving, explosion
+        let explosionRadius = 0;
+        
+        function fireAnnihilation() {
+            aMode = 'moving';
+            ap1.x = 100; ap2.x = 700;
+            explosionRadius = 0;
+        }
+        
+        function drawAnti() {
+            antiCtx.fillStyle = 'rgba(5, 7, 10, 0.3)';
+            antiCtx.fillRect(0,0,800,350);
+            
+            if(aMode === 'moving') {
+                ap1.x += 8; ap2.x -= 8;
+                drawGlowingOrb(antiCtx, ap1.x, ap1.y, 15, '#00f3ff'); // Matter
+                drawGlowingOrb(antiCtx, ap2.x, ap2.y, 15, '#ff0055'); // Antimatter
+                
+                if(ap1.x >= ap2.x) {
+                    aMode = 'explosion';
+                }
+            } else if (aMode === 'explosion') {
+                explosionRadius += 15;
+                // Shockwave
+                antiCtx.strokeStyle = `rgba(255, 255, 200, ${1 - explosionRadius/400})`;
+                antiCtx.lineWidth = 10;
+                antiCtx.beginPath(); antiCtx.arc(400, 175, explosionRadius, 0, Math.PI*2); antiCtx.stroke();
+                
+                // Gamma Rays
+                antiCtx.globalCompositeOperation = 'lighter';
+                antiCtx.strokeStyle = '#ffe600';
+                antiCtx.lineWidth = 4;
+                for(let i=0; i<8; i++) {
+                    let angle = (i/8) * Math.PI*2 + explosionRadius/100;
+                    let x = 400 + Math.cos(angle) * explosionRadius;
+                    let y = 175 + Math.sin(angle) * explosionRadius;
+                    let x2 = 400 + Math.cos(angle) * (explosionRadius + 50);
+                    let y2 = 175 + Math.sin(angle) * (explosionRadius + 50);
+                    
+                    antiCtx.beginPath(); antiCtx.moveTo(x, y); antiCtx.lineTo(x2, y2); antiCtx.stroke();
+                }
+                antiCtx.globalCompositeOperation = 'source-over';
+                
+                if(explosionRadius > 500) aMode = 'idle';
+            }
+            
+            requestAnimationFrame(drawAnti);
+        }
+        drawAnti();
+
+        // --- 6. COLOR CHARGE ---
+        const colC = document.getElementById('colorCanvas');
+        const colCtx = colC.getContext('2d');
+        // 3 quarks in a triangle
+        let quarks = [
+            {color: '#ff0055', angle: 0},
+            {color: '#00ff66', angle: 2.09}, // 120 deg
+            {color: '#00f3ff', angle: 4.18}  // 240 deg
+        ];
+        let gluonPackets = [];
+        
+        function drawColor() {
+            colCtx.fillStyle = 'rgba(5, 7, 10, 0.2)'; colCtx.fillRect(0,0,800,350);
+            
+            let cx = 400, cy = 175, r = 80;
+            
+            // Rotate Quarks
+            quarks.forEach((q, i) => {
+                q.angle += 0.02;
+                q.x = cx + Math.cos(q.angle) * r;
+                q.y = cy + Math.sin(q.angle) * r;
+                
+                drawGlowingOrb(colCtx, q.x, q.y, 15, q.color);
+                
+                // Spawn Gluon occasionally
+                if(Math.random() < 0.05) {
+                    let target = quarks[(i+1)%3];
+                    gluonPackets.push({
+                        x: q.x, y: q.y, 
+                        tx: target.x, ty: target.y, 
+                        color: '#ffe600', life: 1
+                    });
+                }
+            });
+            
+            // Draw Gluons
+            colCtx.globalCompositeOperation = 'lighter';
+            for(let i=gluonPackets.length-1; i>=0; i--) {
+                let g = gluonPackets[i];
+                // Move towards target
+                g.x += (g.tx - g.x) * 0.1;
+                g.y += (g.ty - g.y) * 0.1;
+                g.life -= 0.05;
+                
+                // Update target pos (since quarks move) - simple approx just lerp
+                
+                colCtx.fillStyle = g.color;
+                colCtx.beginPath(); colCtx.arc(g.x, g.y, 3, 0, Math.PI*2); colCtx.fill();
+                
+                if(g.life <= 0) gluonPackets.splice(i, 1);
+            }
+            colCtx.globalCompositeOperation = 'source-over';
+            
+            requestAnimationFrame(drawColor);
+        }
+        drawColor();
+
+        // --- 7. NEUTRINO ---
+        const nC = document.getElementById('neutrinoCanvas');
+        const nCtx = nC.getContext('2d');
+        let nPart = {x:0, active:false};
+        let nTrail = [];
+        
+        function resetNeutrino() { nPart.x = 0; nPart.active = true; nTrail = []; }
+        
+        function drawNeutrino() {
+            nCtx.clearRect(0,0,800,250);
+            
+            if(nPart.active) {
+                nPart.x += 4;
+                if(nPart.x > 800) nPart.active = false;
+                
+                // Oscillation State (0-1-2-0...)
+                let state = (nPart.x / 250) % 3; 
+                let color = '#00f3ff'; // e
+                if(state >= 1 && state < 2) color = '#00ff66'; // mu
+                if(state >= 2) color = '#ff0055'; // tau
+                
+                // Trail
+                nTrail.push({x: nPart.x, y: 125 + Math.sin(nPart.x*0.1)*20, color: color});
+                if(nTrail.length > 50) nTrail.shift();
+                
+                // Draw Trail
+                nCtx.lineWidth = 4;
+                for(let i=0; i<nTrail.length-1; i++) {
+                    nCtx.strokeStyle = nTrail[i].color;
+                    nCtx.beginPath(); 
+                    nCtx.moveTo(nTrail[i].x, nTrail[i].y);
+                    nCtx.lineTo(nTrail[i+1].x, nTrail[i+1].y);
+                    nCtx.stroke();
+                }
+                
+                // Particle
+                drawGlowingOrb(nCtx, nPart.x, 125 + Math.sin(nPart.x*0.1)*20, 8, color);
+                
+                // Labels
+                nCtx.fillStyle = 'white'; nCtx.font = "16px monospace";
+                nCtx.fillText("Electron", 50, 50);
+                nCtx.fillText("Muon", 350, 50);
+                nCtx.fillText("Tau", 650, 50);
+            }
+            requestAnimationFrame(drawNeutrino);
+        }
+        drawNeutrino();
+
+        // --- 8. CYCLOTRON ---
+        const cyC = document.getElementById('cyclotronCanvas');
+        const cyCtx = cyC.getContext('2d');
+        let cyP = {r: 0, theta: 0, speed: 0, active: false};
+        let cyTrail = [];
+        
+        function fireCyclotron() { cyP = {r:10, theta:0, speed:0.1, active:true}; cyTrail = []; }
+        
+        function drawCyclotron() {
+            cyCtx.fillStyle = 'rgba(0,0,0,0.1)'; cyCtx.fillRect(0,0,400,400);
+            
+            // D-Plates Gap
+            cyCtx.strokeStyle = '#334155'; cyCtx.beginPath(); cyCtx.moveTo(200, 20); cyCtx.lineTo(200, 380); cyCtx.stroke();
+            
+            if(cyP.active) {
+                cyP.theta += cyP.speed;
+                cyP.r += 0.5;
+                cyP.speed += 0.002;
+                
+                let x = 200 + Math.cos(cyP.theta) * cyP.r;
+                let y = 200 + Math.sin(cyP.theta) * cyP.r;
+                
+                cyTrail.push({x, y});
+                if(cyTrail.length > 50) cyTrail.shift();
+                
+                // Draw Trail
+                cyCtx.strokeStyle = '#ffe600'; cyCtx.lineWidth = 2;
+                cyCtx.beginPath();
+                cyTrail.forEach((t, i) => {
+                    if(i===0) cyCtx.moveTo(t.x, t.y);
+                    else cyCtx.lineTo(t.x, t.y);
+                });
+                cyCtx.stroke();
+                
+                // Particle
+                cyCtx.fillStyle = '#fff';
+                cyCtx.beginPath(); cyCtx.arc(x, y, 4, 0, Math.PI*2); cyCtx.fill();
+                
+                if(cyP.r > 190) {
+                    cyP.active = false;
+                    // Splash
+                    drawGlowingOrb(cyCtx, x, y, 40, '#ff0055');
+                }
+            }
+            requestAnimationFrame(drawCyclotron);
+        }
+        drawCyclotron();
+
+        // --- 9. FEYNMAN ---
+        const fC = document.getElementById('feynmanCanvas');
+        const fCtx = fC.getContext('2d');
+        let fType = '';
+        let fTime = 0;
+        
+        function drawFeynman(type) {
+            fType = type;
+            fTime = 0;
+        }
+        
+        function animFeynman() {
+            fCtx.clearRect(0,0,800,300);
+            fTime += 2;
+            let t = fTime % 400; // Loop
+            
+            fCtx.strokeStyle = 'white'; fCtx.lineWidth = 3;
+            fCtx.font = '20px monospace'; fCtx.fillStyle = 'white';
+            
+            if(fType === 'scatter') {
+                // Two electrons repel
+                // Top e-
+                let y1 = 50; if(t > 100) y1 -= (t-100)*0.5;
+                drawPath(50, 50, 200, 100, Math.min(t, 100)/100);
+                if(t > 100) drawPath(200, 100, 350, 50, (t-100)/100);
+                
+                // Bot e-
+                drawPath(50, 250, 200, 200, Math.min(t, 100)/100);
+                if(t > 100) drawPath(200, 200, 350, 250, (t-100)/100);
+                
+                // Photon Wiggle
+                if(t > 100) {
+                    fCtx.strokeStyle = '#ffe600';
+                    fCtx.beginPath();
+                    fCtx.moveTo(200, 100);
+                    let progress = (t-100)/100; // 0 to 1
+                    for(let i=0; i<100*progress; i+=5) {
+                        fCtx.lineTo(200 + Math.sin(i)*5, 100 + i);
+                    }
+                    fCtx.stroke();
+                }
+                
+                fCtx.fillStyle = '#00f3ff';
+                fCtx.fillText("e-", 20, 50); fCtx.fillText("e-", 20, 250);
+            } 
+            else if (fType === 'annihilate') {
+                // e- e+ > gamma
+                drawPath(50, 100, 200, 150, Math.min(t, 100)/100);
+                drawPath(50, 200, 200, 150, Math.min(t, 100)/100);
+                
+                if(t > 100) {
+                    fCtx.strokeStyle = '#ffe600';
+                    let progress = (t-100)/100;
+                    // Wavy line out
+                    fCtx.beginPath(); fCtx.moveTo(200, 150);
+                    for(let i=0; i<200*progress; i+=5) {
+                        fCtx.lineTo(200 + i, 150 + Math.sin(i)*5);
+                    }
+                    fCtx.stroke();
+                }
+            }
+            
+            requestAnimationFrame(animFeynman);
+        }
+        
+        function drawPath(x1, y1, x2, y2, progress) {
+            if(progress <= 0) return;
+            if(progress > 1) progress = 1;
+            fCtx.beginPath();
+            fCtx.moveTo(x1, y1);
+            fCtx.lineTo(x1 + (x2-x1)*progress, y1 + (y2-y1)*progress);
+            fCtx.stroke();
+        }
+        animFeynman();
+
+        // --- 10. PROTON SEA ---
+        const pc = document.getElementById('protonCanvas');
+        const pctx = pc.getContext('2d');
+        let seaParts = [];
+        
+        function boostProtonEnergy() {
+            for(let i=0; i<20; i++) {
+                seaParts.push({
+                    x: 400, y: 175,
+                    vx: rand(-5, 5), vy: rand(-5, 5),
+                    life: 1.0, color: Math.random()>0.5 ? '#ff0055' : '#00f3ff'
+                });
+            }
+        }
+        
+        // Valence Quarks
+        let valence = [
+            {x: 380, y: 160, c: '#ff0055'}, // u
+            {x: 420, y: 160, c: '#ff0055'}, // u
+            {x: 400, y: 200, c: '#00f3ff'}  // d
+        ];
+        
+        function drawProton() {
+            pctx.fillStyle = 'rgba(5, 7, 10, 0.2)'; pctx.fillRect(0,0,800,350);
+            
+            // Draw Valence
+            valence.forEach(v => {
+                // Jiggle
+                let jx = v.x + Math.sin(Date.now()/100 + v.x)*5;
+                let jy = v.y + Math.cos(Date.now()/100 + v.y)*5;
+                drawGlowingOrb(pctx, jx, jy, 15, v.c);
+                
+                // Connect with gluons
+                pctx.strokeStyle = 'rgba(255, 255, 0, 0.2)';
+                pctx.beginPath(); pctx.moveTo(jx, jy); pctx.lineTo(400, 175); pctx.stroke();
+            });
+            
+            // Draw Sea
+            pctx.globalCompositeOperation = 'lighter';
+            for(let i=seaParts.length-1; i>=0; i--) {
+                let p = seaParts[i];
+                p.x += p.vx; p.y += p.vy;
+                p.life -= 0.02;
+                
+                // Pull back to center
+                let dx = 400 - p.x; let dy = 175 - p.y;
+                p.vx += dx * 0.01; p.vy += dy * 0.01;
+                
+                pctx.fillStyle = p.color;
+                pctx.globalAlpha = p.life;
+                pctx.beginPath(); pctx.arc(p.x, p.y, 3, 0, Math.PI*2); pctx.fill();
+                
+                if(p.life <= 0) seaParts.splice(i, 1);
+            }
+            pctx.globalAlpha = 1;
+            pctx.globalCompositeOperation = 'source-over';
+            
+            requestAnimationFrame(drawProton);
+        }
+        drawProton();
+
+        // --- 11. ELECTROWEAK ---
+        function updateElectroweak() {
+            let e = document.getElementById('energySlider').value;
+            let em = document.getElementById('force-em');
+            let weak = document.getElementById('force-weak');
+            let status = document.getElementById('ew-status');
+            
+            // Merge
+            let dist = 100 - e; // 100 -> 0
+            em.style.transform = `translateX(${dist}px) scale(${1 + e/200})`;
+            weak.style.transform = `translateX(${-dist}px) scale(${1 + e/200})`;
+            
+            if(e > 90) {
+                em.style.borderColor = '#fff';
+                weak.style.borderColor = '#fff';
+                em.style.boxShadow = '0 0 50px white';
+                weak.style.boxShadow = '0 0 50px white';
+                status.innerText = "UNIFIED ELECTROWEAK FORCE";
+                status.className = "text-center mt-2 text-white font-bold animate-pulse text-xl";
+            } else {
+                em.style.borderColor = '#00f3ff';
+                weak.style.borderColor = '#ff0055';
+                em.style.boxShadow = '0 0 30px rgba(0,243,255,0.3)';
+                weak.style.boxShadow = '0 0 30px rgba(255,0,85,0.3)';
+                status.innerText = "Current: Separated Forces";
+                status.className = "text-center mt-2 text-cyan-400";
+            }
+        }
+
+        // --- 12. GLUON FLUX ---
+        const glC = document.getElementById('gluonCanvas');
+        const glCtx = glC.getContext('2d');
+        
+        function drawGluonTube() {
+            glCtx.clearRect(0,0,800,250);
+            
+            let q1x = 200, q1y = 125;
+            let q2x = 600, q2y = 125;
+            
+            drawGlowingOrb(glCtx, q1x, q1y, 20, '#ff0055');
+            drawGlowingOrb(glCtx, q2x, q2y, 20, '#00f3ff');
+            
+            // Flux Tube
+            glCtx.globalCompositeOperation = 'lighter';
+            glCtx.strokeStyle = 'rgba(255, 230, 0, 0.5)';
+            
+            for(let i=0; i<20; i++) {
+                glCtx.lineWidth = Math.random() * 3;
+                glCtx.beginPath();
+                glCtx.moveTo(q1x + 10, q1y);
+                
+                let midX = 400;
+                let midY = 125 + (Math.random()-0.5)*30; // Constrained in tube
+                
+                glCtx.quadraticCurveTo(midX, midY, q2x - 10, q2y);
+                glCtx.stroke();
+            }
+            glCtx.globalCompositeOperation = 'source-over';
+            
+            requestAnimationFrame(drawGluonTube);
+        }
+        drawGluonTube();
+
+        // --- 13. DARK MATTER ---
+        const galC = document.getElementById('galaxyCanvas');
+        const galCtx = galC.getContext('2d');
+        let hasDarkMatter = false;
+        let stars = [];
+        for(let i=0; i<300; i++) stars.push({r: rand(20, 350), angle: rand(0, Math.PI*2)});
+        
+        function toggleDarkMatter(state) { hasDarkMatter = state; }
+        
+        function drawGalaxy() {
+            galCtx.fillStyle = 'rgba(5, 7, 10, 0.2)'; galCtx.fillRect(0,0,800,400);
+            
+            stars.forEach(s => {
+                // Velocity
+                // Newtonian: v ~ 1/sqrt(r) (Outer slow)
+                // Dark Matter: v ~ constant (Outer fast)
+                let v = hasDarkMatter ? 2 : (50 / Math.sqrt(s.r));
+                
+                s.angle += v * 0.005;
+                
+                // Spiral shape
+                let x = 400 + Math.cos(s.angle) * s.r;
+                let y = 200 + Math.sin(s.angle) * (s.r * 0.6);
+                
+                galCtx.fillStyle = 'white';
+                galCtx.beginPath(); galCtx.arc(x, y, 1.5, 0, Math.PI*2); galCtx.fill();
+            });
+            
+            // Center
+            drawGlowingOrb(galCtx, 400, 200, 10, '#ffe600');
+            
+            requestAnimationFrame(drawGalaxy);
+        }
+        drawGalaxy();
+
+        // --- 14. SUSY ---
+        let susyOn = false;
+        function toggleSUSY() {
+            susyOn = !susyOn;
+            const p = document.getElementById('susy-partner');
+            if(susyOn) {
+                p.style.opacity = 1;
+                p.style.transform = "scale(1)";
+                p.classList.add('animate-pulse');
+            } else {
+                p.style.opacity = 0.3;
+                p.style.transform = "scale(0.9)";
+                p.classList.remove('animate-pulse');
+            }
+        }
+
+    </script>
+</body>
+</html>

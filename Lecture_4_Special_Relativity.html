@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Celestica Initiative - Lecture 4: Relativity</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Changa+One&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --retro-dark: #1a1a2e;
+            --retro-purple: #4a1e9e;
+            --retro-pink: #ff00ff;
+            --retro-cyan: #00ffff;
+            --retro-yellow: #fceabb;
+            --retro-cream: #FFFDD0;
+            --retro-brown: #3F2E3E;
+        }
+
+        body {
+            background-color: var(--retro-dark);
+            color: var(--retro-yellow);
+            font-family: 'Space Mono', monospace;
+            background-image: radial-gradient(rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Changa One', cursive;
+        }
+
+        .retro-box {
+            background-color: #0f0f1a;
+            border: 4px solid var(--retro-cyan);
+            box-shadow: 8px 8px 0px var(--retro-purple);
+            border-radius: 1rem;
+            transition: transform 0.2s;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 4rem;
+        }
+        
+        .retro-box::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 2px;
+            background: linear-gradient(90deg, transparent, var(--retro-cyan), transparent);
+            opacity: 0.5;
+        }
+
+        .retro-box:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 10px 10px 0px var(--retro-purple);
+            border-color: var(--retro-pink);
+        }
+
+        .retro-btn {
+            background-color: var(--retro-purple);
+            color: white;
+            border: 2px solid var(--retro-cyan);
+            padding: 10px 20px;
+            font-family: 'Changa One', cursive;
+            font-size: 1.2rem;
+            cursor: pointer;
+            box-shadow: 4px 4px 0px black;
+            transition: all 0.1s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .retro-btn:active {
+            transform: translate(4px, 4px);
+            box-shadow: 0px 0px 0px black;
+        }
+
+        .retro-btn:hover {
+            background-color: var(--retro-pink);
+        }
+
+        /* Custom Range Slider */
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+        }
+
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 24px;
+            width: 24px;
+            border-radius: 0;
+            background: var(--retro-cyan);
+            border: 2px solid white;
+            margin-top: -10px;
+            cursor: pointer;
+            box-shadow: 2px 2px 0px var(--retro-purple);
+        }
+
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 6px;
+            cursor: pointer;
+            background: var(--retro-purple);
+            border: 1px solid var(--retro-cyan);
+        }
+
+        .section-badge {
+            background-color: var(--retro-pink); 
+            color: white; 
+            width: 3.5rem; 
+            height: 3.5rem; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            border-radius: 50%; 
+            border: 3px solid white; 
+            font-weight: bold; 
+            font-size: 1.5rem;
+            flex-shrink: 0;
+            box-shadow: 0 0 10px var(--retro-pink);
+        }
+        
+        canvas {
+            image-rendering: pixelated;
+            max-width: 100%;
+        }
+
+        .text-neon {
+            text-shadow: 0 0 5px var(--retro-cyan), 0 0 10px var(--retro-cyan);
+        }
+        
+        .scanline {
+            width: 100%;
+            height: 100px;
+            z-index: 10;
+            background: linear-gradient(0deg, rgba(0,0,0,0) 0%, rgba(255, 255, 255, 0.2) 50%, rgba(0,0,0,0) 100%);
+            opacity: 0.1;
+            position: absolute;
+            bottom: 100%;
+            animation: scanline 10s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes scanline {
+            0% { bottom: 100%; }
+            100% { bottom: -100%; }
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8 max-w-6xl mx-auto pb-24">
+
+    <!-- Header -->
+    <header class="text-center mb-16 relative">
+        <div class="inline-block bg-purple-900 text-cyan-300 px-6 py-2 rounded border-2 border-cyan-400 mb-4 font-bold tracking-widest uppercase transform -rotate-1">
+            The Celestica Initiative
+        </div>
+        <h1 class="text-5xl md:text-7xl text-white mb-2 tracking-tighter" style="text-shadow: 4px 4px 0px var(--retro-purple);">
+            SPECIAL RELATIVITY
+        </h1>
+        <p class="text-xl md:text-2xl text-pink-400 font-bold typing-effect">Lecture 4: The Speed Limit of Reality</p>
+    </header>
+
+    <!-- 1. The Cosmic Speed Limit -->
+    <div class="flex items-center gap-4 mb-4">
+        <div class="section-badge">1</div>
+        <h2 class="text-4xl text-white">The Photon Racer</h2>
+    </div>
+    <div class="retro-box p-6">
+        <p class="mb-4 text-gray-300">Concept: Light speed is constant. You cannot catch it.</p>
+        <canvas id="cCanvas" width="800" height="200" class="w-full bg-black border-2 border-cyan-500 rounded-lg mb-4"></canvas>
+        <div class="flex items-center gap-4">
+            <input type="range" id="speedSlider" min="0" max="99" value="0" class="flex-1">
+            <button onclick="firePhoton()" class="retro-btn">FIRE!</button>
+        </div>
+    </div>
+
+    <!-- 2. Time Dilation -->
+    <div class="flex items-center gap-4 mb-4">
+        <div class="section-badge">2</div>
+        <h2 class="text-4xl text-white">The Twin Paradox</h2>
+    </div>
+    <div class="retro-box p-6 bg-gray-900">
+        <p class="mb-4 text-gray-300">Concept: Moving clocks run slower.</p>
+        <div class="flex justify-around mb-4 text-center">
+            <div class="p-4 border border-blue-500 rounded bg-blue-900/20">
+                <div class="text-4xl mb-2">🌍</div>
+                <div class="text-xl font-bold text-blue-300">Earth: <span id="age-earth">0</span></div>
+            </div>
+            <div class="p-4 border border-pink-500 rounded bg-pink-900/20">
+                <div class="text-4xl mb-2">🚀</div>
+                <div class="text-xl font-bold text-pink-300">Ship: <span id="age-space">0</span></div>
+            </div>
+        </div>
+        <div class="flex gap-4">
+            <input type="range" id="timeSlider" min="0" max="99.9" value="0" step="0.1" class="flex-1">
+            <button onclick="toggleTimeSim()" class="retro-btn" id="timeBtn">START</button>
+        </div>
+        <div class="text-center mt-2 font-mono text-green-400">Time Dilation Factor (γ): <span id="gamma-display">1.00</span>x</div>
+    </div>
+
+    <!-- 3. Length Contraction -->
+    <div class="flex items-center gap-4 mb-4">
+        <div class="section-badge">3</div>
+        <h2 class="text-4xl text-white">The Squishy Ship</h2>
+    </div>
+    <div class="retro-box p-6">
+        <p class="mb-4 text-gray-300">Concept: Fast objects contract in length.</p>
+        <canvas id="contractCanvas" width="800" height="200" class="w-full bg-black border-2 border-purple-500 rounded-lg mb-4"></canvas>
+        <input type="range" id="contractionSlider" min="0" max="99" value="0">
+        <div class="text-right text-white font-mono mt-1">Length: <span id="lc-len">100</span>%</div>
+    </div>
+
+    <!-- 4. E=mc2 (IMPROVED) -->
+    <div class="flex items-center gap-4 mb-4">
+        <div class="section-badge">4</div>
+        <h2 class="text-4xl text-white">The Energy Reactor</h2>
+    </div>
+    <div class="retro-box p-6 bg-yellow-900/10 border-yellow-500">
+        <p class="mb-4 text-yellow-100">Concept: Mass is condensed energy ($E=mc^2$).</p>
+        
+        <div class="flex flex-col md:flex-row gap-6">
+            <div class="w-full md:w-1/3 flex flex-col gap-4">
+                <div class="bg-black border-2 border-gray-600 p-4 rounded text-center h-40 flex items-center justify-center cursor-pointer hover:border-yellow-500 transition-colors" id="mass-chamber">
+                    <div id="mass-icon" class="text-6xl">🧊</div>
+                </div>
+                <div class="flex justify-between gap-2">
+                    <button onclick="selectMass('sugar')" class="flex-1 py-2 bg-gray-800 text-white text-xs border border-gray-600 rounded hover:bg-gray-700">Sugar</button>
+                    <button onclick="selectMass('apple')" class="flex-1 py-2 bg-gray-800 text-white text-xs border border-gray-600 rounded hover:bg-gray-700">Apple</button>
+                    <button onclick="selectMass('car')" class="flex-1 py-2 bg-gray-800 text-white text-xs border border-gray-600 rounded hover:bg-gray-700">Car</button>
+                </div>
+                <button onclick="detonate()" class="retro-btn bg-red-600 border-red-400 w-full animate-pulse font-bold text-xl">CONVERT TO ENERGY</button>
+            </div>
+            
+            <div class="w-full md:w-2/3 relative bg-black border-4 border-yellow-600 rounded overflow-hidden h-64">
+                <canvas id="energyCanvas" width="500" height="250" class="absolute top-0 left-0 w-full h-full"></canvas>
+                <div class="absolute bottom-0 left-0 w-full p-2 bg-black/80 border-t border-yellow-600 flex justify-between items-end">
+                    <div>
+                        <div class="text-xs text-gray-400 uppercase">Energy Output</div>
+                        <div class="text-2xl text-yellow-400 font-mono font-bold" id="joule-counter">0 J</div>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-xs text-gray-400 uppercase">Equivalent To</div>
+                        <div class="text-sm text-white font-bold" id="energy-equiv">---</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 5. Relativistic Mass -->
+    <div class="flex items-center gap-4 mb-4">
+        <div class="section-badge">5</div>
+        <h2 class="text-4xl text-white">The Heavy Pusher</h2>
+    </div>
+    <div class="retro-box p-6">
+        <p class="mb-4 text-gray-300">Concept: Objects gain inertia (relativistic mass) near light speed.</p>
+        <div class="relative h-32 bg-gray-900 border-2 border-white rounded mb-4 overflow-hidden">
+            <div class="absolute right-0 top-0 bottom-0 w-1 bg-red-500 z-10"></div>
+            <div id="pusher-obj" class="absolute top-1/2 left-0 w-8 h-8 bg-cyan-500 rounded-full -mt-4 border-2 border-white"></div>
+        </div>
+        <button id="pushBtn" class="retro-btn w-full" onmousedown="startPush()" onmouseup="stopPush()" onmouseleave="stopPush()" ontouchstart="startPush()" ontouchend="stopPush()">HOLD TO PUSH</button>
+        <div class="flex justify-between mt-2 font-mono text-sm">
+            <span>Speed: <span id="push-speed">0</span>% c</span>
+            <span>Mass: <span id="push-mass">1.0</span>x</span>
+        </div>
+    </div>
+
+    <!-- 6. Simultaneity -->
+    <div class="flex items-center gap-4 mb-4">
+        <div class="section-badge">6</div>
+        <h2 class="text-4xl text-white">The Lightning Train</h2>
+    </div>
+    <div class="retro-box p-6">
+        <p class="mb-4 text-gray-300">Concept: Events that are simultaneous for one observer are NOT for another.</p>
+        <canvas id="simulCanvas" width="800" height="250" class="w-full bg-gray-900 border-2 border-green-500 rounded mb-4"></canvas>
+        <div class="flex gap-4">
+            <button onclick="strikeLightning()" class="retro-btn flex-1">STRIKE LIGHTNING</button>
+            <div class="flex-1 text-right font-mono text-sm flex flex-col justify-center">
+                <div class="text-green-400">Platform: Simultaneous</div>
+                <div class="text-pink-400">Train: Front First</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 7. Redshift / Blueshift -->
+    <div class="flex items-center gap-4 mb-4">
+        <div class="section-badge">7</div>
+        <h2 class="text-4xl text-white">The Doppler Star</h2>
+    </div>
+    <div class="retro-box p-6">
+        <p class="mb-4 text-gray-300">Concept: Moving towards light makes it blue (compressed). Moving away makes it red (stretched).</p>
+        <canvas id="dopplerRelCanvas" width="800" height="200" class="w-full bg-black border-2 border-white rounded mb-4"></canvas>
+        <input type="range" id="dopplerSlider" min="-10" max="10" value="0">
+        <div class="flex justify-between text-xs mt-1 text-gray-400">
+            <span>&larr; Retreating (Redshift)</span>
+            <span>Approaching (Blueshift) &rarr;</span>
+        </div>
+    </div>
+
+    <!-- 8. Gravitational Lensing -->
+    <div class="flex items-center gap-4 mb-4">
+        <div class="section-badge">8</div>
+        <h2 class="text-4xl text-white">The Gravity Lens</h2>
+    </div>
+    <div class="retro-box p-6">
+        <p class="mb-4 text-gray-300">Concept: Massive objects bend spacetime, and thus bend light itself.</p>
+        <canvas id="lensCanvas" width="600" height="300" class="w-full bg-black border-2 border-purple-500 rounded mb-4 cursor-none"></canvas>
+        <p class="text-center text-sm text-purple-400">Move your mouse over the grid to act as a Black Hole.</p>
+    </div>
+
+    <!-- 9. The Garage Paradox -->
+    <div class="flex items-center gap-4 mb-4">
+        <div class="section-badge">9</div>
+        <h2 class="text-4xl text-white">The Magic Garage</h2>
+    </div>
+    <div class="retro-box p-6">
+        <p class="mb-4 text-gray-300">Concept: A 20ft car can fit in a 10ft garage if it goes fast enough (Length Contraction).</p>
+        <canvas id="garageCanvas" width="800" height="200" class="w-full bg-blue-900/20 border-2 border-blue-500 rounded mb-4"></canvas>
+        <div class="flex gap-4">
+            <button onclick="runGarage(0.1)" class="retro-btn text-sm">Slow (Don't fit)</button>
+            <button onclick="runGarage(0.9)" class="retro-btn btn-red text-sm">0.9c (FIT!)</button>
+        </div>
+    </div>
+
+    <!-- 10. Spacetime Fabric -->
+    <div class="flex items-center gap-4 mb-4">
+        <div class="section-badge">10</div>
+        <h2 class="text-4xl text-white">The Gravity Well</h2>
+    </div>
+    <div class="retro-box p-6">
+        <p class="mb-4 text-gray-300">Concept: Mass tells space how to curve.</p>
+        <canvas id="fabricCanvas" width="600" height="300" class="w-full bg-black border-2 border-gray-600 rounded mb-4"></canvas>
+        <button onclick="dropMass()" class="retro-btn w-full">DROP PLANET</button>
+    </div>
+
+    <!-- 11. Minkowski Time Cone -->
+    <div class="flex items-center gap-4 mb-4">
+        <div class="section-badge">11</div>
+        <h2 class="text-4xl text-white">The Time Cone</h2>
+    </div>
+    <div class="retro-box p-6">
+        <p class="mb-4 text-gray-300">Concept: Speed rotates your "Now" slice of spacetime.</p>
+        <canvas id="minkowskiCanvas" width="400" height="300" class="w-full bg-gray-900 border-2 border-yellow-500 rounded mb-4"></canvas>
+        <label class="text-yellow-400 text-sm">Your Speed</label>
+        <input type="range" id="minkSlider" min="-90" max="90" value="0">
+    </div>
+
+    <!-- 12. The Event Horizon -->
+    <div class="flex items-center gap-4 mb-4">
+        <div class="section-badge">12</div>
+        <h2 class="text-4xl text-white">Frozen in Time</h2>
+    </div>
+    <div class="retro-box p-6">
+        <p class="mb-4 text-gray-300">Concept: To an outside observer, an object falling into a black hole slows down and never quite fades.</p>
+        <div class="relative h-40 bg-black border-2 border-white rounded overflow-hidden mb-4">
+            <div class="absolute right-0 h-full w-32 bg-gradient-to-r from-transparent to-black border-l-4 border-purple-600 flex items-center justify-center text-purple-500 font-bold text-xs text-center">EVENT HORIZON</div>
+            <div id="probe" class="absolute top-1/2 left-10 w-8 h-8 bg-white rounded-full -mt-4 flex items-center justify-center text-black font-bold text-xs">⏱</div>
+        </div>
+        <button onclick="dropProbe()" class="retro-btn">DROP PROBE</button>
+    </div>
+
+    <!-- 13. Relativistic Baseball -->
+    <div class="flex items-center gap-4 mb-4">
+        <div class="section-badge">13</div>
+        <h2 class="text-4xl text-white">Relativistic Baseball</h2>
+    </div>
+    <div class="retro-box p-6">
+        <p class="mb-4 text-gray-300">Concept: Aberration (Tunnel Vision) + Searchlight Effect at 0.9c.</p>
+        <canvas id="baseballCanvas" width="600" height="300" class="w-full bg-green-900 border-2 border-white rounded mb-4"></canvas>
+        <div class="flex gap-4">
+            <button onclick="throwBall(0.1)" class="retro-btn text-sm">Normal Throw</button>
+            <button onclick="throwBall(0.9)" class="retro-btn bg-red-600 text-sm">0.9c Throw</button>
+        </div>
+    </div>
+
+    <!-- 14. GPS Drift -->
+    <div class="flex items-center gap-4 mb-4">
+        <div class="section-badge">14</div>
+        <h2 class="text-4xl text-white">The GPS Glitch</h2>
+    </div>
+    <div class="retro-box p-6">
+        <p class="mb-4 text-gray-300">Concept: Without Relativity corrections, GPS drifts by kilometers per day.</p>
+        <div class="relative h-64 bg-gray-800 border-2 border-cyan-500 rounded overflow-hidden mb-4 p-4">
+            <!-- Map Grid -->
+            <div class="absolute inset-0 opacity-20" style="background-image: linear-gradient(#00ffff 1px, transparent 1px), linear-gradient(90deg, #00ffff 1px, transparent 1px); background-size: 40px 40px;"></div>
+            <!-- Road -->
+            <div class="absolute top-1/2 left-0 w-full h-8 bg-gray-600 -mt-4"></div>
+            <div class="absolute top-1/2 left-0 w-full h-0 border-t-2 border-dashed border-white -mt-0"></div>
+            <!-- Car -->
+            <div id="gps-car" class="absolute top-1/2 left-0 w-6 h-4 bg-yellow-400 transform -translate-y-1/2"></div>
+            <!-- Dot -->
+            <div id="gps-dot" class="absolute top-1/2 left-0 w-3 h-3 bg-red-500 rounded-full transform -translate-y-1/2 shadow-[0_0_10px_red]"></div>
+        </div>
+        <div class="flex gap-4">
+            <button onclick="toggleGPS(true)" class="retro-btn bg-green-600 text-sm">Relativity ON</button>
+            <button onclick="toggleGPS(false)" class="retro-btn bg-red-600 text-sm">Relativity OFF</button>
+        </div>
+        <div id="gps-status" class="mt-2 text-center font-mono text-sm h-6"></div>
+    </div>
+
+    <!-- 15. Tachyons -->
+    <div class="flex items-center gap-4 mb-4">
+        <div class="section-badge">15</div>
+        <h2 class="text-4xl text-white">The Tachyon Phone</h2>
+    </div>
+    <div class="retro-box p-6">
+        <p class="mb-4 text-gray-300">Concept: Causality violation. If $v > c$, you receive the message before you send it.</p>
+        <div class="flex flex-col gap-2 mb-4 p-4 bg-black border border-gray-700 font-mono text-sm h-40 overflow-y-auto" id="chat-log">
+            <div class="text-gray-500">System: Connection Established.</div>
+        </div>
+        <div class="flex gap-2">
+            <input type="text" id="chat-input" class="flex-1 bg-gray-800 border border-gray-600 p-2 text-white" placeholder="Type a message...">
+            <button onclick="sendTachyon()" class="retro-btn text-sm">SEND (v=2c)</button>
+        </div>
+    </div>
+
+    <footer class="text-center text-gray-600 py-12 border-t border-gray-800">
+        <p class="font-bold text-lg font-mono text-cyan-600">THE CELESTICA INITIATIVE</p>
+        <p class="text-sm">Physics for the Next Generation</p>
+    </footer>
+
+    <!-- SCRIPTS -->
+    <script>
+        lucide.createIcons();
+
+        /* --- 1. COSMIC SPEED LIMIT --- */
+        const cCanvas = document.getElementById('cCanvas');
+        const cCtx = cCanvas.getContext('2d');
+        let photonX = -100;
+        let photonActive = false;
+        function drawSpeedLimit() {
+            cCtx.fillStyle = '#000'; cCtx.fillRect(0,0,800,200);
+            let speed = parseInt(document.getElementById('speedSlider').value);
+            let speedFac = speed/100; 
+            // Stars
+            cCtx.fillStyle = 'white';
+            for(let i=0; i<50; i++) {
+                let x = (Date.now()/5 * (1+speedFac*10) + i*50) % 800;
+                cCtx.fillRect(800-x, Math.random()*200, 2, 2);
+            }
+            // Ship
+            cCtx.fillStyle = '#4a1e9e';
+            cCtx.beginPath(); cCtx.moveTo(100, 100); cCtx.lineTo(50, 80); cCtx.lineTo(50, 120); cCtx.fill();
+            // Engine
+            if(speed > 0) {
+                cCtx.fillStyle = `rgba(0, 255, 255, ${Math.random()})`;
+                cCtx.beginPath(); cCtx.moveTo(50,90); cCtx.lineTo(50-speed, 100); cCtx.lineTo(50,110); cCtx.fill();
+            }
+            // Photon
+            if(photonActive) {
+                photonX += 15; // c is constant!
+                cCtx.fillStyle = 'white'; cCtx.fillRect(photonX, 98, 40, 4);
+                if(photonX > 900) photonActive = false;
+            }
+            requestAnimationFrame(drawSpeedLimit);
+        }
+        function firePhoton() { photonX = 100; photonActive = true; }
+        drawSpeedLimit();
+
+        /* --- 2. TWIN PARADOX --- */
+        let tSim = null;
+        let eAge = 0, sAge = 0;
+        function toggleTimeSim() {
+            if(tSim) { clearInterval(tSim); tSim = null; document.getElementById('timeBtn').innerText="START"; return; }
+            document.getElementById('timeBtn').innerText="STOP";
+            tSim = setInterval(() => {
+                let v = document.getElementById('timeSlider').value / 100;
+                let gamma = 1 / Math.sqrt(1 - v*v);
+                document.getElementById('gamma-display').innerText = gamma.toFixed(2);
+                eAge += 0.1;
+                sAge += 0.1 / gamma;
+                document.getElementById('age-earth').innerText = eAge.toFixed(1);
+                document.getElementById('age-space').innerText = sAge.toFixed(1);
+            }, 50);
+        }
+
+        /* --- 3. LENGTH CONTRACTION --- */
+        const lcCanvas = document.getElementById('contractCanvas');
+        const lcCtx = lcCanvas.getContext('2d');
+        function drawContract() {
+            lcCtx.clearRect(0,0,800,200);
+            let v = document.getElementById('contractionSlider').value / 100;
+            let gamma = 1 / Math.sqrt(1 - v*v);
+            let len = 400 / gamma;
+            document.getElementById('lc-len').innerText = Math.round((1/gamma)*100);
+            
+            lcCtx.fillStyle = '#00ffff';
+            lcCtx.beginPath(); lcCtx.ellipse(400, 100, len/2, 40, 0, 0, Math.PI*2); lcCtx.fill();
+            lcCtx.fillStyle = '#fff';
+            lcCtx.beginPath(); lcCtx.ellipse(400, 100, len/4, 10, 0, 0, Math.PI*2); lcCtx.fill();
+            requestAnimationFrame(drawContract);
+        }
+        drawContract();
+
+        /* --- 4. ENERGY REACTOR (NEW PARTICLE SYSTEM) --- */
+        const enCanvas = document.getElementById('energyCanvas');
+        const enCtx = enCanvas.getContext('2d');
+        let particles = [];
+        let massType = '';
+        let massJ = 0;
+
+        function selectMass(type) {
+            massType = type;
+            const icon = document.getElementById('mass-icon');
+            if(type==='sugar') { icon.innerText='🧊'; massJ=4e13; document.getElementById('energy-equiv').innerText="Power a car for 1000 years"; }
+            if(type==='apple') { icon.innerText='🍎'; massJ=2e16; document.getElementById('energy-equiv').innerText="50 Megaton Bomb"; }
+            if(type==='car') { icon.innerText='🚗'; massJ=1e20; document.getElementById('energy-equiv').innerText="Crater the size of Texas"; }
+            document.getElementById('mass-chamber').style.borderColor = 'white';
+        }
+
+        function detonate() {
+            if(!massType) return;
+            // Explosion
+            for(let i=0; i<200; i++) {
+                particles.push({
+                    x: enCanvas.width/2, y: enCanvas.height/2,
+                    vx: (Math.random()-0.5)*20, vy: (Math.random()-0.5)*20,
+                    life: 1.0, color: `hsl(${Math.random()*60 + 10}, 100%, 50%)`
+                });
+            }
+            // Counter
+            let current = 0;
+            let timer = setInterval(() => {
+                current += massJ / 50;
+                if(current >= massJ) { current = massJ; clearInterval(timer); }
+                document.getElementById('joule-counter').innerText = current.toExponential(2) + " J";
+            }, 20);
+            document.getElementById('mass-icon').innerText = '';
+        }
+
+        function drawEnergy() {
+            enCtx.fillStyle = 'rgba(0,0,0,0.2)';
+            enCtx.fillRect(0,0,500,250);
+            particles.forEach((p, i) => {
+                p.x += p.vx; p.y += p.vy; p.life -= 0.02;
+                enCtx.fillStyle = p.color;
+                enCtx.globalAlpha = p.life;
+                enCtx.beginPath(); enCtx.arc(p.x, p.y, 3, 0, Math.PI*2); enCtx.fill();
+                if(p.life <= 0) particles.splice(i, 1);
+            });
+            enCtx.globalAlpha = 1;
+            requestAnimationFrame(drawEnergy);
+        }
+        drawEnergy();
+
+
+        /* --- 5. HEAVY PUSHER --- */
+        let pSpeed = 0;
+        let pushing = false;
+        let pInt;
+        function startPush() {
+            pushing = true;
+            pInt = setInterval(() => {
+                let gamma = 1 / Math.sqrt(1 - (pSpeed/100)**2);
+                pSpeed += 1 / (gamma**3); // Acceleration drops as mass increases
+                if(pSpeed > 99.9) pSpeed = 99.9;
+                updatePusher();
+            }, 20);
+        }
+        function stopPush() { pushing = false; clearInterval(pInt); }
+        function updatePusher() {
+            document.getElementById('pusher-obj').style.left = pSpeed + '%';
+            document.getElementById('push-speed').innerText = pSpeed.toFixed(1);
+            let gamma = 1 / Math.sqrt(1 - (pSpeed/100)**2);
+            document.getElementById('push-mass').innerText = gamma.toFixed(1);
+            if(!pushing && pSpeed > 0) { pSpeed *= 0.98; updatePusher(); }
+        }
+
+        /* --- 6. SIMULTANEITY --- */
+        const sCanvas = document.getElementById('simulCanvas');
+        const sCtx = sCanvas.getContext('2d');
+        let trainX = 100;
+        let lightning = 0; // 0=none, 1=active
+        function drawSimul() {
+            sCtx.fillStyle = '#111'; sCtx.fillRect(0,0,800,250);
+            // Platform
+            sCtx.fillStyle = '#444'; sCtx.fillRect(0, 200, 800, 20);
+            // Train
+            trainX = (trainX + 5) % 900;
+            sCtx.fillStyle = '#4a1e9e'; sCtx.fillRect(trainX, 150, 200, 50);
+            
+            if(lightning > 0) {
+                lightning--;
+                // Draw bolts at fixed platform locations (200 and 600)
+                sCtx.strokeStyle = '#fff'; sCtx.lineWidth = 4;
+                sCtx.beginPath(); sCtx.moveTo(200, 0); sCtx.lineTo(200, 200); sCtx.stroke();
+                sCtx.beginPath(); sCtx.moveTo(600, 0); sCtx.lineTo(600, 200); sCtx.stroke();
+                
+                // Visualizing the paradox:
+                // If train is here, show hit
+                if(lightning > 10) {
+                    sCtx.fillStyle = 'white'; sCtx.font = '20px monospace';
+                    sCtx.fillText("BOOM", 200, 100);
+                    sCtx.fillText("BOOM", 600, 100);
+                }
+            }
+            requestAnimationFrame(drawSimul);
+        }
+        function strikeLightning() { lightning = 20; }
+        drawSimul();
+
+        /* --- 7. DOPPLER --- */
+        const dCanvas = document.getElementById('dopplerRelCanvas');
+        const dCtx = dCanvas.getContext('2d');
+        let dwaves = [];
+        function drawDoppler() {
+            dCtx.fillStyle = 'black'; dCtx.fillRect(0,0,800,200);
+            let v = document.getElementById('dopplerSlider').value;
+            
+            // Emulate Star center
+            if(Date.now() % 20 === 0) {
+                dwaves.push({x: 400, r: 0, v: v});
+            }
+            
+            dwaves.forEach((w, i) => {
+                w.r += 2;
+                w.x += parseFloat(w.v); // Move wave center based on velocity? No, source moves.
+                // Actually simpler: Source is center. Waves emitted are offset.
+                // Let's restart: Source is at 400.
+                // If v > 0, source moves right.
+                // We draw static waves for visual simplicity?
+                // Let's draw waves centered on where source WAS.
+            });
+             
+            // SIMPLIFIED VISUAL: Just draw waves compressed on one side
+            let shift = v * 5;
+            for(let i=1; i<10; i++) {
+                let offset = (Date.now()/10) % 50;
+                let r = i * 40 + offset;
+                
+                // Color
+                let color = 'white';
+                if(v > 2) color = '#aaf'; // Blue
+                if(v < -2) color = '#faa'; // Red
+                
+                dCtx.strokeStyle = color;
+                dCtx.lineWidth = 2;
+                dCtx.beginPath();
+                // Shift center based on radius to squeeze
+                let cx = 400 + (v * i); 
+                dCtx.arc(cx, 100, r, 0, Math.PI*2);
+                dCtx.stroke();
+            }
+            requestAnimationFrame(drawDoppler);
+        }
+        drawDoppler();
+
+        /* --- 8. LENSING --- */
+        const lCanvas = document.getElementById('lensCanvas');
+        const lCtx = lCanvas.getContext('2d');
+        lCanvas.addEventListener('mousemove', (e) => {
+            let rect = lCanvas.getBoundingClientRect();
+            let mx = e.clientX - rect.left;
+            let my = e.clientY - rect.top;
+            drawLens(mx, my);
+        });
+        function drawLens(mx, my) {
+            lCtx.fillStyle = 'black'; lCtx.fillRect(0,0,600,300);
+            // Draw grid
+            lCtx.strokeStyle = '#333';
+            lCtx.lineWidth = 1;
+            for(let x=0; x<=600; x+=40) {
+                for(let y=0; y<=300; y+=40) {
+                    // Distort
+                    let dx = x - mx;
+                    let dy = y - my;
+                    let dist = Math.sqrt(dx*dx + dy*dy);
+                    let force = Math.max(0, (100 - dist)/2);
+                    
+                    // Push lines away from mouse
+                    let ang = Math.atan2(dy, dx);
+                    let tx = x + Math.cos(ang)*force;
+                    let ty = y + Math.sin(ang)*force;
+                    
+                    lCtx.fillStyle = 'white'; lCtx.fillRect(tx, ty, 2, 2);
+                }
+            }
+            // Black Hole
+            lCtx.fillStyle = 'black'; lCtx.beginPath(); lCtx.arc(mx, my, 20, 0, Math.PI*2); lCtx.fill();
+            lCtx.strokeStyle = 'purple'; lCtx.stroke();
+        }
+        drawLens(300, 150);
+
+        /* --- 9. GARAGE --- */
+        const gCanvas = document.getElementById('garageCanvas');
+        const gCtx = gCanvas.getContext('2d');
+        let carX = -100;
+        let carSpeed = 0;
+        function runGarage(s) {
+            carX = -100;
+            carSpeed = s * 50; // Visual speed
+        }
+        function drawGarage() {
+            gCtx.clearRect(0,0,800,200);
+            // Garage (Static 200px wide)
+            gCtx.strokeStyle = 'white'; gCtx.lineWidth=4;
+            gCtx.strokeRect(300, 50, 200, 100);
+            
+            // Car
+            if(carSpeed > 0) {
+                carX += carSpeed;
+                // Length contraction
+                // If speed is high (0.9c approx 45 px/frame here), length shrinks
+                // Base length 220 (too big for garage)
+                let len = 220;
+                if(carSpeed > 20) len = 100; // Contracted
+                
+                gCtx.fillStyle = '#ff00ff';
+                gCtx.fillRect(carX, 70, len, 60);
+                
+                if(carX > 900) carSpeed = 0;
+            }
+            requestAnimationFrame(drawGarage);
+        }
+        drawGarage();
+
+        /* --- 10. SPACETIME FABRIC --- */
+        const fCanvas = document.getElementById('fabricCanvas');
+        const fCtx = fCanvas.getContext('2d');
+        let fMass = 0;
+        function dropMass() { fMass = 100; }
+        function drawFabric() {
+            fCtx.fillStyle = 'black'; fCtx.fillRect(0,0,600,300);
+            fCtx.strokeStyle = '#00ffff';
+            
+            if(fMass > 0) fMass *= 0.98; // Decay bounce? No just hold
+            
+            for(let y=0; y<300; y+=30) {
+                fCtx.beginPath();
+                for(let x=0; x<600; x+=10) {
+                    let dx = x - 300;
+                    let dy = y - 150;
+                    let dist = Math.sqrt(dx*dx + dy*dy);
+                    let sink = Math.max(0, (fMass - dist*0.5));
+                    fCtx.lineTo(x, y + sink);
+                }
+                fCtx.stroke();
+            }
+            requestAnimationFrame(drawFabric);
+        }
+        drawFabric();
+
+        /* --- 11. MINKOWSKI --- */
+        const mCanvas = document.getElementById('minkowskiCanvas');
+        const mCtx = mCanvas.getContext('2d');
+        const mSlider = document.getElementById('minkSlider');
+        function drawMinkowski() {
+            mCtx.fillStyle = '#111'; mCtx.fillRect(0,0,400,300);
+            let angle = mSlider.value * (Math.PI/4) / 90; // Max 45 deg
+            
+            mCtx.translate(200, 150);
+            mCtx.strokeStyle = '#555';
+            
+            // Light Cone (Fixed)
+            mCtx.beginPath(); mCtx.moveTo(-150, 150); mCtx.lineTo(150, -150); mCtx.stroke();
+            mCtx.beginPath(); mCtx.moveTo(-150, -150); mCtx.lineTo(150, 150); mCtx.stroke();
+            
+            // Axes (Skewed)
+            // T' axis tilts right
+            mCtx.strokeStyle = 'yellow';
+            mCtx.beginPath(); mCtx.moveTo(Math.sin(angle)*150, -150); mCtx.lineTo(-Math.sin(angle)*150, 150); mCtx.stroke();
+            // X' axis tilts up
+            mCtx.beginPath(); mCtx.moveTo(-150, Math.sin(angle)*150); mCtx.lineTo(150, -Math.sin(angle)*150); mCtx.stroke();
+            
+            mCtx.translate(-200, -150);
+            requestAnimationFrame(drawMinkowski);
+        }
+        drawMinkowski();
+
+        /* --- 12. EVENT HORIZON --- */
+        function dropProbe() {
+            const p = document.getElementById('probe');
+            p.style.transition = 'none';
+            p.style.left = '10px';
+            setTimeout(() => {
+                // Move towards right. Total width ~300px?
+                // As it approaches right (Horizon), transition duration increases to infinity?
+                // CSS Bezier can mimic this
+                p.style.transition = 'left 10s cubic-bezier(0,1,0,1)'; // Starts fast, stops at end
+                p.style.left = '90%'; // The horizon
+            }, 50);
+        }
+
+        /* --- 13. BASEBALL --- */
+        const bCanvas = document.getElementById('baseballCanvas');
+        const bCtx = bCanvas.getContext('2d');
+        let ballX = -50;
+        let ballV = 0;
+        function throwBall(v) {
+            ballX = 0;
+            ballV = v * 100; 
+        }
+        function drawBaseball() {
+            bCtx.fillStyle = '#064e3b'; bCtx.fillRect(0,0,600,300); // Grass
+            
+            // Stadium
+            bCtx.strokeStyle = 'white'; bCtx.strokeRect(500, 100, 50, 100); // Batter box
+            
+            if(ballV > 0) {
+                ballX += ballV;
+                
+                // If fast, warp view
+                if(ballV > 50) {
+                    // Tunnel vision effect
+                    let grad = bCtx.createRadialGradient(300, 150, 50, 300, 150, 400);
+                    grad.addColorStop(0, 'rgba(0,0,0,0)');
+                    grad.addColorStop(1, 'black');
+                    bCtx.fillStyle = grad;
+                    bCtx.fillRect(0,0,600,300);
+                    
+                    // Blueshift ball
+                    bCtx.fillStyle = '#aaaaff';
+                } else {
+                    bCtx.fillStyle = 'white';
+                }
+                
+                bCtx.beginPath(); bCtx.arc(ballX, 150, 10, 0, Math.PI*2); bCtx.fill();
+                
+                if(ballX > 700) ballV = 0;
+            }
+            requestAnimationFrame(drawBaseball);
+        }
+        drawBaseball();
+
+        /* --- 14. GPS --- */
+        let gpsRel = true;
+        let gpsY = 0;
+        let gpsTimer;
+        function toggleGPS(state) {
+            gpsRel = state;
+            document.getElementById('gps-status').innerText = state ? "Corrections Active" : "Corrections Disabled";
+            clearInterval(gpsTimer);
+            gpsY = 0;
+            
+            gpsTimer = setInterval(() => {
+                // Move car
+                let car = document.getElementById('gps-car');
+                let dot = document.getElementById('gps-dot');
+                
+                let left = parseFloat(car.style.left || 0) + 1;
+                if(left > 100) left = 0;
+                car.style.left = left + '%';
+                
+                // Drift dot if Rel is off
+                if(!gpsRel) {
+                    gpsY += 0.5;
+                } else {
+                    gpsY = 0;
+                }
+                
+                dot.style.left = left + '%';
+                dot.style.transform = `translate(-50%, calc(-50% + ${gpsY}px))`;
+                
+            }, 50);
+        }
+
+        /* --- 15. TACHYON --- */
+        function sendTachyon() {
+            const inp = document.getElementById('chat-input');
+            const log = document.getElementById('chat-log');
+            const msg = inp.value;
+            if(!msg) return;
+            
+            // Effect: Message appears BEFORE "Sent" confirmation
+            const id = Date.now();
+            
+            // 1. Receive Message (Paradox)
+            const rcv = document.createElement('div');
+            rcv.className = "text-pink-400";
+            rcv.innerText = `[FUTURE_YOU]: ${msg}`;
+            log.appendChild(rcv);
+            
+            // 2. Delay then Send
+            setTimeout(() => {
+                const snd = document.createElement('div');
+                snd.className = "text-green-400 text-right";
+                snd.innerText = `[SENT]: ${msg}`;
+                log.appendChild(snd);
+                log.scrollTop = log.scrollHeight;
+            }, 2000);
+            
+            inp.value = "";
+        }
+
+    </script>
+</body>
+</html>

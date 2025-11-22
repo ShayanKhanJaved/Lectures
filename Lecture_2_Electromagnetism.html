@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Celestica Initiative - Lecture 2</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Changa+One&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --retro-cream: #FFFDD0;
+            --retro-orange: #E85D04;
+            --retro-yellow: #FFBA08;
+            --retro-brown: #3F2E3E;
+            --retro-green: #588157;
+            --retro-blue: #219EBC;
+            --retro-red: #D00000;
+            --retro-purple: #7209b7;
+            --retro-cyan: #06b6d4;
+        }
+
+        body {
+            background-color: var(--retro-cream);
+            color: var(--retro-brown);
+            font-family: 'Space Mono', monospace;
+            background-image: radial-gradient(var(--retro-blue) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Changa One', cursive;
+        }
+
+        .retro-box {
+            background-color: #fff;
+            border: 4px solid var(--retro-brown);
+            box-shadow: 8px 8px 0px var(--retro-blue);
+            border-radius: 1rem;
+            transition: transform 0.2s;
+        }
+
+        .retro-box:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 10px 10px 0px var(--retro-blue);
+        }
+
+        .retro-btn {
+            background-color: var(--retro-orange);
+            color: white;
+            border: 3px solid var(--retro-brown);
+            padding: 8px 16px;
+            font-family: 'Changa One', cursive;
+            font-size: 1.1rem;
+            cursor: pointer;
+            box-shadow: 4px 4px 0px var(--retro-brown);
+            transition: all 0.1s;
+            text-transform: uppercase;
+        }
+
+        .retro-btn:active {
+            transform: translate(4px, 4px);
+            box-shadow: 0px 0px 0px var(--retro-brown);
+        }
+
+        .btn-blue { background-color: var(--retro-blue); }
+        .btn-red { background-color: var(--retro-red); }
+        .btn-green { background-color: var(--retro-green); }
+        .btn-purple { background-color: var(--retro-purple); }
+
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+        }
+
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 24px;
+            width: 24px;
+            border-radius: 50%;
+            background: var(--retro-yellow);
+            border: 2px solid var(--retro-brown);
+            margin-top: -10px;
+            cursor: pointer;
+        }
+
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 8px;
+            cursor: pointer;
+            background: var(--retro-brown);
+            border-radius: 4px;
+        }
+
+        .section-number {
+            background-color: var(--retro-blue); 
+            color: white; 
+            width: 3rem; 
+            height: 3rem; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            border-radius: 9999px; 
+            border: 4px solid var(--retro-brown); 
+            font-weight: bold; 
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+        
+        canvas {
+            image-rendering: pixelated; 
+            width: 100%;
+            height: auto;
+            border-radius: 0.5rem;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8 max-w-6xl mx-auto">
+
+    <!-- Header -->
+    <header class="text-center mb-12">
+        <div class="inline-block bg-blue-600 text-white px-6 py-2 rounded-full border-4 border-gray-800 mb-4 font-bold transform rotate-1">
+            The Celestica Initiative
+        </div>
+        <h1 class="text-5xl md:text-7xl text-orange-500 text-stroke-brown drop-shadow-retro mb-2" style="-webkit-text-stroke: 2px var(--retro-brown);">
+            ELECTROMAGNETISM
+        </h1>
+        <p class="text-xl md:text-2xl text-gray-700 font-bold">Lecture 2: Fields, Forces & Interference</p>
+    </header>
+
+    <!-- Intro -->
+    <section class="retro-box p-8 mb-12 bg-white">
+        <h2 class="text-3xl text-blue-600 mb-2">Zap! Buzz! Whoosh!</h2>
+        <p class="text-lg">
+            Welcome to the invisible world. From the magnets on your fridge to the light entering your eyes, it's all just 
+            <strong>Electromagnetic Fields</strong> dancing around. Here are 15 toys to help you visualize the invisible.
+        </p>
+    </section>
+
+    <!-- 1. Electric Fields -->
+    <section class="mb-16">
+        <div class="flex items-center gap-4 mb-4">
+            <div class="section-number">1</div>
+            <h2 class="text-3xl text-brown-800">The Field Spinner (Electric Charges)</h2>
+        </div>
+        <div class="retro-box p-6 bg-yellow-50">
+            <p class="mb-4"><strong>Lesson:</strong> Like charges repel, opposites attract. The lines show where a positive particle would fly.</p>
+            <canvas id="fieldCanvas" width="600" height="300" class="bg-gray-900 border-4 border-black mb-4"></canvas>
+            <div class="flex gap-4 justify-center">
+                <button onclick="addFieldCharge(1)" class="retro-btn btn-red">+ Add Positive</button>
+                <button onclick="addFieldCharge(-1)" class="retro-btn btn-blue">- Add Negative</button>
+                <button onclick="resetField()" class="retro-btn bg-gray-600">Reset</button>
+            </div>
+            <p class="text-center text-sm mt-2 text-gray-500">Click and drag particles to move them!</p>
+        </div>
+    </section>
+
+    <!-- 2. Wave Interference -->
+    <section class="mb-16">
+        <div class="flex items-center gap-4 mb-4">
+            <div class="section-number">2</div>
+            <h2 class="text-3xl text-brown-800">The Ripple Tank (Interference)</h2>
+        </div>
+        <div class="retro-box p-6 bg-blue-50">
+            <p class="mb-4"><strong>Lesson:</strong> When waves collide, they can add up (Constructive) or cancel out (Destructive).</p>
+            <div class="flex flex-col md:flex-row gap-6 items-center">
+                <canvas id="rippleCanvas" width="300" height="300" class="bg-black border-4 border-blue-800"></canvas>
+                <div class="flex-1 w-full">
+                    <label class="font-bold">Frequency</label>
+                    <input type="range" id="rippleFreq" min="1" max="20" value="10" class="mb-4">
+                    
+                    <label class="font-bold">Source Separation</label>
+                    <input type="range" id="rippleSep" min="0" max="100" value="50" class="mb-4">
+                    
+                    <div class="bg-white p-4 border-2 border-black rounded text-sm">
+                        Look for the dark "spokes". That is where the waves are killing each other (Destructive Interference).
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. Faraday's Law -->
+    <section class="mb-16">
+        <div class="flex items-center gap-4 mb-4">
+            <div class="section-number">3</div>
+            <h2 class="text-3xl text-brown-800">The Magic Coil (Induction)</h2>
+        </div>
+        <div class="retro-box p-6 bg-orange-50">
+            <p class="mb-4"><strong>Lesson:</strong> Moving a magnet creates electricity. Stationary magnets do nothing. Change is power!</p>
+            
+            <div class="relative h-64 bg-gray-200 border-4 border-black rounded-xl overflow-hidden mb-4" id="induction-area">
+                <!-- Coil -->
+                <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-40 border-8 border-orange-600 rounded-full z-10 opacity-70"></div>
+                <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-40 border-8 border-orange-600 rounded-full z-10 opacity-70 transform rotate-12"></div>
+                
+                <!-- Lightbulb -->
+                <div id="lightbulb" class="absolute top-4 right-4 w-16 h-16 bg-gray-400 rounded-full border-4 border-black flex items-center justify-center transition-colors duration-100 z-20">
+                    💡
+                </div>
+
+                <!-- Magnet -->
+                <div id="magnet" class="absolute left-10 top-1/2 -translate-y-1/2 w-32 h-12 bg-white border-2 border-black flex cursor-move z-30 shadow-xl">
+                    <div class="w-1/2 bg-red-600 flex items-center justify-center text-white font-bold">N</div>
+                    <div class="w-1/2 bg-blue-600 flex items-center justify-center text-white font-bold">S</div>
+                </div>
+            </div>
+            <p class="text-center font-bold">Drag the magnet back and forth quickly through the ring!</p>
+        </div>
+    </section>
+
+    <!-- 4. The EM Wave -->
+    <section class="mb-16">
+        <div class="flex items-center gap-4 mb-4">
+            <div class="section-number">4</div>
+            <h2 class="text-3xl text-brown-800">The Light Beam (EM Wave)</h2>
+        </div>
+        <div class="retro-box p-6 bg-gray-900 text-white">
+            <p class="mb-4 text-gray-300"><strong>Lesson:</strong> Light is a 3D wave. An Electric Field (Red) and Magnetic Field (Blue) wiggle perpendicular to each other.</p>
+            <canvas id="emWaveCanvas" width="600" height="300" class="bg-black border-4 border-gray-600"></canvas>
+        </div>
+    </section>
+
+    <!-- 5. Color Mixing -->
+    <section class="mb-16">
+        <div class="flex items-center gap-4 mb-4">
+            <div class="section-number">5</div>
+            <h2 class="text-3xl text-brown-800">The RGB Stage (Additive Color)</h2>
+        </div>
+        <div class="retro-box p-6 bg-black text-white">
+            <p class="mb-4 text-gray-300"><strong>Lesson:</strong> Light adds up. Red + Green = Yellow. All three = White.</p>
+            <div class="flex flex-col md:flex-row gap-4">
+                <canvas id="colorCanvas" width="300" height="300" class="bg-black border-4 border-white rounded-full mx-auto"></canvas>
+                <div class="flex-1 flex flex-col justify-center gap-4 p-4">
+                    <div><label class="text-red-500 font-bold">Red Intensity</label><input type="range" id="rVal" min="0" max="255" value="255"></div>
+                    <div><label class="text-green-500 font-bold">Green Intensity</label><input type="range" id="gVal" min="0" max="255" value="255"></div>
+                    <div><label class="text-blue-500 font-bold">Blue Intensity</label><input type="range" id="bVal" min="0" max="255" value="255"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. Lenses (Refraction) -->
+    <section class="mb-16">
+        <div class="flex items-center gap-4 mb-4">
+            <div class="section-number">6</div>
+            <h2 class="text-3xl text-brown-800">The Eye Doctor (Lenses)</h2>
+        </div>
+        <div class="retro-box p-6 bg-cyan-50">
+            <p class="mb-4"><strong>Lesson:</strong> Convex lenses focus light to a point. Concave lenses spread it out.</p>
+            <canvas id="lensCanvas" width="600" height="250" class="bg-blue-50 border-4 border-black mb-4 cursor-pointer"></canvas>
+            <div class="flex justify-center gap-4">
+                <button onclick="setLens('convex')" class="retro-btn btn-blue">Convex (Focus)</button>
+                <button onclick="setLens('concave')" class="retro-btn btn-orange">Concave (Spread)</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 7. Standing Waves -->
+    <section class="mb-16">
+        <div class="flex items-center gap-4 mb-4">
+            <div class="section-number">7</div>
+            <h2 class="text-3xl text-brown-800">The Guitar String (Standing Waves)</h2>
+        </div>
+        <div class="retro-box p-6 bg-green-50">
+            <p class="mb-4"><strong>Lesson:</strong> Only certain frequencies fit on a string. These are "Harmonics".</p>
+            <canvas id="stringCanvas" width="600" height="200" class="bg-white border-4 border-black mb-4"></canvas>
+            <div class="flex gap-2 justify-center">
+                <button onclick="setHarmonic(1)" class="retro-btn bg-gray-200 text-black">1st Harmonic</button>
+                <button onclick="setHarmonic(2)" class="retro-btn bg-gray-300 text-black">2nd</button>
+                <button onclick="setHarmonic(3)" class="retro-btn bg-gray-400 text-black">3rd</button>
+                <button onclick="setHarmonic(4)" class="retro-btn bg-gray-500 text-black">4th</button>
+                <button onclick="setHarmonic(5)" class="retro-btn bg-gray-600 text-white">5th</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 8. Circuit Logic -->
+    <section class="mb-16">
+        <div class="flex items-center gap-4 mb-4">
+            <div class="section-number">8</div>
+            <h2 class="text-3xl text-brown-800">The Electrician (Circuits)</h2>
+        </div>
+        <div class="retro-box p-6 bg-yellow-100">
+            <p class="mb-4"><strong>Lesson:</strong> Series circuits share voltage (lights dim). Parallel circuits share current (lights bright).</p>
+            <div class="flex gap-8 justify-center mb-4">
+                <div class="text-center">
+                    <h3 class="mb-2">Series</h3>
+                    <div id="circuit-series" class="w-40 h-40 border-4 border-black relative bg-white">
+                        <div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 bg-yellow-400 border-2 border-black rounded-full shadow-[0_0_10px_gold]"></div>
+                        <div class="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-8 h-8 bg-yellow-400 border-2 border-black rounded-full shadow-[0_0_10px_gold]"></div>
+                        <div class="absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-12 bg-black text-white flex items-center justify-center text-xs">BAT</div>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <h3 class="mb-2">Parallel</h3>
+                    <div id="circuit-parallel" class="w-40 h-40 border-4 border-black relative bg-white flex justify-center items-center">
+                        <div class="absolute w-full h-1/3 border-y-4 border-black"></div>
+                        <div class="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 bg-yellow-400 border-2 border-black rounded-full shadow-[0_0_20px_gold]"></div>
+                        <div class="absolute bottom-1/3 left-1/2 -translate-x-1/2 translate-y-1/2 w-8 h-8 bg-yellow-400 border-2 border-black rounded-full shadow-[0_0_20px_gold]"></div>
+                        <div class="absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-12 bg-black text-white flex items-center justify-center text-xs">BAT</div>
+                    </div>
+                </div>
+            </div>
+            <button onclick="toggleCircuit()" class="retro-btn w-full">BREAK THE CIRCUIT (Open Switch)</button>
+        </div>
+    </section>
+
+    <!-- 9. Doppler Effect -->
+    <section class="mb-16">
+        <div class="flex items-center gap-4 mb-4">
+            <div class="section-number">9</div>
+            <h2 class="text-3xl text-brown-800">The Ambulance (Doppler)</h2>
+        </div>
+        <div class="retro-box p-6 bg-indigo-50">
+            <p class="mb-4"><strong>Lesson:</strong> Moving sources squash waves in front (High Pitch) and stretch them behind (Low Pitch).</p>
+            <canvas id="dopplerCanvas" width="600" height="250" class="bg-white border-4 border-black mb-4"></canvas>
+            <div class="flex gap-4 items-center">
+                <label class="font-bold">Speed:</label>
+                <input type="range" id="dopplerSpeed" min="0" max="4" step="0.1" value="2">
+            </div>
+        </div>
+    </section>
+
+    <!-- 10. Total Internal Reflection -->
+    <section class="mb-16">
+        <div class="flex items-center gap-4 mb-4">
+            <div class="section-number">10</div>
+            <h2 class="text-3xl text-brown-800">Fiber Optics (Internal Reflection)</h2>
+        </div>
+        <div class="retro-box p-6 bg-gray-800 text-white">
+            <p class="mb-4 text-gray-300"><strong>Lesson:</strong> If light hits glass at a steep angle, it gets trapped inside. This is how the internet works.</p>
+            <canvas id="fiberCanvas" width="600" height="200" class="bg-black border-4 border-blue-500 mb-4"></canvas>
+            <div class="flex gap-4 items-center">
+                <label class="font-bold">Laser Angle:</label>
+                <input type="range" id="fiberAngle" min="0" max="80" value="45">
+            </div>
+        </div>
+    </section>
+
+    <!-- 11. Double Slit -->
+    <section class="mb-16">
+        <div class="flex items-center gap-4 mb-4">
+            <div class="section-number">11</div>
+            <h2 class="text-3xl text-brown-800">Quantum Weirdness (Double Slit)</h2>
+        </div>
+        <div class="retro-box p-6 bg-purple-50">
+            <p class="mb-4"><strong>Lesson:</strong> Waves from two slits interfere. The graph on the right shows the <strong>Interference Pattern</strong> (Intensity).</p>
+            <canvas id="slitCanvas" width="600" height="300" class="bg-black border-4 border-purple-900 mb-4"></canvas>
+            <div class="flex justify-center gap-4 items-center">
+                <label class="font-bold">Slit Separation:</label>
+                <input type="range" id="slitSep" min="10" max="100" value="40" class="w-48">
+            </div>
+        </div>
+    </section>
+
+    <!-- 12. Sound Waves -->
+    <section class="mb-16">
+        <div class="flex items-center gap-4 mb-4">
+            <div class="section-number">12</div>
+            <h2 class="text-3xl text-brown-800">The Speaker Cone (Longitudinal Waves)</h2>
+        </div>
+        <div class="retro-box p-6 bg-red-50">
+            <p class="mb-4"><strong>Lesson:</strong> Sound is a pressure wave. Air molecules don't travel; they bump into neighbors.</p>
+            <canvas id="soundCanvas" width="600" height="150" class="bg-white border-4 border-black mb-4"></canvas>
+        </div>
+    </section>
+
+    <!-- 13. Polarization -->
+    <section class="mb-16">
+        <div class="flex items-center gap-4 mb-4">
+            <div class="section-number">13</div>
+            <h2 class="text-3xl text-brown-800">The Sunglass Filter (Polarization)</h2>
+        </div>
+        <div class="retro-box p-6 bg-blue-100">
+            <p class="mb-4"><strong>Lesson:</strong> Light waves vibrate in all directions. A polarizer blocks all vibrations except one.</p>
+            <canvas id="polarCanvas" width="600" height="250" class="bg-gray-200 border-4 border-black mb-4"></canvas>
+            <div class="flex gap-4 items-center justify-center">
+                <label class="font-bold">Filter Angle:</label>
+                <input type="range" id="polarAngle" min="0" max="90" value="0" class="w-1/2">
+                <span id="polar-text" class="font-bold text-xl w-24">100%</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- 14. Coulomb's Law -->
+    <section class="mb-16">
+        <div class="flex items-center gap-4 mb-4">
+            <div class="section-number">14</div>
+            <h2 class="text-3xl text-brown-800">The Force (Coulomb's Law)</h2>
+        </div>
+        <div class="retro-box p-6 bg-gray-900 text-white">
+            <p class="mb-4 text-gray-300"><strong>Lesson:</strong> Electrostatic force follows an inverse-square law. Halving the distance quadruples the force!</p>
+            <canvas id="coulombCanvas" width="600" height="250" class="bg-black border-4 border-gray-600 mb-4 rounded-xl"></canvas>
+            <div class="flex gap-4 items-center">
+                <label class="font-bold text-white">Distance:</label>
+                <input type="range" id="coulombDist" min="60" max="500" value="300">
+            </div>
+        </div>
+    </section>
+
+    <!-- 15. Prism -->
+    <section class="mb-16">
+        <div class="flex items-center gap-4 mb-4">
+            <div class="section-number">15</div>
+            <h2 class="text-3xl text-brown-800">The Pink Floyd (Dispersion)</h2>
+        </div>
+        <div class="retro-box p-6 bg-black text-white">
+            <p class="mb-4 text-gray-300"><strong>Lesson:</strong> White light contains all colors. A prism bends Blue more than Red, splitting them apart.</p>
+            <canvas id="prismCanvas" width="600" height="300" class="bg-gray-900 border-4 border-white"></canvas>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="text-center text-gray-600 py-12 border-t-4 border-dotted border-blue-300">
+        <p class="font-bold text-lg">Made for The Celestica Initiative</p>
+        <p>Lecture 2 - Electromagnetism</p>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+
+        // --- 1. ELECTRIC FIELDS ---
+        const fCanvas = document.getElementById('fieldCanvas');
+        const fCtx = fCanvas.getContext('2d');
+        let charges = [{x: 200, y: 150, q: 1}, {x: 400, y: 150, q: -1}];
+        let draggedCharge = null;
+
+        function addFieldCharge(q) {
+            charges.push({x: Math.random()*500+50, y: Math.random()*200+50, q: q});
+            drawField();
+        }
+        function resetField() {
+            charges = [{x: 200, y: 150, q: 1}, {x: 400, y: 150, q: -1}];
+            drawField();
+        }
+
+        function drawField() {
+            fCtx.clearRect(0, 0, 600, 300);
+            
+            // Draw Field Lines
+            fCtx.strokeStyle = 'rgba(100, 255, 100, 0.3)';
+            fCtx.lineWidth = 1;
+            for (let x = 0; x < 600; x += 20) {
+                for (let y = 0; y < 300; y += 20) {
+                    let ex = 0, ey = 0;
+                    charges.forEach(c => {
+                        let dx = x - c.x; let dy = y - c.y;
+                        let r2 = dx*dx + dy*dy;
+                        let r = Math.sqrt(r2);
+                        if(r < 10) return;
+                        ex += (c.q * dx) / (r*r2); // E ~ q/r^2
+                        ey += (c.q * dy) / (r*r2);
+                    });
+                    let len = Math.sqrt(ex*ex + ey*ey);
+                    if(len > 0) {
+                        fCtx.beginPath();
+                        fCtx.moveTo(x, y);
+                        fCtx.lineTo(x + (ex/len)*12, y + (ey/len)*12);
+                        fCtx.stroke();
+                    }
+                }
+            }
+
+            // Draw Charges
+            charges.forEach(c => {
+                fCtx.beginPath();
+                fCtx.arc(c.x, c.y, 15, 0, Math.PI*2);
+                fCtx.fillStyle = c.q > 0 ? '#EF4444' : '#3B82F6';
+                fCtx.fill();
+                fCtx.fillStyle = 'white';
+                fCtx.font = "20px Arial";
+                fCtx.textAlign = "center";
+                fCtx.textBaseline = "middle";
+                fCtx.fillText(c.q > 0 ? "+" : "-", c.x, c.y);
+            });
+        }
+        
+        // Drag Logic
+        fCanvas.addEventListener('mousedown', e => {
+            const rect = fCanvas.getBoundingClientRect();
+            const mx = e.clientX - rect.left; const my = e.clientY - rect.top;
+            draggedCharge = charges.find(c => Math.hypot(c.x-mx, c.y-my) < 20);
+        });
+        fCanvas.addEventListener('mousemove', e => {
+            if(draggedCharge) {
+                const rect = fCanvas.getBoundingClientRect();
+                draggedCharge.x = e.clientX - rect.left;
+                draggedCharge.y = e.clientY - rect.top;
+                drawField();
+            }
+        });
+        fCanvas.addEventListener('mouseup', () => draggedCharge = null);
+        drawField();
+
+        // --- 2. RIPPLE TANK ---
+        const rCanvas = document.getElementById('rippleCanvas');
+        const rCtx = rCanvas.getContext('2d');
+        let rTime = 0;
+        
+        function loopRipple() {
+            let freq = document.getElementById('rippleFreq').value;
+            let sep = document.getElementById('rippleSep').value;
+            let imgData = rCtx.createImageData(300, 300);
+            let d = imgData.data;
+            
+            let s1x = 150 - sep, s1y = 150;
+            let s2x = 150 + parseInt(sep), s2y = 150;
+
+            for (let y = 0; y < 300; y+=2) { // Optimization: skip pixels
+                for (let x = 0; x < 300; x+=2) {
+                    let dist1 = Math.sqrt((x-s1x)**2 + (y-s1y)**2);
+                    let dist2 = Math.sqrt((x-s2x)**2 + (y-s2y)**2);
+                    
+                    // Wave Function
+                    let val = Math.sin(dist1/5 - rTime*freq/50) + Math.sin(dist2/5 - rTime*freq/50);
+                    
+                    // Color Map (Blue intensity)
+                    let intensity = (val + 2) * 60; // Scale to 0-255 approx
+                    
+                    // Fill 2x2 block
+                    let idx = (y * 300 + x) * 4;
+                    d[idx] = 0; d[idx+1] = intensity/2; d[idx+2] = intensity; d[idx+3] = 255;
+                    d[idx+4] = 0; d[idx+5] = intensity/2; d[idx+6] = intensity; d[idx+7] = 255;
+                    let idxDown = ((y+1) * 300 + x) * 4;
+                    d[idxDown] = 0; d[idxDown+1] = intensity/2; d[idxDown+2] = intensity; d[idxDown+3] = 255;
+                    d[idxDown+4] = 0; d[idxDown+5] = intensity/2; d[idxDown+6] = intensity; d[idxDown+7] = 255;
+                }
+            }
+            rCtx.putImageData(imgData, 0, 0);
+            rTime += 0.1;
+            requestAnimationFrame(loopRipple);
+        }
+        loopRipple();
+
+        // --- 3. INDUCTION ---
+        const magnet = document.getElementById('magnet');
+        const bulb = document.getElementById('lightbulb');
+        const container = document.getElementById('induction-area');
+        let magX = 50;
+        let lastMagX = 50;
+        let isDraggingMag = false;
+
+        magnet.addEventListener('mousedown', () => isDraggingMag = true);
+        window.addEventListener('mouseup', () => isDraggingMag = false);
+        container.addEventListener('mousemove', e => {
+            if(!isDraggingMag) return;
+            const rect = container.getBoundingClientRect();
+            let newX = e.clientX - rect.left - 64;
+            if(newX < 0) newX = 0; if(newX > rect.width - 128) newX = rect.width - 128;
+            
+            // Calculate Speed
+            let speed = Math.abs(newX - lastMagX);
+            lastMagX = newX;
+            magnet.style.left = newX + "px";
+            
+            // Light up bulb based on speed
+            let brightness = Math.min(255, speed * 10 + 50); // Base dim
+            if(speed > 2) {
+                bulb.style.backgroundColor = `rgb(255, 255, 0)`;
+                bulb.style.boxShadow = `0 0 ${speed*2}px yellow`;
+            } else {
+                bulb.style.backgroundColor = `#9CA3AF`;
+                bulb.style.boxShadow = `none`;
+            }
+        });
+
+        // --- 4. EM WAVE ---
+        const emCanvas = document.getElementById('emWaveCanvas');
+        const emCtx = emCanvas.getContext('2d');
+        let emT = 0;
+        function drawEM() {
+            emCtx.clearRect(0,0,600,300);
+            emCtx.strokeStyle = 'white';
+            emCtx.beginPath(); emCtx.moveTo(0,150); emCtx.lineTo(600,150); emCtx.stroke(); // Axis
+            
+            // Draw E (Red, Vertical) and B (Blue, Horizontal/Perspective)
+            for(let x=0; x<600; x+=10) {
+                let pha = (x/50) - emT;
+                let mag = Math.sin(pha) * 80;
+                
+                // E Field (Red, Y-axis)
+                emCtx.beginPath(); emCtx.moveTo(x, 150); emCtx.lineTo(x, 150 - mag); 
+                emCtx.strokeStyle = '#EF4444'; emCtx.stroke();
+                
+                // B Field (Blue, Z-axis simulated by diagonal)
+                let diagX = x + mag * 0.3;
+                let diagY = 150 + mag * 0.3;
+                emCtx.beginPath(); emCtx.moveTo(x, 150); emCtx.lineTo(diagX, diagY);
+                emCtx.strokeStyle = '#3B82F6'; emCtx.stroke();
+            }
+            emT += 0.1;
+            requestAnimationFrame(drawEM);
+        }
+        drawEM();
+
+        // --- 5. COLOR MIXING ---
+        const cCanvas = document.getElementById('colorCanvas');
+        const cCtx = cCanvas.getContext('2d');
+        function drawColor() {
+            let r = document.getElementById('rVal').value;
+            let g = document.getElementById('gVal').value;
+            let b = document.getElementById('bVal').value;
+            
+            cCtx.globalCompositeOperation = 'screen'; // Additive mixing
+            cCtx.clearRect(0,0,300,300);
+            cCtx.fillStyle = 'black'; cCtx.fillRect(0,0,300,300); // Base
+
+            // Red Spot
+            cCtx.beginPath(); cCtx.arc(100, 100, 80, 0, Math.PI*2);
+            cCtx.fillStyle = `rgb(${r}, 0, 0)`; cCtx.fill();
+            
+            // Green Spot
+            cCtx.beginPath(); cCtx.arc(200, 100, 80, 0, Math.PI*2);
+            cCtx.fillStyle = `rgb(0, ${g}, 0)`; cCtx.fill();
+            
+            // Blue Spot
+            cCtx.beginPath(); cCtx.arc(150, 200, 80, 0, Math.PI*2);
+            cCtx.fillStyle = `rgb(0, 0, ${b})`; cCtx.fill();
+            
+            requestAnimationFrame(drawColor);
+        }
+        drawColor();
+
+        // --- 6. LENSES ---
+        const lCanvas = document.getElementById('lensCanvas');
+        const lCtx = lCanvas.getContext('2d');
+        let lensType = 'convex';
+        let lensX = 300;
+        
+        function setLens(type) { lensType = type; }
+        function drawLens() {
+            lCtx.clearRect(0,0,600,250);
+            
+            // Draw Lens
+            lCtx.fillStyle = 'rgba(200, 230, 255, 0.5)';
+            lCtx.strokeStyle = '#2563EB';
+            lCtx.lineWidth = 2;
+            lCtx.beginPath();
+            if(lensType === 'convex') {
+                lCtx.ellipse(lensX, 125, 20, 100, 0, 0, Math.PI*2);
+            } else {
+                lCtx.moveTo(lensX-10, 25); lCtx.lineTo(lensX+10, 25);
+                lCtx.lineTo(lensX, 125); lCtx.lineTo(lensX+10, 225);
+                lCtx.lineTo(lensX-10, 225); lCtx.lineTo(lensX-5, 125);
+                lCtx.closePath();
+            }
+            lCtx.fill(); lCtx.stroke();
+            
+            // Draw Rays
+            lCtx.strokeStyle = '#E85D04';
+            lCtx.lineWidth = 2;
+            for(let y=75; y<=175; y+=25) {
+                lCtx.beginPath();
+                lCtx.moveTo(0, y);
+                lCtx.lineTo(lensX, y);
+                
+                // Refraction logic
+                if(lensType === 'convex') {
+                    // Converge to focus (approx at x+150)
+                    let slope = (125 - y) / 150;
+                    lCtx.lineTo(600, y + slope * (600-lensX));
+                } else {
+                    // Diverge
+                    let slope = (y - 125) / 100;
+                    lCtx.lineTo(600, y + slope * (600-lensX));
+                }
+                lCtx.stroke();
+            }
+            requestAnimationFrame(drawLens);
+        }
+        drawLens();
+        
+        // Drag Lens
+        let dragLens = false;
+        lCanvas.addEventListener('mousedown', () => dragLens = true);
+        window.addEventListener('mouseup', () => dragLens = false);
+        lCanvas.addEventListener('mousemove', e => {
+            if(dragLens) {
+                const r = lCanvas.getBoundingClientRect();
+                lensX = e.clientX - r.left;
+            }
+        });
+
+        // --- 7. STANDING WAVES ---
+        const sCanvas = document.getElementById('stringCanvas');
+        const sCtx = sCanvas.getContext('2d');
+        let harmonic = 1;
+        let sT = 0;
+        function setHarmonic(h) { harmonic = h; }
+        function drawString() {
+            sCtx.clearRect(0,0,600,200);
+            sCtx.strokeStyle = 'black';
+            sCtx.lineWidth = 4;
+            sCtx.beginPath();
+            for(let x=0; x<=600; x++) {
+                let normX = x / 600; // 0 to 1
+                // Wave equation: sin(n * pi * x) * cos(t)
+                let y = 100 + Math.sin(harmonic * Math.PI * normX) * Math.cos(sT) * 80;
+                if(x===0) sCtx.moveTo(x,y); else sCtx.lineTo(x,y);
+            }
+            sCtx.stroke();
+            
+            // Nodes
+            sCtx.fillStyle = 'red';
+            for(let i=0; i<=harmonic; i++) {
+                let nx = (i/harmonic) * 600;
+                sCtx.beginPath(); sCtx.arc(nx, 100, 5, 0, Math.PI*2); sCtx.fill();
+            }
+            
+            sT += 0.1;
+            requestAnimationFrame(drawString);
+        }
+        drawString();
+
+        // --- 8. CIRCUITS ---
+        let circuitBroken = false;
+        function toggleCircuit() {
+            circuitBroken = !circuitBroken;
+            const lights = document.querySelectorAll('.bg-yellow-400');
+            const btn = document.querySelector('#circuit-series').parentElement.parentElement.nextElementSibling; // Lazy selection
+            
+            if(circuitBroken) {
+                btn.innerText = "REPAIR CIRCUIT (Close Switch)";
+                btn.classList.add('bg-gray-600');
+                lights.forEach(l => {
+                    l.style.backgroundColor = '#555'; 
+                    l.style.boxShadow = 'none';
+                });
+            } else {
+                btn.innerText = "BREAK THE CIRCUIT (Open Switch)";
+                btn.classList.remove('bg-gray-600');
+                lights.forEach(l => {
+                    l.style.backgroundColor = '#FACC15'; 
+                    l.style.boxShadow = '0 0 10px gold';
+                });
+            }
+        }
+
+        // --- 9. DOPPLER ---
+        const dCanvas = document.getElementById('dopplerCanvas');
+        const dCtx = dCanvas.getContext('2d');
+        let sourceX = 0;
+        let waves = [];
+        function drawDoppler() {
+            dCtx.clearRect(0,0,600,250);
+            let speed = parseFloat(document.getElementById('dopplerSpeed').value);
+            
+            sourceX += speed;
+            if(sourceX > 600) sourceX = 0;
+            
+            if(Math.floor(sourceX) % 20 === 0) {
+                waves.push({x: sourceX, r: 0});
+            }
+            
+            // Draw waves
+            dCtx.strokeStyle = 'rgba(0,0,0,0.5)';
+            dCtx.lineWidth = 2;
+            for(let i=waves.length-1; i>=0; i--) {
+                let w = waves[i];
+                w.r += 2; // Wave speed constant
+                dCtx.beginPath(); dCtx.arc(w.x, 125, w.r, 0, Math.PI*2); dCtx.stroke();
+                if(w.r > 400) waves.splice(i, 1);
+            }
+            
+            // Source
+            dCtx.fillStyle = 'red';
+            dCtx.fillRect(sourceX-10, 115, 20, 20);
+            
+            requestAnimationFrame(drawDoppler);
+        }
+        drawDoppler();
+
+        // --- 10. FIBER OPTICS ---
+        const fibCanvas = document.getElementById('fiberCanvas');
+        const fibCtx = fibCanvas.getContext('2d');
+        function drawFiber() {
+            fibCtx.clearRect(0,0,600,200);
+            let angle = document.getElementById('fiberAngle').value * (Math.PI/180);
+            
+            // Draw Fiber Core
+            fibCtx.fillStyle = 'rgba(0, 100, 255, 0.2)';
+            fibCtx.fillRect(0, 50, 600, 100);
+            
+            // Ray Trace
+            let x = 0, y = 100;
+            let dx = Math.cos(angle) * 5;
+            let dy = Math.sin(angle) * 5;
+            
+            fibCtx.beginPath();
+            fibCtx.moveTo(x,y);
+            fibCtx.strokeStyle = '#00FF00'; // Green laser
+            fibCtx.lineWidth = 3;
+            
+            while(x < 600) {
+                x += dx; y += dy;
+                if(y < 50 || y > 150) {
+                    dy *= -1; // Reflect
+                    // Check critical angle (Visual only)
+                    if(Math.abs(dy) > 4) { // Too steep = escape
+                         fibCtx.lineTo(x + dx*5, y + dy*5);
+                         fibCtx.stroke();
+                         return;
+                    }
+                }
+                fibCtx.lineTo(x,y);
+            }
+            fibCtx.stroke();
+            requestAnimationFrame(drawFiber);
+        }
+        drawFiber();
+
+        // --- 11. DOUBLE SLIT (Real Simulation) ---
+        const slCanvas = document.getElementById('slitCanvas');
+        const slCtx = slCanvas.getContext('2d');
+        
+        let slTime = 0;
+        
+        function drawSlitSim() {
+            // Settings
+            let separation = parseInt(document.getElementById('slitSep').value);
+            let wavelength = 20; 
+            let frequency = 0.5;
+            
+            // Create visual buffer
+            let imgData = slCtx.createImageData(600, 300);
+            let data = imgData.data;
+            
+            // Source positions (Two slits)
+            let s1y = 150 - separation;
+            let s2y = 150 + separation;
+            
+            // Render Waves
+            for(let x=0; x<550; x+=4) { // Optimization: skip pixels
+                for(let y=0; y<300; y+=4) {
+                    let d1 = Math.sqrt(x*x + (y-s1y)*(y-s1y));
+                    let d2 = Math.sqrt(x*x + (y-s2y)*(y-s2y));
+                    
+                    // Wave superposition
+                    let amp = Math.cos(d1/wavelength*Math.PI*2 - slTime) + Math.cos(d2/wavelength*Math.PI*2 - slTime);
+                    
+                    // Color map (Purple/Cyan)
+                    let val = (amp + 2) * 40; // Normalize approx 0-160
+                    
+                    // Fill 4x4 block
+                    for(let dy=0; dy<4; dy++){
+                        for(let dx=0; dx<4; dx++){
+                            let idx = ((y+dy)*600 + (x+dx)) * 4;
+                            data[idx] = val;    // R
+                            data[idx+1] = 0;    // G
+                            data[idx+2] = val*2; // B
+                            data[idx+3] = 255;  // A
+                        }
+                    }
+                }
+            }
+            slCtx.putImageData(imgData, 0, 0);
+            
+            // Render Intensity Graph on Wall (Right side)
+            slCtx.fillStyle = 'black';
+            slCtx.fillRect(550, 0, 50, 300);
+            slCtx.beginPath();
+            slCtx.strokeStyle = '#00FFFF';
+            slCtx.lineWidth = 2;
+            
+            for(let y=0; y<300; y++) {
+                // Theoretical Intensity at screen distance X=550
+                let d1 = Math.sqrt(550*550 + (y-s1y)*(y-s1y));
+                let d2 = Math.sqrt(550*550 + (y-s2y)*(y-s2y));
+                
+                // Phase difference
+                let phaseDiff = (2 * Math.PI * (d2-d1)) / wavelength;
+                let intensity = Math.cos(phaseDiff/2)**2; // Simplified interference term
+                
+                let graphX = 550 + intensity * 40;
+                if(y===0) slCtx.moveTo(graphX, y); else slCtx.lineTo(graphX, y);
+            }
+            slCtx.stroke();
+            
+            // Draw Slit Wall
+            slCtx.fillStyle = '#555';
+            slCtx.fillRect(20, 0, 10, 300);
+            // Slit gaps
+            slCtx.clearRect(20, s1y-5, 10, 10);
+            slCtx.clearRect(20, s2y-5, 10, 10);
+
+            slTime += frequency;
+            requestAnimationFrame(drawSlitSim);
+        }
+        drawSlitSim();
+
+        // --- 12. SOUND WAVES ---
+        const sndCanvas = document.getElementById('soundCanvas');
+        const sndCtx = sndCanvas.getContext('2d');
+        let airParticles = [];
+        for(let i=0; i<200; i++) airParticles.push({x: Math.random()*600, y: Math.random()*150, base: Math.random()*600});
+        let sndT = 0;
+        function drawSound() {
+            sndCtx.clearRect(0,0,600,150);
+            // Cone
+            sndCtx.fillStyle = '#333';
+            let coneX = 50 + Math.sin(sndT)*10;
+            sndCtx.beginPath(); sndCtx.moveTo(10, 20); sndCtx.lineTo(coneX, 75); sndCtx.lineTo(10, 130); sndCtx.fill();
+            
+            // Particles
+            sndCtx.fillStyle = 'black';
+            airParticles.forEach(p => {
+                // Longitudinal wave: displacement is parallel to propagation
+                let displacement = Math.sin((p.base/50) - sndT) * 10;
+                p.x = p.base + displacement;
+                sndCtx.fillRect(p.x, p.y, 2, 2);
+            });
+            sndT += 0.2;
+            requestAnimationFrame(drawSound);
+        }
+        drawSound();
+
+        // --- 13. POLARIZATION ---
+        const polCanvas = document.getElementById('polarCanvas');
+        const polCtx = polCanvas.getContext('2d');
+        let polT = 0;
+        function drawPolar() {
+            let angle = document.getElementById('polarAngle').value;
+            let rad = angle * Math.PI / 180;
+            let transmission = Math.abs(Math.cos(rad)); // Malus's Law approx
+            document.getElementById('polar-text').innerText = Math.round(transmission*100) + "%";
+
+            polCtx.clearRect(0,0,600,250);
+            
+            // Incoming Wave (Chaotic/Unpolarized - simplified as vertical + horizontal)
+            polCtx.lineWidth = 2;
+            for(let x=0; x<300; x+=5) {
+                let yV = 125 + Math.sin(x/20 - polT)*30; // Vert component
+                let yH = 125; // Horiz component (seen from side is flat line)
+                
+                // Draw visual chaos
+                polCtx.strokeStyle = 'red';
+                polCtx.beginPath(); polCtx.moveTo(x, 125); polCtx.lineTo(x, yV); polCtx.stroke();
+            }
+            
+            // Filter
+            polCtx.save();
+            polCtx.translate(300, 125);
+            polCtx.rotate(rad);
+            polCtx.fillStyle = 'rgba(0,0,0,0.5)';
+            polCtx.fillRect(-5, -75, 10, 150);
+            // Slits
+            polCtx.strokeStyle='white';
+            polCtx.beginPath(); polCtx.moveTo(0,-70); polCtx.lineTo(0,70); polCtx.stroke();
+            polCtx.restore();
+
+            // Outgoing Wave
+            for(let x=305; x<600; x+=5) {
+                let amp = 30 * transmission;
+                let y = 125 + Math.sin(x/20 - polT)*amp;
+                polCtx.strokeStyle = 'blue';
+                polCtx.beginPath(); polCtx.moveTo(x, 125); polCtx.lineTo(x, y); polCtx.stroke();
+            }
+            
+            polT += 0.2;
+            requestAnimationFrame(drawPolar);
+        }
+        drawPolar();
+
+        // --- 14. COULOMB (High Fidelity) ---
+        const couCanvas = document.getElementById('coulombCanvas');
+        const couCtx = couCanvas.getContext('2d');
+        
+        function drawCoulomb() {
+            couCtx.clearRect(0,0,600,250);
+            let dist = parseInt(document.getElementById('coulombDist').value);
+            let cx = 300, cy = 125;
+            let p1x = cx - dist/2;
+            let p2x = cx + dist/2;
+            
+            // Force Calc (Visual Scale)
+            let force = 100000 / (dist * dist);
+            
+            // Draw Particles (Glowing)
+            let grad1 = couCtx.createRadialGradient(p1x, cy, 5, p1x, cy, 30);
+            grad1.addColorStop(0, '#EF4444'); grad1.addColorStop(1, 'transparent');
+            couCtx.fillStyle = grad1; couCtx.beginPath(); couCtx.arc(p1x, cy, 30, 0, Math.PI*2); couCtx.fill();
+            
+            let grad2 = couCtx.createRadialGradient(p2x, cy, 5, p2x, cy, 30);
+            grad2.addColorStop(0, '#EF4444'); grad2.addColorStop(1, 'transparent');
+            couCtx.fillStyle = grad2; couCtx.beginPath(); couCtx.arc(p2x, cy, 30, 0, Math.PI*2); couCtx.fill();
+            
+            // Solid Cores
+            couCtx.fillStyle = 'white';
+            couCtx.beginPath(); couCtx.arc(p1x, cy, 8, 0, Math.PI*2); couCtx.fill();
+            couCtx.beginPath(); couCtx.arc(p2x, cy, 8, 0, Math.PI*2); couCtx.fill();
+            
+            // Draw Force Arrows
+            let arrowLen = Math.min(120, force * 40); // Max length 120px
+            couCtx.fillStyle = 'white';
+            couCtx.strokeStyle = 'white';
+            couCtx.lineWidth = 4;
+            
+            // Left Arrow (Pushes Left)
+            drawArrow(couCtx, p1x - 20, cy, p1x - 20 - arrowLen, cy);
+            
+            // Right Arrow (Pushes Right)
+            drawArrow(couCtx, p2x + 20, cy, p2x + 20 + arrowLen, cy);
+            
+            // Text
+            couCtx.font = "20px monospace";
+            couCtx.textAlign = "center";
+            couCtx.fillText(`Force: ${(force).toFixed(2)} N`, 300, 50);
+            
+            requestAnimationFrame(drawCoulomb);
+        }
+        
+        function drawArrow(ctx, fromx, fromy, tox, toy) {
+            var headlen = 10; 
+            var dx = tox - fromx;
+            var dy = toy - fromy;
+            var angle = Math.atan2(dy, dx);
+            ctx.beginPath();
+            ctx.moveTo(fromx, fromy);
+            ctx.lineTo(tox, toy);
+            ctx.lineTo(tox - headlen * Math.cos(angle - Math.PI / 6), toy - headlen * Math.sin(angle - Math.PI / 6));
+            ctx.moveTo(tox, toy);
+            ctx.lineTo(tox - headlen * Math.cos(angle + Math.PI / 6), toy - headlen * Math.sin(angle + Math.PI / 6));
+            ctx.stroke();
+        }
+        drawCoulomb();
+
+
+        // --- 15. PRISM ---
+        const priCanvas = document.getElementById('prismCanvas');
+        const priCtx = priCanvas.getContext('2d');
+        function drawPrism() {
+            priCtx.clearRect(0,0,600,300);
+            
+            // Prism Triangle
+            priCtx.fillStyle = 'rgba(255,255,255,0.1)';
+            priCtx.strokeStyle = 'white';
+            priCtx.beginPath();
+            priCtx.moveTo(200, 250);
+            priCtx.lineTo(400, 250);
+            priCtx.lineTo(300, 50);
+            priCtx.closePath();
+            priCtx.fill(); priCtx.stroke();
+            
+            // Incoming White Light
+            priCtx.strokeStyle = 'white';
+            priCtx.lineWidth = 4;
+            priCtx.beginPath();
+            priCtx.moveTo(0, 200);
+            priCtx.lineTo(250, 150); // Hit point approx
+            priCtx.stroke();
+            
+            // Inside Prism (Dispersion)
+            // Red bends least, Blue bends most
+            const colors = ['#FF0000', '#FFA500', '#FFFF00', '#008000', '#0000FF', '#4B0082', '#EE82EE'];
+            
+            colors.forEach((col, i) => {
+                priCtx.strokeStyle = col;
+                priCtx.lineWidth = 2;
+                priCtx.beginPath();
+                priCtx.moveTo(250, 150);
+                
+                // Refraction 1
+                let yInternal = 150 + (i*2); 
+                let xInternal = 330; // Exit point approx
+                
+                priCtx.lineTo(xInternal, yInternal);
+                
+                // Refraction 2 (Exit)
+                priCtx.lineTo(600, yInternal + (i*15) + 50);
+                priCtx.stroke();
+            });
+        }
+        drawPrism();
+
+    </script>
+</body>
+</html>

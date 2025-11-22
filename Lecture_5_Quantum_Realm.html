@@ -1,0 +1,1145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Celestica: Quantum Realm (High Fidelity)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --q-bg: #050510;
+            --q-cyan: #00f3ff;
+            --q-pink: #bc13fe;
+            --q-green: #0aff68;
+            --q-panel: rgba(20, 20, 35, 0.7);
+        }
+
+        body {
+            background-color: var(--q-bg);
+            color: #e0e0e0;
+            font-family: 'Rajdhani', sans-serif;
+            overflow-x: hidden;
+            background-image: 
+                linear-gradient(rgba(0, 243, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 243, 255, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        h1, h2, .tech-font {
+            font-family: 'Orbitron', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .glass-panel {
+            background: var(--q-panel);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(0, 243, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 24px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .glass-panel:hover {
+            border-color: var(--q-cyan);
+            box-shadow: 0 0 30px rgba(0, 243, 255, 0.15);
+        }
+
+        /* Quantum Button */
+        .cyber-btn {
+            background: transparent;
+            border: 1px solid var(--q-green);
+            color: var(--q-green);
+            font-family: 'Orbitron', sans-serif;
+            padding: 10px 20px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .cyber-btn::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 0%; height: 100%;
+            background: var(--q-green);
+            transition: 0.3s;
+            z-index: -1;
+        }
+        
+        .cyber-btn:hover {
+            color: black;
+            box-shadow: 0 0 15px var(--q-green);
+        }
+        
+        .cyber-btn:hover::before { width: 100%; }
+        .cyber-btn.pink { border-color: var(--q-pink); color: var(--q-pink); }
+        .cyber-btn.pink::before { background: var(--q-pink); }
+        .cyber-btn.pink:hover { box-shadow: 0 0 15px var(--q-pink); color: white; }
+
+        /* Range Slider */
+        input[type=range] {
+            -webkit-appearance: none; width: 100%; background: transparent;
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%; height: 2px; background: #333;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none; height: 16px; width: 16px;
+            background: var(--q-cyan); border-radius: 50%;
+            margin-top: -7px; cursor: pointer;
+            box-shadow: 0 0 10px var(--q-cyan);
+        }
+
+        canvas {
+            border-radius: 8px;
+            background: radial-gradient(circle at center, #1a1a2e 0%, #000000 100%);
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+            cursor: crosshair;
+        }
+
+        .glow-text { text-shadow: 0 0 10px currentColor; }
+        
+        .hud-line {
+            position: absolute; height: 1px; background: var(--q-cyan); opacity: 0.3;
+        }
+    </style>
+</head>
+<body class="max-w-7xl mx-auto px-4 py-12">
+
+    <!-- Hero -->
+    <header class="text-center mb-24 relative">
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-cyan-500 rounded-full blur-[150px] opacity-10 -z-10 animate-pulse"></div>
+        
+        <div class="inline-block border border-cyan-500/50 px-4 py-1 mb-6 text-xs tracking-[0.3em] text-cyan-400 font-bold bg-black/40 backdrop-blur rounded-full">
+            CELESTICA INITIATIVE // LEVEL 5
+        </div>
+        
+        <h1 class="text-6xl md:text-8xl mb-6 text-white tracking-tight" style="text-shadow: 0 0 30px rgba(0, 243, 255, 0.5);">
+            QUANTUM <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-500">REALM</span>
+        </h1>
+        
+        <p class="text-xl text-gray-400 max-w-2xl mx-auto font-light">
+            Reality is a probability. Observation is destruction.
+            <br><span class="text-cyan-400">15 High-Fidelity Simulations</span>
+        </p>
+    </header>
+
+    <!-- 1. Double Slit (Particles) -->
+    <section class="mb-24 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <div class="lg:col-span-4">
+            <div class="text-6xl font-bold text-cyan-500/20 mb-[-20px] ml-[-10px] select-none">01</div>
+            <h2 class="text-3xl text-white mb-4 relative z-10">Double Slit Interference</h2>
+            <p class="text-gray-400 mb-6 leading-relaxed">
+                When unobserved, particles behave like waves, creating bands. 
+                Watch the probability distribution form on the back wall.
+            </p>
+            <button onclick="fireDoubleSlit()" class="cyber-btn w-full mb-2">FIRE BEAM</button>
+            <button onclick="resetDoubleSlit()" class="cyber-btn pink w-full">CLEAR DETECTOR</button>
+        </div>
+        <div class="lg:col-span-8 glass-panel p-2">
+            <canvas id="slitCanvas" width="800" height="300" class="w-full h-[300px]"></canvas>
+        </div>
+    </section>
+
+    <!-- 2. Schrodinger's Cat -->
+    <section class="mb-24 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <div class="lg:col-span-8 glass-panel relative group h-[400px] flex items-center justify-center overflow-visible">
+            <!-- The Box -->
+            <div id="q-box" class="w-48 h-48 bg-gray-900 border-2 border-purple-500 relative shadow-[0_0_30px_rgba(188,19,254,0.2)] transition-all duration-500 cursor-pointer group-hover:shadow-[0_0_50px_rgba(188,19,254,0.4)]" onclick="observeCat()">
+                <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjEiIGZpbGw9InJnYmEoMTg4LCAxOSwgMjU0LCAwLjIpIi8+PC9zdmc+')] opacity-50"></div>
+                <!-- Lid -->
+                <div id="q-lid" class="absolute top-0 left-0 w-full h-2 bg-purple-500 shadow-[0_0_10px_currentColor] transition-all duration-500"></div>
+                <!-- Content -->
+                <div id="q-content" class="w-full h-full flex items-center justify-center text-6xl opacity-0 transition-opacity duration-200"></div>
+                <!-- Superposition effect -->
+                <div id="q-fog" class="absolute inset-0 bg-gradient-to-t from-purple-900/80 to-transparent animate-pulse"></div>
+            </div>
+            
+            <!-- Status -->
+            <div class="absolute bottom-4 left-0 w-full text-center">
+                <div id="cat-status" class="text-2xl font-bold text-white tracking-widest">SUPERPOSITION</div>
+                <div class="text-xs text-purple-400 mt-1">STATE VECTOR IS UNDEFINED</div>
+            </div>
+        </div>
+        <div class="lg:col-span-4">
+            <div class="text-6xl font-bold text-purple-500/20 mb-[-20px] ml-[-10px]">02</div>
+            <h2 class="text-3xl text-white mb-4 relative z-10">Schrödinger's Box</h2>
+            <p class="text-gray-400">
+                The system exists in a linear combination of |ALIVE⟩ and |DEAD⟩ until measurement occurs.
+            </p>
+            <p class="text-xs text-gray-500 mt-4 border-l-2 border-purple-500 pl-3">Click the box to collapse the wavefunction.</p>
+        </div>
+    </section>
+
+    <!-- 3. Heisenberg Uncertainty -->
+    <section class="mb-24 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <div class="lg:col-span-4">
+            <div class="text-6xl font-bold text-green-500/20 mb-[-20px] ml-[-10px]">03</div>
+            <h2 class="text-3xl text-white mb-4 relative z-10">Uncertainty Principle</h2>
+            <p class="text-gray-400 mb-6">
+                $\Delta x \cdot \Delta p \geq \frac{\hbar}{2}$
+                <br><br>
+                Squeeze the position ($\Delta x$), and the momentum ($\Delta p$) explodes, causing the wave packet to spread rapidly.
+            </p>
+            <div class="space-y-6 bg-black/30 p-4 rounded border border-gray-700">
+                <div>
+                    <div class="flex justify-between text-cyan-400 text-sm mb-2">
+                        <span>Position Certainty</span>
+                        <span id="unc-pos-val">50%</span>
+                    </div>
+                    <input type="range" id="unc-pos" min="1" max="99" value="50" oninput="updateUncertainty()">
+                </div>
+                <div class="text-xs text-gray-500 text-center">Momentum Certainty is inversely locked</div>
+            </div>
+        </div>
+        <div class="lg:col-span-8 glass-panel p-2">
+            <canvas id="uncCanvas" width="800" height="300" class="w-full h-[300px]"></canvas>
+        </div>
+    </section>
+
+    <!-- 4. Quantum Tunneling -->
+    <section class="mb-24 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <div class="lg:col-span-8 glass-panel p-2">
+            <canvas id="tunnelCanvas" width="800" height="300" class="w-full h-[300px]"></canvas>
+        </div>
+        <div class="lg:col-span-4">
+            <div class="text-6xl font-bold text-cyan-500/20 mb-[-20px] ml-[-10px]">04</div>
+            <h2 class="text-3xl text-white mb-4 relative z-10">Quantum Tunneling</h2>
+            <p class="text-gray-400 mb-6">
+                Particles encountering a potential barrier higher than their energy should bounce back. In quantum mechanics, the wavefunction leaks through.
+            </p>
+            <button onclick="emitTunnelParticles()" class="cyber-btn w-full">EMIT PARTICLE STREAM</button>
+        </div>
+    </section>
+
+    <!-- 5. Entanglement -->
+    <section class="mb-24 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <div class="lg:col-span-4">
+            <div class="text-6xl font-bold text-purple-500/20 mb-[-20px] ml-[-10px]">05</div>
+            <h2 class="text-3xl text-white mb-4 relative z-10">Quantum Entanglement</h2>
+            <p class="text-gray-400 mb-6">
+                Spooky action at a distance. Two particles share a single quantum state. Measuring one instantly determines the other.
+            </p>
+            <button onclick="entanglePair()" class="cyber-btn pink w-full">GENERATE PAIR</button>
+        </div>
+        <div class="lg:col-span-8 glass-panel p-8 flex justify-around items-center relative">
+            <!-- Connection Line -->
+            <div id="ent-link" class="absolute top-1/2 left-1/4 right-1/4 h-1 bg-purple-500 blur-md transition-opacity opacity-0"></div>
+            
+            <!-- Particle A -->
+            <div class="text-center cursor-pointer group" onclick="measureEntanglement('A')">
+                <div class="text-sm text-purple-300 mb-4">ALICE</div>
+                <div id="ent-a" class="w-24 h-24 rounded-full border-4 border-purple-500 shadow-[0_0_30px_currentColor] flex items-center justify-center text-2xl bg-black relative overflow-hidden transition-all">
+                    <div class="absolute inset-0 bg-purple-500/20 animate-spin"></div>
+                    <span class="relative z-10 font-bold">?</span>
+                </div>
+            </div>
+
+            <!-- Particle B -->
+            <div class="text-center cursor-pointer group" onclick="measureEntanglement('B')">
+                <div class="text-sm text-purple-300 mb-4">BOB</div>
+                <div id="ent-b" class="w-24 h-24 rounded-full border-4 border-purple-500 shadow-[0_0_30px_currentColor] flex items-center justify-center text-2xl bg-black relative overflow-hidden transition-all">
+                    <div class="absolute inset-0 bg-purple-500/20 animate-spin" style="animation-direction: reverse;"></div>
+                    <span class="relative z-10 font-bold">?</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. The Qubit (Bloch Sphere) -->
+    <section class="mb-24 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <div class="lg:col-span-8 glass-panel p-2 flex justify-center bg-black">
+            <canvas id="blochCanvas" width="400" height="400" class="bg-transparent shadow-none border-none"></canvas>
+        </div>
+        <div class="lg:col-span-4">
+            <div class="text-6xl font-bold text-green-500/20 mb-[-20px] ml-[-10px]">06</div>
+            <h2 class="text-3xl text-white mb-4 relative z-10">The Qubit</h2>
+            <p class="text-gray-400 mb-6">
+                Visualized on the Bloch Sphere. Unlike a classical bit (0 or 1), a Qubit is a vector that can point anywhere on the surface.
+            </p>
+            <div class="grid grid-cols-2 gap-4">
+                <button onclick="rotateBloch('x')" class="cyber-btn text-xs">Rotate X (NOT)</button>
+                <button onclick="rotateBloch('z')" class="cyber-btn text-xs">Rotate Z (Phase)</button>
+                <button onclick="rotateBloch('h')" class="cyber-btn text-xs">Hadamard (Sup)</button>
+                <button onclick="measureBloch()" class="cyber-btn pink text-xs">Measure</button>
+            </div>
+            <div id="bloch-state" class="mt-4 text-center font-mono text-green-400">State: |0⟩</div>
+        </div>
+    </section>
+
+    <!-- 7. Photoelectric Effect -->
+    <section class="mb-24 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <div class="lg:col-span-4">
+            <div class="text-6xl font-bold text-red-500/20 mb-[-20px] ml-[-10px]">07</div>
+            <h2 class="text-3xl text-white mb-4 relative z-10">Photoelectric Effect</h2>
+            <p class="text-gray-400 mb-6">
+                Light comes in packets (photons). Low frequency photons bounce off. High frequency photons knock electrons loose.
+            </p>
+            <label class="text-xs text-gray-400">Light Frequency</label>
+            <input type="range" id="photo-freq" min="1" max="10" value="2" oninput="updatePhotoelectric()" class="mb-4">
+            <div class="flex justify-between text-xs font-bold">
+                <span class="text-red-500">INFRARED</span>
+                <span class="text-purple-500">ULTRAVIOLET</span>
+            </div>
+        </div>
+        <div class="lg:col-span-8 glass-panel p-2">
+            <canvas id="photoCanvas" width="800" height="300" class="w-full h-[300px]"></canvas>
+        </div>
+    </section>
+
+    <!-- 8. Atomic Orbitals (Monte Carlo) -->
+    <section class="mb-24 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <div class="lg:col-span-8 glass-panel p-2 flex justify-center">
+            <canvas id="orbitalCanvas" width="500" height="500" class="w-[500px] h-[500px]"></canvas>
+        </div>
+        <div class="lg:col-span-4">
+            <div class="text-6xl font-bold text-blue-500/20 mb-[-20px] ml-[-10px]">08</div>
+            <h2 class="text-3xl text-white mb-4 relative z-10">Atomic Orbitals</h2>
+            <p class="text-gray-400 mb-6">
+                Electrons are probability clouds. We simulate thousands of measurements to visualize the density shape.
+            </p>
+            <div class="flex flex-col gap-3">
+                <button onclick="setOrbital('1s')" class="cyber-btn">1s (Sphere)</button>
+                <button onclick="setOrbital('2p')" class="cyber-btn">2p (Dumbbell)</button>
+                <button onclick="setOrbital('3d')" class="cyber-btn">3d (Clover)</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 9. Particle in a Box -->
+    <section class="mb-24 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <div class="lg:col-span-4">
+            <div class="text-6xl font-bold text-yellow-500/20 mb-[-20px] ml-[-10px]">09</div>
+            <h2 class="text-3xl text-white mb-4 relative z-10">Standing Waves</h2>
+            <p class="text-gray-400 mb-6">
+                A confined particle can only have quantized energy levels ($n=1, 2, 3...$) fitting exact wavelengths.
+            </p>
+            <div class="grid grid-cols-4 gap-2">
+                <button onclick="setBoxN(1)" class="cyber-btn text-xs">n=1</button>
+                <button onclick="setBoxN(2)" class="cyber-btn text-xs">n=2</button>
+                <button onclick="setBoxN(3)" class="cyber-btn text-xs">n=3</button>
+                <button onclick="setBoxN(4)" class="cyber-btn text-xs">n=4</button>
+            </div>
+        </div>
+        <div class="lg:col-span-8 glass-panel p-2">
+            <canvas id="boxCanvas" width="800" height="300" class="w-full h-[300px]"></canvas>
+        </div>
+    </section>
+
+    <!-- 10. Wave Particle Duality -->
+    <section class="mb-24 text-center">
+        <div class="text-6xl font-bold text-white/10 mb-[-20px]">10</div>
+        <h2 class="text-3xl text-white mb-8 relative z-10">Wave-Particle Duality</h2>
+        
+        <div class="glass-panel inline-block p-12 relative overflow-visible cursor-pointer group" onclick="toggleDuality()">
+            <div id="duality-container" class="w-64 h-64 flex items-center justify-center relative">
+                <!-- Dynamic Content Here -->
+            </div>
+            <p id="duality-label" class="mt-8 text-2xl font-bold text-green-400">OBSERVING: PARTICLE</p>
+            <p class="text-xs text-gray-500 mt-2">Click to switch perspective</p>
+        </div>
+    </section>
+
+    <!-- 11. Quantum Zeno -->
+    <section class="mb-24 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <div class="lg:col-span-8 glass-panel p-8">
+            <div class="relative w-full h-12 bg-gray-900 rounded border border-gray-700 overflow-hidden mb-4">
+                <div id="zeno-bar" class="absolute top-0 left-0 h-full bg-gradient-to-r from-green-500 to-red-600 w-0 transition-all duration-75"></div>
+                <div class="absolute inset-0 flex items-center justify-center text-xs font-bold tracking-widest z-10 mix-blend-difference">DECAY PROBABILITY</div>
+            </div>
+            <button id="zeno-btn" class="cyber-btn pink w-full h-16 text-xl font-bold shadow-[0_0_20px_rgba(188,19,254,0.3)]" onmousedown="observeZeno()">
+                👁️ OBSERVE SYSTEM
+            </button>
+        </div>
+        <div class="lg:col-span-4">
+            <div class="text-6xl font-bold text-pink-500/20 mb-[-20px] ml-[-10px]">11</div>
+            <h2 class="text-3xl text-white mb-4 relative z-10">Quantum Zeno Effect</h2>
+            <p class="text-gray-400">
+                "A watched pot never boils."
+                <br><br>
+                If you measure a system frequently enough, you force its wavefunction to collapse back to the initial state, preventing decay.
+            </p>
+        </div>
+    </section>
+
+    <!-- 12. Spin (Stern-Gerlach) -->
+    <section class="mb-24 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <div class="lg:col-span-4">
+            <div class="text-6xl font-bold text-cyan-500/20 mb-[-20px] ml-[-10px]">12</div>
+            <h2 class="text-3xl text-white mb-4 relative z-10">Quantum Spin</h2>
+            <p class="text-gray-400 mb-6">
+                Silver atoms passing through a magnetic field don't spread out; they split into exactly two paths: Spin UP or Spin DOWN.
+            </p>
+            <button onclick="fireSpin()" class="cyber-btn w-full">FIRE ATOMS</button>
+        </div>
+        <div class="lg:col-span-8 glass-panel p-2">
+            <canvas id="spinCanvas" width="800" height="300" class="w-full h-[300px]"></canvas>
+        </div>
+    </section>
+
+    <!-- 13. Many Worlds (Fractal) -->
+    <section class="mb-24 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <div class="lg:col-span-8 glass-panel p-2 overflow-hidden relative h-[400px] bg-black" id="multiverse-container">
+            <div class="absolute bottom-4 left-4 text-xs text-gray-500">Click nodes to split reality</div>
+        </div>
+        <div class="lg:col-span-4">
+            <div class="text-6xl font-bold text-white/20 mb-[-20px] ml-[-10px]">13</div>
+            <h2 class="text-3xl text-white mb-4 relative z-10">Many Worlds</h2>
+            <p class="text-gray-400 mb-6">
+                In the Everett interpretation, wavefunctions don't collapse. They branch. Every outcome happens in a separate universe.
+            </p>
+            <button onclick="resetMultiverse()" class="cyber-btn w-full">RESET TIMELINE</button>
+        </div>
+    </section>
+
+    <!-- 14. Quantum Eraser -->
+    <section class="mb-24 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <div class="lg:col-span-4">
+            <div class="text-6xl font-bold text-green-500/20 mb-[-20px] ml-[-10px]">14</div>
+            <h2 class="text-3xl text-white mb-4 relative z-10">Quantum Eraser</h2>
+            <p class="text-gray-400 mb-6">
+                If we know "which path" information, interference vanishes. If we destroy that information (erase it), interference returns.
+            </p>
+            <button onclick="toggleEraser()" class="cyber-btn pink w-full">TOGGLE DETECTOR</button>
+        </div>
+        <div class="lg:col-span-8 glass-panel p-8 flex items-center justify-center bg-black">
+            <div class="relative w-full h-64">
+                <!-- Lasers -->
+                <div class="absolute left-0 top-1/2 w-full h-0.5 bg-green-500/20"></div>
+                
+                <!-- Detector -->
+                <div id="eraser-eye" class="absolute top-4 left-1/2 -translate-x-1/2 text-6xl transition-all duration-500 opacity-100 filter drop-shadow-[0_0_10px_red]">👁️</div>
+                
+                <!-- Screen -->
+                <div id="eraser-screen" class="absolute right-0 top-0 bottom-0 w-24 bg-gray-900 border-l-4 border-white flex flex-col justify-center items-center gap-2 transition-all duration-500">
+                    <!-- Pattern generated by JS -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 15. Logic Gates -->
+    <section class="mb-24 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <div class="lg:col-span-8 glass-panel p-8 flex items-center justify-between">
+            <!-- Input -->
+            <div class="text-center">
+                <div class="text-gray-500 mb-2">INPUT</div>
+                <div class="w-16 h-16 border border-white flex items-center justify-center text-2xl font-bold text-white">0</div>
+            </div>
+            
+            <div class="text-gray-600 text-2xl">→</div>
+            
+            <!-- Gate -->
+            <div class="w-24 h-24 bg-purple-900/50 border-2 border-purple-500 flex items-center justify-center text-4xl font-bold text-purple-400 shadow-[0_0_20px_rgba(168,85,247,0.4)] cursor-pointer hover:scale-105 transition" onclick="runLogicGate()">
+                H
+            </div>
+            
+            <div class="text-gray-600 text-2xl">→</div>
+            
+            <!-- Output -->
+            <div class="text-center">
+                <div class="text-gray-500 mb-2">OUTPUT</div>
+                <div id="gate-out" class="w-16 h-16 border border-dashed border-purple-500 flex items-center justify-center text-2xl font-bold text-purple-400">?</div>
+            </div>
+        </div>
+        <div class="lg:col-span-4">
+            <div class="text-6xl font-bold text-purple-500/20 mb-[-20px] ml-[-10px]">15</div>
+            <h2 class="text-3xl text-white mb-4 relative z-10">Hadamard Gate</h2>
+            <p class="text-gray-400">
+                The 'Hello World' of quantum computing. It transforms a definite state $|0\rangle$ into a perfect superposition $\frac{|0\rangle + |1\rangle}{\sqrt{2}}$.
+            </p>
+        </div>
+    </section>
+
+    <footer class="text-center py-20 border-t border-gray-900">
+        <div class="text-cyan-500 font-bold tracking-[0.5em] mb-4">CELESTICA INITIATIVE</div>
+        <div class="text-gray-600 text-xs">LECTURE 05: COMPLETED</div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+
+        // === UTILS ===
+        function rand(min, max) { return Math.random() * (max - min) + min; }
+
+        // === 1. DOUBLE SLIT (NEON PARTICLES) ===
+        const slitC = document.getElementById('slitCanvas');
+        const slitCtx = slitC.getContext('2d');
+        let slitParticles = [];
+
+        function fireDoubleSlit() {
+            for(let i=0; i<50; i++) {
+                slitParticles.push({
+                    x: 0, y: 150 + rand(-20, 20),
+                    vx: rand(4, 6), vy: rand(-0.5, 0.5),
+                    phase: 0, // 0: start, 1: interfere
+                    color: `hsl(${rand(160, 200)}, 100%, 50%)`
+                });
+            }
+        }
+
+        function resetDoubleSlit() {
+            slitParticles = [];
+            // Clear screen persistent buffer logic could be added here
+            slitCtx.clearRect(0, 0, 800, 300);
+        }
+
+        function animSlit() {
+            // Trail Effect
+            slitCtx.fillStyle = 'rgba(5, 5, 16, 0.2)';
+            slitCtx.fillRect(0, 0, 800, 300);
+
+            // Wall
+            slitCtx.fillStyle = '#222';
+            slitCtx.fillRect(400, 0, 10, 120);
+            slitCtx.fillRect(400, 180, 10, 120);
+            slitCtx.fillRect(400, 140, 10, 20); // Middle block
+
+            slitCtx.globalCompositeOperation = 'lighter';
+
+            slitParticles.forEach((p, i) => {
+                p.x += p.vx;
+                p.y += p.vy;
+
+                // Slit Logic
+                if (p.phase === 0 && p.x > 400) {
+                    // Hit wall?
+                    if (p.y < 120 || p.y > 180 || (p.y > 140 && p.y < 160)) {
+                        p.vx = -p.vx * 0.5; // Bounce back and die
+                        p.life = 0; 
+                    } else {
+                        // Passed through
+                        p.phase = 1;
+                        // INTERFERENCE MAGIC: Bias velocity Y based on X position to create bands
+                        // Simulating diffraction
+                        p.vy += Math.sin(p.y * 0.5) * 2; 
+                        p.vx += 2; // Speed up
+                    }
+                }
+
+                // Draw
+                slitCtx.shadowBlur = 10;
+                slitCtx.shadowColor = p.color;
+                slitCtx.fillStyle = p.color;
+                slitCtx.beginPath();
+                slitCtx.arc(p.x, p.y, 2, 0, Math.PI*2);
+                slitCtx.fill();
+
+                // Screen Hit
+                if (p.x > 790) {
+                    // Draw permanent mark on screen? For now just stop
+                    p.vx = 0; p.vy = 0;
+                    // Draw a glow on the wall
+                    slitCtx.beginPath();
+                    slitCtx.arc(795, p.y, 6, 0, Math.PI*2);
+                    slitCtx.fill();
+                    slitParticles.splice(i, 1);
+                }
+            });
+            
+            slitCtx.globalCompositeOperation = 'source-over';
+            requestAnimationFrame(animSlit);
+        }
+        animSlit();
+
+        // === 2. SCHRODINGER ===
+        function observeCat() {
+            const lid = document.getElementById('q-lid');
+            const content = document.getElementById('q-content');
+            const status = document.getElementById('cat-status');
+            const fog = document.getElementById('q-fog');
+            
+            // Open
+            lid.style.transform = 'translateY(-100%) rotateX(90deg)';
+            lid.style.opacity = 0;
+            fog.style.opacity = 0;
+            
+            const alive = Math.random() > 0.5;
+            
+            setTimeout(() => {
+                content.innerHTML = alive ? 
+                    '<span class="text-green-400 drop-shadow-[0_0_10px_lime]">🐱</span>' : 
+                    '<span class="text-red-500 drop-shadow-[0_0_10px_red]">☠️</span>';
+                content.style.opacity = 1;
+                status.innerText = alive ? "COLLAPSED: ALIVE" : "COLLAPSED: DEAD";
+                status.className = `text-2xl font-bold tracking-widest ${alive ? 'text-green-400' : 'text-red-500'}`;
+            }, 200);
+
+            // Reset
+            setTimeout(() => {
+                lid.style.transform = 'translateY(0) rotateX(0)';
+                lid.style.opacity = 1;
+                content.style.opacity = 0;
+                fog.style.opacity = 1;
+                status.innerText = "SUPERPOSITION";
+                status.className = "text-2xl font-bold text-white tracking-widest";
+            }, 3000);
+        }
+
+        // === 3. HEISENBERG (WAVE PACKET) ===
+        const uncC = document.getElementById('uncCanvas');
+        const uncCtx = uncC.getContext('2d');
+        let uncTime = 0;
+        
+        function updateUncertainty() {
+            const val = document.getElementById('unc-pos').value;
+            document.getElementById('unc-pos-val').innerText = val + "%";
+        }
+
+        function drawUnc() {
+            uncTime += 0.1;
+            uncCtx.fillStyle = 'rgba(0,0,0,0.3)';
+            uncCtx.fillRect(0,0,800,300);
+
+            const posCertainty = document.getElementById('unc-pos').value / 100; 
+            // High posCertainty = Narrow Width, High spread speed
+            // Low posCertainty = Wide Width, Low spread speed
+            
+            const width = 200 * (1 - posCertainty) + 10; // 10px to 210px
+            const momentumSpread = posCertainty * 20; // Jitter amount
+            
+            uncCtx.strokeStyle = '#00f3ff';
+            uncCtx.lineWidth = 3;
+            uncCtx.shadowBlur = 10;
+            uncCtx.shadowColor = '#00f3ff';
+            
+            uncCtx.beginPath();
+            for(let x=0; x<800; x+=2) {
+                // Gaussian packet
+                const center = 400 + Math.sin(uncTime * (1 + momentumSpread/10)) * (momentumSpread*5); 
+                const dist = x - center;
+                const envelope = Math.exp(-(dist*dist)/(2*width*width));
+                const wave = Math.sin(x * 0.1 - uncTime * 5);
+                
+                const y = 150 - (envelope * wave * 100);
+                if(x===0) uncCtx.moveTo(x,y); else uncCtx.lineTo(x,y);
+            }
+            uncCtx.stroke();
+            
+            // Draw "Particle" Representation
+            uncCtx.fillStyle = 'white';
+            const pCenter = 400 + Math.sin(uncTime * (1 + momentumSpread/10)) * (momentumSpread*5);
+            uncCtx.globalAlpha = (width < 50) ? 1 : 0.2;
+            uncCtx.beginPath();
+            uncCtx.arc(pCenter, 150, 4, 0, Math.PI*2);
+            uncCtx.fill();
+            uncCtx.globalAlpha = 1;
+
+            requestAnimationFrame(drawUnc);
+        }
+        drawUnc();
+
+        // === 4. TUNNELING ===
+        const tunC = document.getElementById('tunnelCanvas');
+        const tunCtx = tunC.getContext('2d');
+        let tunParts = [];
+
+        function emitTunnelParticles() {
+            for(let i=0; i<20; i++) {
+                tunParts.push({
+                    x: 0, y: 150 + rand(-50, 50),
+                    vx: 8, vy: 0,
+                    color: '#fff'
+                });
+            }
+        }
+
+        function animTunnel() {
+            tunCtx.fillStyle = 'rgba(5,5,16,0.3)';
+            tunCtx.fillRect(0,0,800,300);
+
+            // Barrier
+            tunCtx.fillStyle = 'rgba(255, 0, 100, 0.3)';
+            tunCtx.fillRect(400, 0, 50, 300);
+            tunCtx.strokeStyle = '#ff0066';
+            tunCtx.strokeRect(400, 0, 50, 300);
+
+            tunParts.forEach((p, i) => {
+                p.x += p.vx;
+                
+                // Hit Barrier
+                if(p.x > 400 && p.x < 450) {
+                    if(Math.random() > 0.92) {
+                        // Tunnel!
+                        p.x = 455;
+                        p.color = '#0aff68'; // Turn green
+                    } else {
+                        p.vx = -p.vx; // Bounce
+                    }
+                }
+
+                tunCtx.shadowBlur = 10;
+                tunCtx.shadowColor = p.color;
+                tunCtx.fillStyle = p.color;
+                tunCtx.beginPath();
+                tunCtx.arc(p.x, p.y, 3, 0, Math.PI*2);
+                tunCtx.fill();
+
+                if(p.x < 0 || p.x > 800) tunParts.splice(i, 1);
+            });
+            requestAnimationFrame(animTunnel);
+        }
+        animTunnel();
+
+        // === 5. ENTANGLEMENT ===
+        let isEntangled = false;
+        function entanglePair() {
+            isEntangled = true;
+            document.getElementById('ent-link').style.opacity = 1;
+            document.getElementById('ent-a').innerHTML = '<div class="absolute inset-0 bg-purple-500/20 animate-spin"></div><span class="relative z-10 font-bold">?</span>';
+            document.getElementById('ent-b').innerHTML = '<div class="absolute inset-0 bg-purple-500/20 animate-spin" style="animation-direction:reverse"></div><span class="relative z-10 font-bold">?</span>';
+            document.getElementById('ent-a').style.borderColor = '#a855f7';
+            document.getElementById('ent-b').style.borderColor = '#a855f7';
+        }
+
+        function measureEntanglement(source) {
+            if(!isEntangled) return;
+            isEntangled = false;
+            document.getElementById('ent-link').style.opacity = 0;
+            
+            const val = Math.random() > 0.5 ? "UP" : "DOWN";
+            const opp = val === "UP" ? "DOWN" : "UP";
+            
+            const aEl = document.getElementById('ent-a');
+            const bEl = document.getElementById('ent-b');
+            
+            // Immediate collapse visual
+            const arrowUp = '<span class="text-4xl text-cyan-400">⬆</span>';
+            const arrowDown = '<span class="text-4xl text-pink-500">⬇</span>';
+
+            if(source === 'A') {
+                aEl.innerHTML = val === "UP" ? arrowUp : arrowDown;
+                aEl.style.borderColor = val === "UP" ? '#00f3ff' : '#bc13fe';
+                // Bob updates instantly
+                bEl.innerHTML = opp === "UP" ? arrowUp : arrowDown;
+                bEl.style.borderColor = opp === "UP" ? '#00f3ff' : '#bc13fe';
+            } else {
+                bEl.innerHTML = val === "UP" ? arrowUp : arrowDown;
+                bEl.style.borderColor = val === "UP" ? '#00f3ff' : '#bc13fe';
+                aEl.innerHTML = opp === "UP" ? arrowUp : arrowDown;
+                aEl.style.borderColor = opp === "UP" ? '#00f3ff' : '#bc13fe';
+            }
+        }
+
+        // === 6. BLOCH SPHERE ===
+        const blochC = document.getElementById('blochCanvas');
+        const blochCtx = blochC.getContext('2d');
+        let theta = 0; // 0 = |0>, PI = |1>
+        let phi = 0;   // Phase
+        let targetTheta = 0;
+        let targetPhi = 0;
+
+        function drawBloch() {
+            blochCtx.clearRect(0,0,400,400);
+            
+            // Lerp targets
+            theta += (targetTheta - theta) * 0.1;
+            phi += (targetPhi - phi) * 0.1;
+            
+            const cx = 200, cy = 200, r = 150;
+            
+            // Sphere
+            blochCtx.strokeStyle = 'rgba(255,255,255,0.2)';
+            blochCtx.lineWidth = 1;
+            blochCtx.beginPath(); blochCtx.arc(cx, cy, r, 0, Math.PI*2); blochCtx.stroke();
+            
+            // Equator
+            blochCtx.beginPath(); blochCtx.ellipse(cx, cy, r, r/3, 0, 0, Math.PI*2); blochCtx.stroke();
+            
+            // Axes
+            blochCtx.strokeStyle = 'rgba(0, 243, 255, 0.5)';
+            blochCtx.beginPath(); blochCtx.moveTo(cx, cy-r); blochCtx.lineTo(cx, cy+r); blochCtx.stroke(); // Z
+            
+            // Vector
+            // Convert spherical to cartesian for visualization (pseudo 3D)
+            // x = r sin(theta) cos(phi)
+            // y = r sin(theta) sin(phi) <-- compressed by perspective
+            // z = r cos(theta)
+            
+            // In 2D Canvas:
+            // X_screen = cx + r * sin(theta) * cos(phi)
+            // Y_screen = cy - r * cos(theta) + (perspective shift from phi)
+            
+            // Let's simplify:
+            // Top is |0> (cy - r)
+            // Bottom is |1> (cy + r)
+            
+            const vecX = cx + r * Math.sin(theta) * Math.cos(phi);
+            const vecY = cy - r * Math.cos(theta) + (r/3 * Math.sin(theta) * Math.sin(phi));
+            
+            blochCtx.strokeStyle = '#bc13fe';
+            blochCtx.lineWidth = 4;
+            blochCtx.shadowBlur = 15;
+            blochCtx.shadowColor = '#bc13fe';
+            blochCtx.beginPath(); blochCtx.moveTo(cx, cy); blochCtx.lineTo(vecX, vecY); blochCtx.stroke();
+            
+            // Tip
+            blochCtx.fillStyle = '#fff';
+            blochCtx.beginPath(); blochCtx.arc(vecX, vecY, 5, 0, Math.PI*2); blochCtx.fill();
+            
+            blochCtx.shadowBlur = 0;
+            requestAnimationFrame(drawBloch);
+        }
+        drawBloch();
+
+        function rotateBloch(axis) {
+            if(axis === 'x') targetTheta = Math.PI; // Flip to |1>
+            if(axis === 'z') targetPhi += Math.PI/2; 
+            if(axis === 'h') { targetTheta = Math.PI/2; targetPhi = 0; } // Superposition
+            updateBlochText();
+        }
+        
+        function measureBloch() {
+            // Probabilistic collapse
+            const prob0 = Math.cos(targetTheta/2) ** 2;
+            if(Math.random() < prob0) {
+                targetTheta = 0;
+            } else {
+                targetTheta = Math.PI;
+            }
+            targetPhi = 0;
+            updateBlochText();
+        }
+        
+        function updateBlochText() {
+            const s = document.getElementById('bloch-state');
+            // Delayed update
+            setTimeout(() => {
+                if(targetTheta < 0.1) s.innerText = "State: |0⟩";
+                else if(targetTheta > 3.0) s.innerText = "State: |1⟩";
+                else s.innerText = "State: Superposition";
+            }, 500);
+        }
+
+        // === 7. PHOTOELECTRIC ===
+        const phCanvas = document.getElementById('photoCanvas');
+        const phCtx = phCanvas.getContext('2d');
+        let phPhotons = [];
+        let phElectrons = [];
+
+        function updatePhotoelectric() {
+            // Just used to read input in anim loop
+        }
+
+        function animPhoto() {
+            phCtx.fillStyle = 'rgba(5,5,16,0.2)';
+            phCtx.fillRect(0,0,800,300);
+
+            // Metal Plate
+            phCtx.fillStyle = '#444';
+            phCtx.fillRect(0, 250, 800, 50);
+            phCtx.shadowBlur = 10;
+            phCtx.shadowColor = 'cyan';
+            phCtx.strokeStyle = 'cyan';
+            phCtx.beginPath(); phCtx.moveTo(0, 250); phCtx.lineTo(800, 250); phCtx.stroke();
+            phCtx.shadowBlur = 0;
+
+            const freq = document.getElementById('photo-freq').value;
+            
+            // Spawn Photon
+            if(Math.random() > 0.8) {
+                phPhotons.push({
+                    x: Math.random() * 800, y: 0,
+                    vy: 5,
+                    color: freq > 5 ? '#bc13fe' : '#ff0055',
+                    energy: freq
+                });
+            }
+
+            // Photons
+            phPhotons.forEach((p, i) => {
+                p.y += p.vy;
+                
+                // Wiggle
+                const wiggleX = p.x + Math.sin(p.y * 0.1) * 10;
+                
+                phCtx.strokeStyle = p.color;
+                phCtx.lineWidth = 2;
+                phCtx.beginPath(); 
+                phCtx.moveTo(wiggleX, p.y); 
+                phCtx.lineTo(wiggleX, p.y-10); 
+                phCtx.stroke();
+
+                if(p.y >= 250) {
+                    phPhotons.splice(i, 1);
+                    // Eject Electron?
+                    if(p.energy > 5) {
+                        for(let k=0; k<3; k++) {
+                            phElectrons.push({
+                                x: wiggleX, y: 250,
+                                vx: rand(-2, 2), vy: -rand(2, 5) * (p.energy/5),
+                                life: 1.0
+                            });
+                        }
+                    }
+                }
+            });
+
+            // Electrons
+            phElectrons.forEach((e, i) => {
+                e.x += e.vx;
+                e.y += e.vy;
+                e.vy += 0.1; // Gravity
+                e.life -= 0.01;
+                
+                phCtx.fillStyle = `rgba(255, 255, 0, ${e.life})`;
+                phCtx.beginPath(); phCtx.arc(e.x, e.y, 2, 0, Math.PI*2); phCtx.fill();
+                
+                if(e.y > 300 || e.life <= 0) phElectrons.splice(i, 1);
+            });
+
+            requestAnimationFrame(animPhoto);
+        }
+        animPhoto();
+
+        // === 8. ORBITALS (MONTE CARLO) ===
+        const orbC = document.getElementById('orbitalCanvas');
+        const orbCtx = orbC.getContext('2d');
+        
+        function setOrbital(type) {
+            orbCtx.clearRect(0,0,500,500);
+            orbCtx.fillStyle = 'rgba(0, 243, 255, 0.6)';
+            
+            let count = 5000;
+            
+            for(let i=0; i<count; i++) {
+                let x, y;
+                let r = Math.random() * 200;
+                let theta = Math.random() * Math.PI * 2;
+                
+                if(type === '1s') {
+                    // Dense center, fading out
+                    // Box-Muller or just random radius weighted
+                    let rad = (Math.random() - Math.random()) * 100; 
+                    x = 250 + rad;
+                    y = 250 + (Math.random() - Math.random()) * 100;
+                } 
+                else if (type === '2p') {
+                    // Dumbbell
+                    let rad = Math.random() * 150;
+                    // Probability mask
+                    x = 250 + rad * Math.cos(theta);
+                    y = 250 + rad * Math.sin(theta) * Math.abs(Math.cos(theta)); // Dumbbell shape
+                }
+                else if (type === '3d') {
+                    // Clover
+                    let rad = Math.random() * 150;
+                    x = 250 + rad * Math.cos(theta);
+                    y = 250 + rad * Math.sin(theta) * Math.cos(2*theta);
+                }
+                
+                orbCtx.fillRect(x, y, 1, 1);
+            }
+        }
+        setOrbital('1s');
+
+        // === 9. BOX ===
+        const boxC = document.getElementById('boxCanvas');
+        const boxCtx = boxC.getContext('2d');
+        let boxN = 1;
+        let boxT = 0;
+        function setBoxN(n) { boxN = n; }
+        function animBox() {
+            boxT += 0.05;
+            boxCtx.clearRect(0,0,800,300);
+            
+            // Walls
+            boxCtx.fillStyle = '#fff';
+            boxCtx.fillRect(0,0,10,300);
+            boxCtx.fillRect(790,0,10,300);
+            
+            boxCtx.strokeStyle = '#0aff68';
+            boxCtx.lineWidth = 3;
+            boxCtx.shadowBlur = 10;
+            boxCtx.shadowColor = '#0aff68';
+            
+            boxCtx.beginPath();
+            for(let x=0; x<=800; x+=5) {
+                let amp = 100 * Math.cos(boxT);
+                let y = 150 + amp * Math.sin( (boxN * Math.PI * x) / 800 );
+                if(x===0) boxCtx.moveTo(x,y); else boxCtx.lineTo(x,y);
+            }
+            boxCtx.stroke();
+            requestAnimationFrame(animBox);
+        }
+        animBox();
+
+        // === 10. DUALITY ===
+        let isParticle = true;
+        function toggleDuality() {
+            isParticle = !isParticle;
+            const con = document.getElementById('duality-container');
+            const lbl = document.getElementById('duality-label');
+            
+            con.innerHTML = '';
+            if(isParticle) {
+                lbl.innerText = "OBSERVING: PARTICLE";
+                lbl.className = "mt-8 text-2xl font-bold text-green-400";
+                con.innerHTML = '<div class="w-12 h-12 bg-white rounded-full shadow-[0_0_30px_white] animate-bounce"></div>';
+            } else {
+                lbl.innerText = "OBSERVING: WAVE";
+                lbl.className = "mt-8 text-2xl font-bold text-cyan-400";
+                con.innerHTML = `
+                    <div class="absolute w-64 h-64 border border-cyan-500 rounded-full animate-ping opacity-20"></div>
+                    <div class="absolute w-48 h-48 border border-cyan-500 rounded-full animate-ping opacity-40" style="animation-delay:0.2s"></div>
+                    <div class="absolute w-32 h-32 border border-cyan-500 rounded-full animate-ping opacity-60" style="animation-delay:0.4s"></div>
+                `;
+            }
+        }
+        toggleDuality(); // Init
+
+        // === 11. ZENO ===
+        let zenoDecay = 0;
+        let zenoInt = setInterval(() => {
+            zenoDecay += 0.5;
+            if(zenoDecay > 100) zenoDecay = 100;
+            document.getElementById('zeno-bar').style.width = zenoDecay + '%';
+        }, 30);
+
+        function observeZeno() {
+            // Flash eye effect
+            const btn = document.getElementById('zeno-btn');
+            btn.style.boxShadow = "0 0 50px #fff";
+            setTimeout(() => btn.style.boxShadow = "0 0 20px rgba(188,19,254,0.3)", 100);
+            
+            // Reset decay (Observation)
+            zenoDecay = 0;
+            document.getElementById('zeno-bar').style.width = '0%';
+        }
+
+        // === 12. SPIN ===
+        const sC = document.getElementById('spinCanvas');
+        const sCtx = sC.getContext('2d');
+        function fireSpin() {
+            sCtx.clearRect(0,0,800,300);
+            // Magnets
+            sCtx.fillStyle = '#333';
+            sCtx.fillRect(400, 50, 50, 50); // N
+            sCtx.fillRect(400, 200, 50, 50); // S
+            
+            // Particles
+            let parts = [];
+            for(let i=0; i<20; i++) parts.push({x:0, y:150, up: Math.random()>0.5});
+            
+            let t = 0;
+            let anim = setInterval(() => {
+                t += 5;
+                sCtx.globalCompositeOperation = 'lighter';
+                parts.forEach(p => {
+                    if(p.x < 800) p.x += 10;
+                    
+                    if(p.x > 400) {
+                        if(p.up) p.y -= 2; else p.y += 2;
+                    }
+                    
+                    sCtx.fillStyle = p.up ? '#00f3ff' : '#bc13fe';
+                    sCtx.beginPath(); sCtx.arc(p.x, p.y, 2, 0, Math.PI*2); sCtx.fill();
+                });
+                
+                if(t > 400) clearInterval(anim);
+            }, 16);
+        }
+
+        // === 13. MANY WORLDS ===
+        function spawnNode(x, y, level) {
+            if(level > 4) return;
+            
+            const div = document.createElement('div');
+            div.className = "absolute w-3 h-3 bg-white rounded-full cursor-pointer hover:scale-150 transition z-10";
+            div.style.left = x + 'px';
+            div.style.top = y + 'px';
+            div.style.boxShadow = "0 0 10px white";
+            
+            // Line from prev? CSS lines are tricky in pure JS dynamic, 
+            // let's just spawn particles
+            
+            div.onclick = () => {
+                // Branch
+                spawnNode(x + 50, y - 40/level, level+1);
+                spawnNode(x + 50, y + 40/level, level+1);
+                
+                // Visual Line
+                drawBranch(x, y, x+50, y - 40/level);
+                drawBranch(x, y, x+50, y + 40/level);
+            }
+            
+            document.getElementById('multiverse-container').appendChild(div);
+        }
+        
+        function drawBranch(x1, y1, x2, y2) {
+            const line = document.createElement('div');
+            const len = Math.sqrt(Math.pow(x2-x1, 2) + Math.pow(y2-y1, 2));
+            const angle = Math.atan2(y2-y1, x2-x1) * 180 / Math.PI;
+            
+            line.style.width = len + 'px';
+            line.style.height = '1px';
+            line.style.background = 'rgba(255,255,255,0.5)';
+            line.style.position = 'absolute';
+            line.style.left = x1 + 'px';
+            line.style.top = y1 + 'px';
+            line.style.transformOrigin = '0 0';
+            line.style.transform = `rotate(${angle}deg)`;
+            
+            document.getElementById('multiverse-container').appendChild(line);
+        }
+        
+        function resetMultiverse() {
+            document.getElementById('multiverse-container').innerHTML = '<div class="absolute bottom-4 left-4 text-xs text-gray-500">Click nodes to split reality</div>';
+            spawnNode(50, 200, 1);
+        }
+        resetMultiverse();
+
+        // === 14. ERASER ===
+        let eraserOn = false;
+        function toggleEraser() {
+            eraserOn = !eraserOn;
+            const screen = document.getElementById('eraser-screen');
+            const eye = document.getElementById('eraser-eye');
+            
+            if(eraserOn) {
+                eye.style.opacity = 1;
+                // Clumped pattern
+                screen.innerHTML = `
+                    <div class="w-1 h-2 bg-red-500 shadow-[0_0_10px_red]"></div>
+                    <div class="w-1 h-2 bg-red-500 shadow-[0_0_10px_red]"></div>
+                `;
+            } else {
+                eye.style.opacity = 0.1;
+                // Interference pattern
+                screen.innerHTML = `
+                    <div class="w-12 h-1 bg-green-400 shadow-[0_0_10px_lime]"></div>
+                    <div class="w-12 h-1 bg-transparent"></div>
+                    <div class="w-12 h-1 bg-green-400 shadow-[0_0_10px_lime]"></div>
+                    <div class="w-12 h-1 bg-transparent"></div>
+                    <div class="w-12 h-1 bg-green-400 shadow-[0_0_10px_lime]"></div>
+                `;
+            }
+        }
+        toggleEraser(); // Init
+
+        // === 15. LOGIC GATE ===
+        function runLogicGate() {
+            const out = document.getElementById('gate-out');
+            out.innerText = "⚡";
+            setTimeout(() => {
+                const res = Math.random() > 0.5 ? 1 : 0;
+                out.innerText = res;
+                out.style.borderColor = res ? '#bc13fe' : '#00f3ff';
+                out.style.color = res ? '#bc13fe' : '#00f3ff';
+            }, 500);
+        }
+
+    </script>
+</body>
+</html>
