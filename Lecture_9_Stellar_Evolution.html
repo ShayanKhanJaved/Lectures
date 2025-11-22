@@ -1,0 +1,1270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Celestica Initiative - Lecture 9: Stellar Evolution</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Changa+One&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --retro-cream: #FFFDD0;
+            --retro-orange: #E85D04;
+            --retro-yellow: #FFBA08;
+            --retro-brown: #3F2E3E;
+            --retro-green: #588157;
+            --retro-blue: #219EBC;
+            --retro-red: #D00000;
+            --retro-purple: #7209b7;
+            --retro-cyan: #06b6d4;
+            --space-black: #050b14;
+        }
+
+        body {
+            background-color: var(--retro-cream);
+            color: var(--retro-brown);
+            font-family: 'Space Mono', monospace;
+            background-image: radial-gradient(var(--retro-blue) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Changa One', cursive;
+        }
+
+        .retro-box {
+            background-color: #fff;
+            border: 4px solid var(--retro-brown);
+            box-shadow: 8px 8px 0px var(--retro-blue);
+            border-radius: 1rem;
+            transition: transform 0.2s;
+            overflow: hidden;
+        }
+
+        .retro-btn {
+            background-color: var(--retro-orange);
+            color: white;
+            border: 3px solid var(--retro-brown);
+            padding: 8px 16px;
+            font-family: 'Changa One', cursive;
+            font-size: 1.1rem;
+            cursor: pointer;
+            box-shadow: 4px 4px 0px var(--retro-brown);
+            transition: all 0.1s;
+            text-transform: uppercase;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            user-select: none;
+        }
+
+        .retro-btn:active {
+            transform: translate(4px, 4px);
+            box-shadow: 0px 0px 0px var(--retro-brown);
+        }
+
+        .retro-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: translate(2px, 2px);
+            background-color: #718096;
+        }
+
+        .btn-blue { background-color: var(--retro-blue); }
+        .btn-red { background-color: var(--retro-red); }
+        .btn-green { background-color: var(--retro-green); }
+        .btn-purple { background-color: var(--retro-purple); }
+
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 24px;
+            width: 24px;
+            border-radius: 50%;
+            background: var(--retro-yellow);
+            border: 2px solid var(--retro-brown);
+            margin-top: -10px;
+            cursor: pointer;
+            box-shadow: 2px 2px 0px rgba(0,0,0,0.2);
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 8px;
+            cursor: pointer;
+            background: var(--retro-brown);
+            border-radius: 4px;
+        }
+
+        .section-number {
+            background-color: var(--retro-orange); 
+            color: white; 
+            width: 3.5rem; 
+            height: 3.5rem; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            border-radius: 9999px; 
+            border: 4px solid var(--retro-brown); 
+            font-weight: bold; 
+            font-size: 1.8rem;
+            flex-shrink: 0;
+            box-shadow: 4px 4px 0px rgba(0,0,0,0.2);
+        }
+        
+        canvas {
+            width: 100%;
+            height: auto;
+            border-radius: 0.5rem;
+            background-color: var(--space-black);
+            border: 4px solid var(--retro-brown);
+            box-shadow: inset 0 0 30px rgba(0,0,0,0.8);
+            cursor: crosshair;
+        }
+
+        .lesson-text {
+            background-color: rgba(255,255,255,0.98);
+            border: 2px solid var(--retro-brown);
+            padding: 1.2rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        
+        .glow-text {
+            text-shadow: 0 0 10px rgba(255, 186, 8, 0.5);
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8 max-w-5xl mx-auto">
+
+    <!-- Header -->
+    <header class="text-center mb-16">
+        <div class="inline-block bg-purple-600 text-white px-6 py-2 rounded-full border-4 border-gray-800 mb-6 font-bold transform -rotate-2 shadow-[4px_4px_0px_rgba(0,0,0,1)]">
+            THE CELESTICA INITIATIVE
+        </div>
+        <h1 class="text-6xl md:text-9xl text-orange-500 mb-2 leading-none tracking-tighter" style="-webkit-text-stroke: 4px var(--retro-brown); text-shadow: 8px 8px 0px var(--retro-brown);">
+            STELLAR<br>EVOLUTION
+        </h1>
+        <div class="bg-white border-4 border-black inline-block px-8 py-4 transform rotate-1 shadow-[8px_8px_0px_rgba(0,0,0,0.2)] mt-6">
+            <p class="text-xl md:text-2xl text-gray-800 font-bold">Lecture 9: From Dust to Black Holes</p>
+        </div>
+    </header>
+
+    <!-- 1. The Nebula (Jeans Instability) -->
+    <section class="mb-20">
+        <div class="flex items-center gap-6 mb-6">
+            <div class="section-number">1</div>
+            <div>
+                <h2 class="text-4xl text-brown-800">The Nebula</h2>
+                <p class="text-gray-600 font-bold">Jeans Instability & Collapse</p>
+            </div>
+        </div>
+        <div class="retro-box p-6 bg-indigo-50">
+            <div class="lesson-text">
+                <strong>Concept:</strong> Stars are born in molecular clouds. Gas pressure pushes out, but if a region gets dense enough, <strong>Gravity</strong> wins.
+                <br><strong>Interaction:</strong> Click and hold to create a gravity well. Watch the gas cool and condense into a protostar core.
+            </div>
+            <canvas id="nebulaCanvas" width="800" height="400" class="mb-4"></canvas>
+            <div class="flex justify-center">
+                 <p class="font-bold text-purple-700 animate-pulse text-lg">Hold to Collapse Gas Cloud</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 2. Conservation of Angular Momentum -->
+    <section class="mb-20">
+        <div class="flex items-center gap-6 mb-6">
+            <div class="section-number">2</div>
+            <div>
+                <h2 class="text-4xl text-brown-800">Accretion Disk</h2>
+                <p class="text-gray-600 font-bold">Conservation of Angular Momentum</p>
+            </div>
+        </div>
+        <div class="retro-box p-6 bg-blue-50">
+            <div class="lesson-text">
+                <strong>Concept:</strong> As the cloud shrinks, it spins faster (like a figure skater). Centrifugal force flattens the sphere into a <strong>disk</strong>. Planets form in this disk!
+                <br><strong>Interaction:</strong> Shrink the cloud radius and observe the spin velocity increase ($L = mvr$).
+            </div>
+            <canvas id="spinCanvas" width="800" height="350" class="mb-4"></canvas>
+            <div class="flex gap-4 items-center justify-center bg-white p-4 border-2 border-black rounded-lg">
+                <label class="font-bold w-32">Cloud Radius:</label>
+                <input type="range" id="radiusSlider" min="20" max="200" value="200" class="flex-1">
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. Nuclear Fusion (Coulomb Barrier) -->
+    <section class="mb-20">
+        <div class="flex items-center gap-6 mb-6">
+            <div class="section-number">3</div>
+            <div>
+                <h2 class="text-4xl text-brown-800">Nuclear Fusion</h2>
+                <p class="text-gray-600 font-bold">Overcoming the Coulomb Barrier</p>
+            </div>
+        </div>
+        <div class="retro-box p-6 bg-red-50">
+            <div class="lesson-text">
+                <strong>Concept:</strong> Protons are positive and repel each other (Coulomb Barrier). To fuse, they need heat (speed) to smash together and stick via the Strong Force.
+                <br><strong>Interaction:</strong> Increase Temperature to make atoms fast enough to fuse!
+            </div>
+            <canvas id="fusionCanvas" width="800" height="400" class="mb-4"></canvas>
+            <div class="flex gap-6 items-center justify-center bg-white p-4 border-2 border-black rounded-lg">
+                <label class="font-bold w-24">Core Temp:</label>
+                <input type="range" id="fusionTemp" min="1" max="20" value="2" class="flex-1">
+                <span id="tempReadout" class="font-mono font-bold w-24 text-right">2 MK</span>
+            </div>
+            <p class="text-center font-bold text-red-600 text-xl mt-2" id="fusionScore">Energy Output: 0 MeV</p>
+        </div>
+    </section>
+
+    <!-- 4. Hydrostatic Equilibrium -->
+    <section class="mb-20">
+        <div class="flex items-center gap-6 mb-6">
+            <div class="section-number">4</div>
+            <div>
+                <h2 class="text-4xl text-brown-800">Stable Life</h2>
+                <p class="text-gray-600 font-bold">Hydrostatic Equilibrium</p>
+            </div>
+        </div>
+        <div class="retro-box p-6 bg-yellow-50">
+            <div class="lesson-text">
+                <strong>Concept:</strong> A Main Sequence star is a stable balance. Gravity pulls in, Fusion pressure pushes out. If fusion stops, gravity wins instantly.
+                <br><strong>Interaction:</strong> Adjust Gravity and Pressure to find the stable "Goldilocks" zone.
+            </div>
+            <canvas id="balanceCanvas" width="800" height="400" class="mb-4"></canvas>
+            <div class="flex gap-8 items-center justify-center p-4 bg-white border-2 border-black rounded-lg">
+                <div class="flex flex-col w-1/2">
+                    <label class="font-bold text-blue-600 mb-1">Gravity (Mass)</label>
+                    <input type="range" id="gravitySlider" min="1" max="10" value="5">
+                </div>
+                <div class="flex flex-col w-1/2">
+                    <label class="font-bold text-red-600 mb-1">Radiation Pressure</label>
+                    <input type="range" id="pressureSlider" min="1" max="10" value="5">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. Stellar Colors (Blackbody Radiation) -->
+    <section class="mb-20">
+        <div class="flex items-center gap-6 mb-6">
+            <div class="section-number">5</div>
+            <div>
+                <h2 class="text-4xl text-brown-800">Stellar Color</h2>
+                <p class="text-gray-600 font-bold">Blackbody Radiation & Wien's Law</p>
+            </div>
+        </div>
+        <div class="retro-box p-6 bg-gray-100">
+            <div class="lesson-text">
+                <strong>Concept:</strong> Color tells us temperature. Cool stars (3,000K) are Red. Medium stars (6,000K) are Yellow/White. Hot stars (20,000K+) are Blue.
+                <br><strong>Interaction:</strong> Slide to heat up the star and see the peak wavelength shift.
+            </div>
+            <canvas id="colorCanvas" width="800" height="300" class="mb-4"></canvas>
+            <div class="flex gap-4 items-center justify-center bg-white p-4 border-2 border-black rounded-lg">
+                <label class="font-bold">Surface Temp:</label>
+                <input type="range" id="tempSlider" min="2500" max="30000" value="5700" class="flex-1">
+            </div>
+            <p class="text-center font-mono text-2xl mt-4 font-bold" id="colorReadout">5700 K (Class G)</p>
+        </div>
+    </section>
+
+    <!-- 6. Red Giant (Shell Burning) -->
+    <section class="mb-20">
+        <div class="flex items-center gap-6 mb-6">
+            <div class="section-number">6</div>
+            <div>
+                <h2 class="text-4xl text-brown-800">Red Giant</h2>
+                <p class="text-gray-600 font-bold">Hydrogen Shell Burning</p>
+            </div>
+        </div>
+        <div class="retro-box p-6 bg-orange-50">
+            <div class="lesson-text">
+                <strong>Concept:</strong> When the core runs out of Hydrogen, it collapses and heats up. This heat ignites a <strong>shell</strong> of hydrogen around the core, pushing the outer layers far out into space.
+                <br><strong>Interaction:</strong> Deplete the core fuel to witness the expansion.
+            </div>
+            <canvas id="giantCanvas" width="800" height="400" class="mb-4"></canvas>
+            <div class="flex gap-4 items-center justify-center bg-white p-4 border-2 border-black rounded-lg">
+                <label class="font-bold">Core Hydrogen:</label>
+                <input type="range" id="fuelSlider" min="0" max="100" value="100" class="flex-1">
+            </div>
+        </div>
+    </section>
+
+    <!-- 7. Helium Flash -->
+    <section class="mb-20">
+        <div class="flex items-center gap-6 mb-6">
+            <div class="section-number">7</div>
+            <div>
+                <h2 class="text-4xl text-brown-800">Helium Flash</h2>
+                <p class="text-gray-600 font-bold">Degenerate Core Ignition</p>
+            </div>
+        </div>
+        <div class="retro-box p-6 bg-red-50">
+            <div class="lesson-text">
+                <strong>Concept:</strong> In low-mass stars, the core becomes so dense it is supported by Quantum Mechanics (Degeneracy Pressure). When Helium finally ignites, it happens <strong>all at once</strong> in seconds.
+                <br><strong>Interaction:</strong> Compress the degenerate core until it reaches the ignition point ($100$ Million K).
+            </div>
+            <canvas id="flashCanvas" width="800" height="350" class="mb-4"></canvas>
+            <div class="flex justify-center">
+                <button onclick="compressCore()" class="retro-btn btn-red w-full md:w-1/2">COMPRESS CORE & IGNITE</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 8. Planetary Nebula -->
+    <section class="mb-20">
+        <div class="flex items-center gap-6 mb-6">
+            <div class="section-number">8</div>
+            <div>
+                <h2 class="text-4xl text-brown-800">Planetary Nebula</h2>
+                <p class="text-gray-600 font-bold">Mass Ejection & Ionization</p>
+            </div>
+        </div>
+        <div class="retro-box p-6 bg-black border-white">
+            <div class="lesson-text">
+                <strong>Concept:</strong> The outer layers drift away. The hot, exposed core (White Dwarf) emits UV radiation that makes the gas glow, creating beautiful shapes.
+                <br><strong>Interaction:</strong> Launch the ejection phase to sculpt the nebula.
+            </div>
+            <canvas id="nebulaArtCanvas" width="800" height="400" class="mb-4 border-gray-600"></canvas>
+            <div class="flex justify-center gap-4">
+                <button onclick="createNebula('ring')" class="retro-btn btn-purple">Ring Nebula</button>
+                <button onclick="createNebula('butterfly')" class="retro-btn btn-blue">Butterfly Nebula</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 9. Iron Core Collapse -->
+    <section class="mb-20">
+        <div class="flex items-center gap-6 mb-6">
+            <div class="section-number">9</div>
+            <div>
+                <h2 class="text-4xl text-brown-800">The Iron Trap</h2>
+                <p class="text-gray-600 font-bold">Nucleosynthesis End Game</p>
+            </div>
+        </div>
+        <div class="retro-box p-6 bg-gray-100">
+            <div class="lesson-text">
+                <strong>Concept:</strong> Massive stars fuse elements in layers: H&to;He&to;C&to;O&to;Si. But <strong>Iron (Fe)</strong> cannot fuse to create energy. It absorbs it. The core loses support instantly.
+                <br><strong>Interaction:</strong> Add fusion layers until you hit the Iron catastrophe.
+            </div>
+            <canvas id="onionCanvas" width="800" height="400" class="mb-4"></canvas>
+            <div class="flex justify-center">
+                <button onclick="addFusionLayer()" class="retro-btn btn-green">Fuse Next Element</button>
+            </div>
+            <p id="elementDisplay" class="text-center font-bold text-2xl mt-2 text-gray-800">Core: Hydrogen</p>
+        </div>
+    </section>
+
+    <!-- 10. Supernova (Core Bounce) -->
+    <section class="mb-20">
+        <div class="flex items-center gap-6 mb-6">
+            <div class="section-number">10</div>
+            <div>
+                <h2 class="text-4xl text-brown-800">Supernova</h2>
+                <p class="text-gray-600 font-bold">Core Collapse & Shockwave</p>
+            </div>
+        </div>
+        <div class="retro-box p-6 bg-red-900 text-white">
+            <div class="lesson-text text-black">
+                <strong>Concept:</strong> Gravity collapses the Iron core at 25% light speed. It hits nuclear density, becomes rigid, and <strong>bounces</strong> back, blasting the star apart.
+                <br><strong>Interaction:</strong> Trigger the collapse. Watch the implosion (inward) followed by the explosion (outward).
+            </div>
+            <canvas id="supernovaCanvas" width="800" height="400" class="mb-4 border-white"></canvas>
+            <div class="flex justify-center gap-4">
+                <button onclick="triggerSupernova()" class="retro-btn btn-red w-48">TRIGGER COLLAPSE</button>
+                <button onclick="resetSupernova()" class="retro-btn bg-gray-500">Reset</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 11. The Pulsar (Lighthouse Effect) -->
+    <section class="mb-20">
+        <div class="flex items-center gap-6 mb-6">
+            <div class="section-number">11</div>
+            <div>
+                <h2 class="text-4xl text-brown-800">The Pulsar</h2>
+                <p class="text-gray-600 font-bold">Neutron Star Lighthouse</p>
+            </div>
+        </div>
+        <div class="retro-box p-6 bg-slate-900 text-white">
+            <div class="lesson-text text-black">
+                <strong>Concept:</strong> A neutron star spins rapidly. Its magnetic field shoots radiation beams. If the magnetic axis is tilted from the spin axis, the beams sweep across Earth like a lighthouse.
+                <br><strong>Interaction:</strong> Adjust the spin and tilt to get a signal on Earth.
+            </div>
+            <canvas id="pulsarCanvas" width="800" height="400" class="mb-4 border-cyan-500"></canvas>
+            <div class="flex gap-6 items-center justify-center bg-gray-800 p-4 border-2 border-white rounded-lg text-black">
+                <div class="w-1/2">
+                    <label class="font-bold text-white block mb-1">Spin Speed:</label>
+                    <input type="range" id="pulsarSpeed" min="1" max="30" value="5">
+                </div>
+                <div class="w-1/2">
+                    <label class="font-bold text-white block mb-1">Magnetic Tilt:</label>
+                    <input type="range" id="pulsarTilt" min="0" max="90" value="30">
+                </div>
+            </div>
+            <div id="signalGraph" class="h-12 w-full bg-green-900 mt-2 rounded relative overflow-hidden border-2 border-green-500">
+                <!-- Signal viz -->
+            </div>
+        </div>
+    </section>
+
+    <!-- 12. Spaghettification (Tidal Forces) -->
+    <section class="mb-20">
+        <div class="flex items-center gap-6 mb-6">
+            <div class="section-number">12</div>
+            <div>
+                <h2 class="text-4xl text-brown-800">The Abyss</h2>
+                <p class="text-gray-600 font-bold">Black Hole Tidal Forces</p>
+            </div>
+        </div>
+        <div class="retro-box p-6 bg-black border-white">
+            <div class="lesson-text">
+                <strong>Concept:</strong> Gravity weakens with distance ($1/r^2$). Near a small black hole, gravity at your feet is much stronger than at your head. This tidal force stretches you into spaghetti.
+                <br><strong>Interaction:</strong> Drag the astronaut into the grid distortion field.
+            </div>
+            <canvas id="holeCanvas" width="800" height="400" class="mb-4 border-gray-800"></canvas>
+            <div class="flex justify-center">
+                <p class="text-white font-mono animate-pulse">Drag astronaut towards the Singularity</p>
+            </div>
+        </div>
+    </section>
+
+    <footer class="text-center text-gray-600 py-12 border-t-4 border-dotted border-purple-300">
+        <p class="font-bold text-lg">The Celestica Initiative</p>
+        <p>Lecture 9 Complete</p>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+
+        // Helper: Random Range
+        function rand(min, max) { return Math.random() * (max - min) + min; }
+
+        // --- 1. NEBULA (Fluid Particles) ---
+        const nbCanvas = document.getElementById('nebulaCanvas');
+        const nbCtx = nbCanvas.getContext('2d');
+        let nbParticles = [];
+        let nbHolding = false;
+
+        // Init particles
+        for(let i=0; i<400; i++) {
+            nbParticles.push({
+                x: rand(0, 800), y: rand(0, 400),
+                vx: rand(-0.5, 0.5), vy: rand(-0.5, 0.5),
+                size: rand(2, 6),
+                life: rand(0.5, 1),
+                color: `hsla(${rand(200, 280)}, 80%, 60%,`
+            });
+        }
+
+        nbCanvas.addEventListener('mousedown', () => nbHolding = true);
+        nbCanvas.addEventListener('mouseup', () => nbHolding = false);
+        nbCanvas.addEventListener('touchstart', (e) => { e.preventDefault(); nbHolding = true; });
+        nbCanvas.addEventListener('touchend', (e) => { e.preventDefault(); nbHolding = false; });
+
+        function updateNebula() {
+            // Trail effect
+            nbCtx.fillStyle = 'rgba(5, 11, 20, 0.2)'; 
+            nbCtx.fillRect(0, 0, 800, 400);
+            nbCtx.globalCompositeOperation = 'lighter'; // Glow blend
+
+            const cx = 400, cy = 200;
+
+            nbParticles.forEach(p => {
+                if (nbHolding) {
+                    let dx = cx - p.x;
+                    let dy = cy - p.y;
+                    let dist = Math.sqrt(dx*dx + dy*dy);
+                    if (dist > 10) {
+                        p.vx += (dx/dist) * 0.2; // Gravity accel
+                        p.vy += (dy/dist) * 0.2;
+                    }
+                    p.color = `hsla(${rand(0, 40)}, 80%, 60%,`; // Heat up (red)
+                } else {
+                    p.vx *= 0.99; p.vy *= 0.99; // Friction
+                    p.color = `hsla(${rand(200, 280)}, 80%, 60%,`; // Cool down (blue)
+                }
+
+                p.x += p.vx;
+                p.y += p.vy;
+
+                // Wrap
+                if(p.x < 0) p.x = 800; if(p.x > 800) p.x = 0;
+                if(p.y < 0) p.y = 400; if(p.y > 400) p.y = 0;
+
+                let alpha = nbHolding ? 0.8 : 0.4;
+                nbCtx.fillStyle = p.color + alpha + ')';
+                nbCtx.beginPath();
+                nbCtx.arc(p.x, p.y, p.size, 0, Math.PI*2);
+                nbCtx.fill();
+            });
+            
+            // Core glow
+            if(nbHolding) {
+                let grad = nbCtx.createRadialGradient(cx, cy, 0, cx, cy, 100);
+                grad.addColorStop(0, 'rgba(255, 200, 100, 0.5)');
+                grad.addColorStop(1, 'rgba(255, 0, 0, 0)');
+                nbCtx.fillStyle = grad;
+                nbCtx.beginPath(); nbCtx.arc(cx, cy, 100, 0, Math.PI*2); nbCtx.fill();
+            }
+
+            nbCtx.globalCompositeOperation = 'source-over';
+            requestAnimationFrame(updateNebula);
+        }
+        updateNebula();
+
+        // --- 2. SPIN (Conservation L = mvr) ---
+        const spCanvas = document.getElementById('spinCanvas');
+        const spCtx = spCanvas.getContext('2d');
+        let spAngle = 0;
+        
+        function updateSpin() {
+            spCtx.fillStyle = 'rgba(5, 11, 20, 0.4)'; // Clear with trail
+            spCtx.fillRect(0,0,800,350);
+            
+            let r = parseInt(document.getElementById('radiusSlider').value);
+            let speed = 4000 / (r * r); // Physics: w ~ 1/r^2 roughly for visual
+            spAngle += speed * 0.005;
+            
+            const cx = 400, cy = 175;
+            
+            spCtx.save();
+            spCtx.translate(cx, cy);
+            
+            // Draw Cloud/Disk
+            // Flatten Y based on speed to simulate disk formation
+            let flattening = Math.min(1, r / 100); 
+            
+            spCtx.rotate(spAngle);
+            
+            spCtx.globalCompositeOperation = 'lighter';
+            for(let i=0; i<50; i++) {
+                let dist = Math.random() * r;
+                let ang = Math.random() * Math.PI * 2;
+                let px = Math.cos(ang) * dist;
+                let py = Math.sin(ang) * dist * flattening; // Flatten y
+                
+                spCtx.fillStyle = `hsla(${30 + (200-r)}, 80%, 60%, 0.6)`;
+                spCtx.beginPath();
+                spCtx.arc(px, py, 3, 0, Math.PI*2);
+                spCtx.fill();
+            }
+            spCtx.restore();
+            
+            // Central Protostar
+            spCtx.globalCompositeOperation = 'source-over';
+            let coreSize = 200 / r * 5;
+            let coreGrad = spCtx.createRadialGradient(cx, cy, 0, cx, cy, coreSize);
+            coreGrad.addColorStop(0, '#fff');
+            coreGrad.addColorStop(0.4, '#ffaa00');
+            coreGrad.addColorStop(1, 'rgba(255, 0, 0, 0)');
+            spCtx.fillStyle = coreGrad;
+            spCtx.beginPath(); spCtx.arc(cx, cy, coreSize, 0, Math.PI*2); spCtx.fill();
+            
+            requestAnimationFrame(updateSpin);
+        }
+        updateSpin();
+
+        // --- 3. FUSION (Coulomb Barrier) ---
+        const fuCanvas = document.getElementById('fusionCanvas');
+        const fuCtx = fuCanvas.getContext('2d');
+        let protons = [];
+        let fuFlash = 0;
+
+        for(let i=0; i<15; i++) protons.push({x: rand(0,800), y: rand(0,400), vx: rand(-1,1), vy: rand(-1,1)});
+
+        function updateFusion() {
+            let temp = parseInt(document.getElementById('fusionTemp').value);
+            let speedMult = temp * 0.5;
+            document.getElementById('tempReadout').innerText = temp + " MK";
+            
+            fuCtx.fillStyle = `rgba(5, 11, 20, 0.3)`;
+            fuCtx.fillRect(0,0,800,400);
+            
+            // Flash effect
+            if(fuFlash > 0) {
+                fuCtx.fillStyle = `rgba(255, 255, 200, ${fuFlash})`;
+                fuCtx.fillRect(0,0,800,400);
+                fuFlash *= 0.9;
+            }
+
+            // Update positions
+            protons.forEach(p => {
+                p.x += p.vx * speedMult;
+                p.y += p.vy * speedMult;
+                
+                // Bounce walls
+                if(p.x<0 || p.x>800) p.vx *= -1;
+                if(p.y<0 || p.y>400) p.vy *= -1;
+                
+                // Draw Proton
+                fuCtx.beginPath();
+                fuCtx.arc(p.x, p.y, 10, 0, Math.PI*2);
+                fuCtx.fillStyle = '#ef4444'; // Red
+                fuCtx.shadowBlur = 10; fuCtx.shadowColor = 'red';
+                fuCtx.fill();
+                fuCtx.shadowBlur = 0;
+                fuCtx.fillStyle = 'white'; fuCtx.fillText('+', p.x-3, p.y+3);
+            });
+            
+            // Collision & Fusion Logic
+            for(let i=0; i<protons.length; i++) {
+                for(let j=i+1; j<protons.length; j++) {
+                    let p1 = protons[i]; let p2 = protons[j];
+                    let dx = p1.x - p2.x; let dy = p1.y - p2.y;
+                    let dist = Math.sqrt(dx*dx + dy*dy);
+                    
+                    if(dist < 30) {
+                        // Coulomb Repulsion Force
+                        // F = k/r^2. Push apart
+                        let force = 5 / (dist || 1);
+                        
+                        // If temp (speed) is low, they bounce off (repel)
+                        // If temp is high, they overcome barrier
+                        if (temp < 8) {
+                            // Repel
+                            p1.vx += (dx/dist) * force * 0.1;
+                            p1.vy += (dy/dist) * force * 0.1;
+                            p2.vx -= (dx/dist) * force * 0.1;
+                            p2.vy -= (dy/dist) * force * 0.1;
+                        } else if (dist < 15) {
+                            // FUSE!
+                            // Teleport randomly to reset
+                            p1.x = rand(0,800); p1.y = rand(0,400);
+                            p2.x = rand(0,800); p2.y = rand(0,400);
+                            fuFlash = 1;
+                            
+                            // Update Score
+                            let s = document.getElementById('fusionScore');
+                            let val = parseInt(s.innerText.split(' ')[2]) + 25;
+                            s.innerText = `Energy Output: ${val} MeV`;
+                        }
+                    }
+                }
+            }
+            
+            requestAnimationFrame(updateFusion);
+        }
+        updateFusion();
+
+        // --- 4. EQUILIBRIUM ---
+        const blCanvas = document.getElementById('balanceCanvas');
+        const blCtx = blCanvas.getContext('2d');
+        let blTime = 0;
+        
+        function updateBalance() {
+            blCtx.clearRect(0,0,800,400);
+            
+            let g = parseInt(document.getElementById('gravitySlider').value);
+            let p = parseInt(document.getElementById('pressureSlider').value);
+            
+            let diff = p - g; 
+            // Radius logic: 
+            // If P > G, expands. If G > P, shrinks.
+            // We simulate the "result" size
+            let targetSize = 100 + diff * 15;
+            let pulse = Math.sin(blTime) * Math.abs(diff) * 2; // Unstable wobble
+            let size = targetSize + pulse;
+            
+            if(size < 10) size = 10; // Collapse limit
+            
+            const cx = 400, cy = 200;
+            
+            // Draw Star
+            let grad = blCtx.createRadialGradient(cx, cy, size*0.2, cx, cy, size);
+            grad.addColorStop(0, '#fff');
+            grad.addColorStop(0.5, diff > 2 ? '#ff5555' : diff < -2 ? '#5555ff' : '#ffaa00'); // Red giant or Blue dwarf based on state
+            grad.addColorStop(1, 'rgba(0,0,0,0)');
+            
+            blCtx.globalCompositeOperation = 'lighter';
+            blCtx.fillStyle = grad;
+            blCtx.beginPath(); blCtx.arc(cx, cy, size, 0, Math.PI*2); blCtx.fill();
+            
+            // Arrows
+            blCtx.globalCompositeOperation = 'source-over';
+            blCtx.lineWidth = 3;
+            
+            // Gravity Arrows (In)
+            blCtx.strokeStyle = '#3b82f6';
+            let gLen = g * 10;
+            for(let i=0; i<8; i++) {
+                let ang = (Math.PI*2/8)*i;
+                let sx = cx + Math.cos(ang)*(size + 20 + gLen);
+                let sy = cy + Math.sin(ang)*(size + 20 + gLen);
+                let ex = cx + Math.cos(ang)*(size + 20);
+                let ey = cy + Math.sin(ang)*(size + 20);
+                drawArrow(blCtx, sx, sy, ex, ey);
+            }
+            
+            // Pressure Arrows (Out)
+            blCtx.strokeStyle = '#ef4444';
+            let pLen = p * 10;
+            for(let i=0; i<8; i++) {
+                let ang = (Math.PI*2/8)*i + 0.4;
+                let sx = cx + Math.cos(ang)*(size*0.5);
+                let sy = cy + Math.sin(ang)*(size*0.5);
+                let ex = cx + Math.cos(ang)*(size*0.5 + pLen);
+                let ey = cy + Math.sin(ang)*(size*0.5 + pLen);
+                drawArrow(blCtx, sx, sy, ex, ey);
+            }
+            
+            blTime += 0.1;
+            requestAnimationFrame(updateBalance);
+        }
+        
+        function drawArrow(ctx, x1, y1, x2, y2) {
+            ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+            // Head not implemented for simplicity, just lines
+        }
+        updateBalance();
+
+        // --- 5. COLORS (Wien's Law) ---
+        const clCanvas = document.getElementById('colorCanvas');
+        const clCtx = clCanvas.getContext('2d');
+        
+        function kelvinToRGB(k) {
+            // Approximate Planckian Locus colors
+            let r, g, b;
+            if (k < 6600) {
+                r = 255;
+                g = 99.47 * Math.log(k/100) - 161.1;
+                if(k < 2000) b = 0;
+                else b = 138.5 * Math.log(k/100 - 10) - 305;
+            } else {
+                r = 329.7 * Math.pow(k/100 - 60, -0.133);
+                g = 288.1 * Math.pow(k/100 - 60, -0.0755);
+                b = 255;
+            }
+            return `rgb(${clamp(r)},${clamp(g)},${clamp(b)})`;
+        }
+        function clamp(v) { return Math.max(0, Math.min(255, v)); }
+        
+        function updateColor() {
+            let k = parseInt(document.getElementById('tempSlider').value);
+            
+            // Class text
+            let cls = "M";
+            if(k>3700) cls="K"; if(k>5200) cls="G"; if(k>6000) cls="F"; 
+            if(k>7500) cls="A"; if(k>10000) cls="B"; if(k>30000) cls="O";
+            document.getElementById('colorReadout').innerText = `${k} K (Class ${cls})`;
+            document.getElementById('colorReadout').style.color = kelvinToRGB(k);
+            
+            clCtx.fillStyle = '#000'; clCtx.fillRect(0,0,800,300);
+            
+            // Star
+            let color = kelvinToRGB(k);
+            let cx = 400, cy = 150;
+            
+            // Halo
+            let grad = clCtx.createRadialGradient(cx, cy, 50, cx, cy, 250);
+            grad.addColorStop(0, color);
+            grad.addColorStop(1, 'rgba(0,0,0,0)');
+            clCtx.fillStyle = grad;
+            clCtx.globalCompositeOperation = 'lighter';
+            clCtx.beginPath(); clCtx.arc(cx, cy, 250, 0, Math.PI*2); clCtx.fill();
+            
+            // Core
+            clCtx.fillStyle = '#fff';
+            clCtx.beginPath(); clCtx.arc(cx, cy, 40, 0, Math.PI*2); clCtx.fill();
+            
+            // Spectrum Graph (Mini)
+            clCtx.globalCompositeOperation = 'source-over';
+            clCtx.strokeStyle = 'white'; clCtx.lineWidth = 2;
+            clCtx.beginPath();
+            for(let x=0; x<200; x++) {
+                // Planck's law shape approx
+                let wl = 300 + (x/200)*1000; // nm
+                // Simple bell curve shifting with K
+                let peak = 2.898e6 / k; // Wien's law nm
+                let dist = Math.abs(wl - peak);
+                let y = 250 - 100 * Math.exp(- (dist*dist)/(200*200)) * (k/30000);
+                if(x==0) clCtx.moveTo(580+x, y); else clCtx.lineTo(580+x, y);
+            }
+            clCtx.stroke();
+            clCtx.fillStyle = 'white'; clCtx.fillText("Spectrum", 580, 280);
+            
+            requestAnimationFrame(updateColor);
+        }
+        updateColor();
+
+        // --- 6. RED GIANT ---
+        const rgCanvas = document.getElementById('giantCanvas');
+        const rgCtx = rgCanvas.getContext('2d');
+        
+        function updateGiant() {
+            rgCtx.clearRect(0,0,800,400);
+            let fuel = parseInt(document.getElementById('fuelSlider').value);
+            
+            // Inverse relation: Less fuel = Bigger Star
+            let radius = 80 + (100-fuel)*2.5;
+            let coreSize = 20 * (fuel/100); 
+            
+            const cx = 400, cy = 200;
+            
+            // Outer Envelope (Red)
+            let grad = rgCtx.createRadialGradient(cx, cy, radius*0.2, cx, cy, radius);
+            grad.addColorStop(0, 'rgba(255, 100, 50, 0.8)');
+            grad.addColorStop(1, 'rgba(255, 0, 0, 0)');
+            
+            rgCtx.globalCompositeOperation = 'lighter';
+            rgCtx.fillStyle = grad;
+            rgCtx.beginPath(); rgCtx.arc(cx, cy, radius, 0, Math.PI*2); rgCtx.fill();
+            
+            // Burning Shell (Bright Ring)
+            if(fuel < 90) {
+                rgCtx.strokeStyle = '#ffff00';
+                rgCtx.lineWidth = 4;
+                rgCtx.shadowBlur = 10; rgCtx.shadowColor = 'yellow';
+                rgCtx.beginPath(); rgCtx.arc(cx, cy, 25, 0, Math.PI*2); rgCtx.stroke();
+                rgCtx.shadowBlur = 0;
+            }
+            
+            // Inert Core (White/Blue shrinking)
+            rgCtx.fillStyle = '#fff';
+            rgCtx.beginPath(); rgCtx.arc(cx, cy, Math.max(5, coreSize), 0, Math.PI*2); rgCtx.fill();
+            
+            // Earth Reference
+            let earthDist = 280;
+            rgCtx.globalCompositeOperation = 'source-over';
+            rgCtx.fillStyle = '#3b82f6';
+            rgCtx.beginPath(); rgCtx.arc(cx + earthDist, cy, 5, 0, Math.PI*2); rgCtx.fill();
+            rgCtx.fillText("Earth", cx+earthDist-15, cy+20);
+            
+            if (radius > earthDist) {
+                rgCtx.fillStyle = 'white';
+                rgCtx.font = '30px Changa One';
+                rgCtx.fillText("PLANET CONSUMED", 300, 50);
+            }
+
+            requestAnimationFrame(updateGiant);
+        }
+        updateGiant();
+
+        // --- 7. HELIUM FLASH ---
+        const hfCanvas = document.getElementById('flashCanvas');
+        const hfCtx = hfCanvas.getContext('2d');
+        let hfRad = 100;
+        let hfState = 'stable'; // stable, compress, flash
+        let hfParticles = [];
+        
+        function compressCore() {
+            if(hfState === 'stable') hfState = 'compress';
+        }
+        
+        function updateFlash() {
+            hfCtx.fillStyle = 'rgba(0,0,0,0.3)'; hfCtx.fillRect(0,0,800,350);
+            
+            const cx = 400, cy = 175;
+            
+            if(hfState === 'compress') {
+                hfRad -= 1;
+                if(hfRad < 20) {
+                    hfState = 'flash';
+                    // Explosion particles
+                    for(let i=0; i<100; i++) {
+                        let ang = Math.random()*Math.PI*2;
+                        let spd = Math.random()*10;
+                        hfParticles.push({x: cx, y: cy, vx: Math.cos(ang)*spd, vy: Math.sin(ang)*spd, life: 1});
+                    }
+                }
+            }
+            
+            // Core
+            hfCtx.fillStyle = hfState === 'flash' ? '#fff' : '#ff0000';
+            hfCtx.shadowBlur = 20; hfCtx.shadowColor = 'red';
+            hfCtx.beginPath(); hfCtx.arc(cx, cy, hfRad, 0, Math.PI*2); hfCtx.fill();
+            hfCtx.shadowBlur = 0;
+            
+            // Particles
+            if(hfState === 'flash') {
+                hfCtx.fillStyle = '#ffff00';
+                hfParticles.forEach(p => {
+                    p.x += p.vx; p.y += p.vy;
+                    p.life -= 0.02;
+                    hfCtx.globalAlpha = p.life;
+                    hfCtx.fillRect(p.x, p.y, 4, 4);
+                });
+                hfCtx.globalAlpha = 1;
+                
+                // Whiteout fade
+                if(hfParticles[0].life <= 0) {
+                    hfState = 'stable'; hfRad = 80; hfParticles = []; // Reset to Carbon burning size
+                }
+            }
+            
+            requestAnimationFrame(updateFlash);
+        }
+        updateFlash();
+
+        // --- 8. NEBULA ART ---
+        const pnCanvas = document.getElementById('nebulaArtCanvas');
+        const pnCtx = pnCanvas.getContext('2d');
+        let pnParts = [];
+        let pnType = 'ring';
+        
+        function createNebula(type) {
+            pnType = type;
+            pnParts = [];
+            for(let i=0; i<1000; i++) {
+                let ang = Math.random() * Math.PI * 2;
+                let dist = Math.random() * 10; // Start close
+                let speed = rand(1, 3);
+                let col = `hsl(${rand(180, 320)}, 100%, 70%)`;
+                pnParts.push({x: 400, y: 200, ang: ang, dist: dist, spd: speed, col: col});
+            }
+        }
+        
+        function updatePN() {
+            pnCtx.fillStyle = 'rgba(0,0,0,0.1)'; pnCtx.fillRect(0,0,800,400);
+            
+            pnCtx.globalCompositeOperation = 'lighter';
+            pnParts.forEach(p => {
+                // Move pattern
+                let speedMod = 1;
+                if(pnType === 'butterfly') {
+                    // Hourglass logic: Fast at poles (90, 270), slow at equator
+                    // Math.cos(ang) is 0 at 90/270.
+                    // We want speed proportional to sin?
+                    // Butterfly wings are usually on an axis. Let's say X axis.
+                    speedMod = Math.abs(Math.cos(p.ang)) * 2 + 0.2;
+                }
+                
+                p.dist += p.spd * speedMod;
+                let px = 400 + Math.cos(p.ang) * p.dist;
+                let py = 200 + Math.sin(p.ang) * p.dist;
+                
+                pnCtx.fillStyle = p.col;
+                pnCtx.beginPath(); pnCtx.arc(px, py, 2, 0, Math.PI*2); pnCtx.fill();
+            });
+            
+            // White Dwarf Core
+            pnCtx.shadowBlur = 20; pnCtx.shadowColor = 'white';
+            pnCtx.fillStyle = 'white'; pnCtx.beginPath(); pnCtx.arc(400, 200, 4, 0, Math.PI*2); pnCtx.fill();
+            pnCtx.shadowBlur = 0;
+            pnCtx.globalCompositeOperation = 'source-over';
+            
+            requestAnimationFrame(updatePN);
+        }
+        updatePN();
+
+        // --- 9. ONION SKIN ---
+        const onCanvas = document.getElementById('onionCanvas');
+        const onCtx = onCanvas.getContext('2d');
+        let layers = ['H'];
+        const elems = ['H', 'He', 'C', 'Ne', 'O', 'Si', 'Fe'];
+        const colors = ['#ef4444', '#f97316', '#eab308', '#22c55e', '#3b82f6', '#a855f7', '#555'];
+        
+        function addFusionLayer() {
+            if(layers.length < elems.length) layers.push(elems[layers.length]);
+            let last = layers[layers.length-1];
+            document.getElementById('elementDisplay').innerText = `Fused: ${last}`;
+            if(last === 'Fe') {
+                document.getElementById('elementDisplay').innerText = "IRON CORE: ENERGY SINK! COLLAPSE!";
+                document.getElementById('elementDisplay').style.color = "red";
+            }
+        }
+        
+        function updateOnion() {
+            onCtx.fillStyle = '#222'; onCtx.fillRect(0,0,800,400);
+            const cx = 400, cy = 200;
+            
+            // Draw from outside in
+            for(let i=0; i<layers.length; i++) {
+                // We want the first element (H) to be the biggest outer shell
+                // So we draw H first (big), then He inside it, etc.
+                // Wait, layers grows. layers=['H', 'He']. 
+                // We should draw layers[0] big, layers[1] smaller.
+                
+                // Actually, to handle Z-order in 2D canvas without 3D, 
+                // we draw Biggest First (Back) -> Smallest Last (Front).
+                // layers[0] is H (Outer).
+                
+                // But the loop needs to iterate all current layers.
+                // Let's assume layers contains what we have.
+                // If we have H, He. H is outer, He is inner.
+                
+                // Radius
+                let maxR = 180;
+                let r = maxR - (i * 25);
+                
+                onCtx.beginPath();
+                onCtx.arc(cx, cy, r, 0, Math.PI*2);
+                onCtx.fillStyle = colors[i];
+                onCtx.fill();
+                
+                // Text Label on edge
+                onCtx.fillStyle = 'rgba(255,255,255,0.8)';
+                onCtx.font = 'bold 14px Space Mono';
+                onCtx.fillText(layers[i], cx, cy - r + 20);
+            }
+            requestAnimationFrame(updateOnion);
+        }
+        updateOnion();
+
+        // --- 10. SUPERNOVA ---
+        const snCanvas = document.getElementById('supernovaCanvas');
+        const snCtx = snCanvas.getContext('2d');
+        let snPhase = 'idle'; // idle, implode, explode
+        let snTimer = 0;
+        
+        function triggerSupernova() { if(snPhase==='idle') snPhase = 'implode'; }
+        function resetSupernova() { snPhase = 'idle'; snTimer = 0; }
+        
+        function updateSN() {
+            snCtx.fillStyle = 'rgba(0,0,0,0.3)'; snCtx.fillRect(0,0,800,400);
+            const cx = 400, cy = 200;
+            
+            if(snPhase === 'idle') {
+                // Big Red Supergiant
+                snCtx.fillStyle = '#c2410c'; 
+                snCtx.beginPath(); snCtx.arc(cx, cy, 150, 0, Math.PI*2); snCtx.fill();
+            } 
+            else if (snPhase === 'implode') {
+                // Rapid shrink
+                snTimer += 1;
+                let r = 150 - snTimer * 10;
+                if(r <= 10) { snPhase = 'explode'; snTimer = 0; }
+                else {
+                    snCtx.fillStyle = '#c2410c'; 
+                    snCtx.beginPath(); snCtx.arc(cx, cy, r, 0, Math.PI*2); snCtx.fill();
+                    // Inrushing arrows
+                    snCtx.strokeStyle = 'white';
+                    for(let i=0; i<8; i++) {
+                        let a = (Math.PI*2/8)*i;
+                        snCtx.beginPath(); 
+                        snCtx.moveTo(cx+Math.cos(a)*160, cy+Math.sin(a)*160);
+                        snCtx.lineTo(cx+Math.cos(a)*r, cy+Math.sin(a)*r);
+                        snCtx.stroke();
+                    }
+                }
+            }
+            else if (snPhase === 'explode') {
+                snTimer += 5;
+                // Shockwave
+                let r = snTimer * 2;
+                
+                snCtx.globalCompositeOperation = 'lighter';
+                // Bright Flash
+                if(snTimer < 20) {
+                    snCtx.fillStyle = 'white'; snCtx.fillRect(0,0,800,400);
+                }
+                
+                // Expanding Shell
+                // FIX: Ensure r0 is never negative
+                let r0 = Math.max(0, r - 20);
+                let grad = snCtx.createRadialGradient(cx, cy, r0, cx, cy, r);
+                grad.addColorStop(0, 'rgba(0,0,0,0)');
+                grad.addColorStop(0.5, '#ff00ff');
+                grad.addColorStop(1, '#00ffff');
+                
+                snCtx.fillStyle = grad;
+                snCtx.beginPath(); snCtx.arc(cx, cy, r, 0, Math.PI*2); snCtx.fill();
+                
+                // Remnant (Neutron Star)
+                snCtx.fillStyle = '#fff';
+                snCtx.shadowBlur = 10; snCtx.shadowColor = 'blue';
+                snCtx.beginPath(); snCtx.arc(cx, cy, 5, 0, Math.PI*2); snCtx.fill();
+                snCtx.shadowBlur = 0;
+                
+                snCtx.globalCompositeOperation = 'source-over';
+            }
+            
+            requestAnimationFrame(updateSN);
+        }
+        updateSN();
+
+        // --- 11. PULSAR ---
+        const plCanvas = document.getElementById('pulsarCanvas');
+        const plCtx = plCanvas.getContext('2d');
+        let plRot = 0;
+        let signalData = new Array(100).fill(0);
+        
+        function updatePulsar() {
+            plCtx.fillStyle = '#050b14'; plCtx.fillRect(0,0,800,400);
+            
+            let speed = parseInt(document.getElementById('pulsarSpeed').value) * 0.05;
+            let tilt = parseInt(document.getElementById('pulsarTilt').value) * (Math.PI/180);
+            
+            plRot += speed;
+            const cx = 400, cy = 200;
+            
+            // We simulate 3D rotation of the magnetic axis vector
+            // Rot axis is vertical (Y). Mag axis is tilted by 'tilt'.
+            // Mag vector components:
+            // Mx = sin(tilt) * cos(rot)
+            // My = cos(tilt)
+            // Mz = sin(tilt) * sin(rot) (Depth)
+            
+            let mx = Math.sin(tilt) * Math.cos(plRot);
+            let my = Math.cos(tilt);
+            let mz = Math.sin(tilt) * Math.sin(plRot); // Z points to viewer when positive?
+            
+            // Draw Beams
+            plCtx.globalCompositeOperation = 'lighter';
+            
+            // North Beam
+            drawBeam(cx, cy, mx, -my, mz);
+            // South Beam
+            drawBeam(cx, cy, -mx, my, -mz);
+            
+            // Star Body
+            plCtx.fillStyle = '#fff';
+            plCtx.shadowBlur = 20; plCtx.shadowColor = '#06b6d4';
+            plCtx.beginPath(); plCtx.arc(cx, cy, 15, 0, Math.PI*2); plCtx.fill();
+            plCtx.shadowBlur = 0;
+            
+            plCtx.globalCompositeOperation = 'source-over';
+            
+            // Signal Detection (When beam points at Z > 0.9)
+            // Let's say viewer is at Z+
+            let signal = 0;
+            // Check dot product with view vector (0,0,1)
+            // Beam vector (mx, -my, mz). Dot = mz.
+            if (mz > 0.9) signal = 1; // North beam sweep
+            if (-mz > 0.9) signal = 1; // South beam sweep
+            
+            // Update graph
+            signalData.push(signal);
+            signalData.shift();
+            drawSignalGraph();
+            
+            requestAnimationFrame(updatePulsar);
+        }
+        
+        function drawBeam(cx, cy, dx, dy, dz) {
+            let len = 150;
+            let width = 20 + (dz * 10); // Perspective scale
+            let alpha = 0.5 + (dz * 0.4); // Perspective fade
+            
+            let ex = cx + dx * len;
+            let ey = cy + dy * len;
+            
+            let grad = plCtx.createLinearGradient(cx, cy, ex, ey);
+            grad.addColorStop(0, `rgba(6, 182, 212, ${alpha})`);
+            grad.addColorStop(1, 'rgba(0,0,0,0)');
+            
+            plCtx.strokeStyle = grad;
+            plCtx.lineWidth = width;
+            plCtx.lineCap = 'round';
+            plCtx.beginPath(); plCtx.moveTo(cx, cy); plCtx.lineTo(ex, ey); plCtx.stroke();
+        }
+        
+        function drawSignalGraph() {
+            const el = document.getElementById('signalGraph');
+            // CSS-based bars would be slow to update DOM.
+            // Canvas viz simpler?
+            // Let's just use innerHTML bars
+            let bars = signalData.map(v => `<div style="height:100%; width:1%; background:${v?'#4ade80':'transparent'}; display:inline-block;"></div>`).join('');
+            el.innerHTML = bars;
+        }
+        updatePulsar();
+
+        // --- 12. SPAGHETTIFICATION ---
+        const bhCanvas = document.getElementById('holeCanvas');
+        const bhCtx = bhCanvas.getContext('2d');
+        let astronaut = {x: 100, y: 200, drag: false};
+        
+        bhCanvas.addEventListener('mousedown', (e) => {
+            let r = bhCanvas.getBoundingClientRect();
+            let mx = e.clientX - r.left; let my = e.clientY - r.top;
+            if(Math.hypot(mx-astronaut.x, my-astronaut.y)<40) astronaut.drag = true;
+        });
+        bhCanvas.addEventListener('mousemove', (e) => {
+            if(astronaut.drag) {
+                let r = bhCanvas.getBoundingClientRect();
+                astronaut.x = e.clientX - r.left; astronaut.y = e.clientY - r.top;
+            }
+        });
+        bhCanvas.addEventListener('mouseup', () => astronaut.drag = false);
+
+        function updateHole() {
+            bhCtx.fillStyle = 'black'; bhCtx.fillRect(0,0,800,400);
+            
+            const cx = 400, cy = 200;
+            
+            // Draw Grid with Gravity Distortion
+            bhCtx.strokeStyle = '#334155';
+            bhCtx.lineWidth = 1;
+            
+            for(let i=0; i<=800; i+=40) {
+                // Vertical lines
+                bhCtx.beginPath();
+                for(let j=0; j<=400; j+=10) {
+                    let p = distort(i, j, cx, cy);
+                    if(j==0) bhCtx.moveTo(p.x, p.y); else bhCtx.lineTo(p.x, p.y);
+                }
+                bhCtx.stroke();
+            }
+            for(let j=0; j<=400; j+=40) {
+                // Horizontal lines
+                bhCtx.beginPath();
+                for(let i=0; i<=800; i+=10) {
+                    let p = distort(i, j, cx, cy);
+                    if(i==0) bhCtx.moveTo(p.x, p.y); else bhCtx.lineTo(p.x, p.y);
+                }
+                bhCtx.stroke();
+            }
+            
+            // Event Horizon
+            bhCtx.fillStyle = 'black';
+            bhCtx.beginPath(); bhCtx.arc(cx, cy, 40, 0, Math.PI*2); bhCtx.fill();
+            // Accretion Ring
+            bhCtx.strokeStyle = 'rgba(255,255,255,0.5)';
+            bhCtx.lineWidth = 2;
+            bhCtx.beginPath(); bhCtx.arc(cx, cy, 40, 0, Math.PI*2); bhCtx.stroke();
+
+            // Astronaut
+            let dx = cx - astronaut.x;
+            let dy = cy - astronaut.y;
+            let dist = Math.sqrt(dx*dx + dy*dy);
+            
+            // Tidal Force: F ~ 1/r^3. Stretch factor
+            let stretch = 1;
+            if(dist < 200) stretch = 1 + Math.pow((200-dist)/50, 2);
+            
+            bhCtx.save();
+            bhCtx.translate(astronaut.x, astronaut.y);
+            bhCtx.rotate(Math.atan2(dy, dx));
+            
+            bhCtx.fillStyle = 'white';
+            // Head
+            bhCtx.beginPath(); bhCtx.arc(-10*stretch, 0, 10/Math.sqrt(stretch), 0, Math.PI*2); bhCtx.fill();
+            // Body (Stretched rectangle)
+            bhCtx.fillRect(-10*stretch, -5/Math.sqrt(stretch), 40*stretch, 10/Math.sqrt(stretch));
+            
+            bhCtx.restore();
+            
+            // Reset if sucked in
+            if(dist < 40) { astronaut.x = 100; astronaut.y = 200; astronaut.drag = false; }
+
+            requestAnimationFrame(updateHole);
+        }
+        
+        function distort(x, y, cx, cy) {
+            // Simple gravitational lensing approximation for grid
+            let dx = x - cx;
+            let dy = y - cy;
+            let dist = Math.sqrt(dx*dx + dy*dy);
+            let pull = 2000 / (dist + 1); // pull factor
+            
+            // Move point towards center
+            let move = Math.min(dist, pull);
+            let angle = Math.atan2(dy, dx);
+            return {
+                x: x - Math.cos(angle)*move,
+                y: y - Math.sin(angle)*move
+            };
+        }
+        updateHole();
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Celestica Initiative - Lecture 10: Black Holes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Changa+One&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --retro-cream: #FFFDD0;
+            --retro-orange: #E85D04;
+            --retro-yellow: #FFBA08;
+            --retro-brown: #3F2E3E;
+            --retro-green: #588157;
+            --retro-blue: #219EBC;
+            --retro-red: #D00000;
+            --retro-purple: #7209b7;
+            --retro-cyan: #06b6d4;
+            --space-black: #050b14;
+        }
+
+        body {
+            background-color: var(--retro-cream);
+            color: var(--retro-brown);
+            font-family: 'Space Mono', monospace;
+            background-image: radial-gradient(var(--retro-brown) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Changa One', cursive;
+        }
+
+        .retro-box {
+            background-color: #fff;
+            border: 4px solid var(--retro-brown);
+            box-shadow: 8px 8px 0px var(--retro-purple);
+            border-radius: 1rem;
+            transition: transform 0.2s;
+            overflow: hidden;
+        }
+
+        .retro-btn {
+            background-color: var(--retro-orange);
+            color: white;
+            border: 3px solid var(--retro-brown);
+            padding: 8px 16px;
+            font-family: 'Changa One', cursive;
+            font-size: 1.1rem;
+            cursor: pointer;
+            box-shadow: 4px 4px 0px var(--retro-brown);
+            transition: all 0.1s;
+            text-transform: uppercase;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            user-select: none;
+        }
+
+        .retro-btn:active {
+            transform: translate(4px, 4px);
+            box-shadow: 0px 0px 0px var(--retro-brown);
+        }
+
+        .retro-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: translate(2px, 2px);
+            background-color: #718096;
+        }
+
+        .btn-blue { background-color: var(--retro-blue); }
+        .btn-red { background-color: var(--retro-red); }
+        .btn-green { background-color: var(--retro-green); }
+        .btn-purple { background-color: var(--retro-purple); }
+        .btn-dark { background-color: var(--retro-brown); }
+
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 24px;
+            width: 24px;
+            border-radius: 50%;
+            background: var(--retro-yellow);
+            border: 2px solid var(--retro-brown);
+            margin-top: -10px;
+            cursor: pointer;
+            box-shadow: 2px 2px 0px rgba(0,0,0,0.2);
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 8px;
+            cursor: pointer;
+            background: var(--retro-brown);
+            border-radius: 4px;
+        }
+
+        .section-number {
+            background-color: var(--retro-purple); 
+            color: white; 
+            width: 3.5rem; 
+            height: 3.5rem; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            border-radius: 9999px; 
+            border: 4px solid var(--retro-brown); 
+            font-weight: bold; 
+            font-size: 1.8rem;
+            flex-shrink: 0;
+            box-shadow: 4px 4px 0px rgba(0,0,0,0.2);
+        }
+        
+        canvas {
+            width: 100%;
+            height: auto;
+            border-radius: 0.5rem;
+            background-color: var(--space-black);
+            border: 4px solid var(--retro-brown);
+            box-shadow: inset 0 0 30px rgba(0,0,0,0.8);
+            cursor: crosshair;
+        }
+
+        .lesson-text {
+            background-color: rgba(255,255,255,0.98);
+            border: 2px solid var(--retro-brown);
+            padding: 1.2rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8 max-w-5xl mx-auto">
+
+    <!-- Header -->
+    <header class="text-center mb-20">
+        <div class="inline-block bg-black text-white px-6 py-2 rounded-full border-4 border-gray-800 mb-6 font-bold transform -rotate-2 shadow-[4px_4px_0px_rgba(100,100,100,1)]">
+            THE CELESTICA INITIATIVE
+        </div>
+        <h1 class="text-6xl md:text-9xl text-purple-600 mb-2 leading-none tracking-tighter" style="-webkit-text-stroke: 4px var(--retro-brown); text-shadow: 8px 8px 0px var(--retro-brown);">
+            BLACK<br>HOLES
+        </h1>
+        <div class="bg-white border-4 border-black inline-block px-8 py-4 transform rotate-1 shadow-[8px_8px_0px_rgba(0,0,0,0.2)] mt-6">
+            <p class="text-xl md:text-2xl text-gray-800 font-bold">Lecture 10: General Relativity</p>
+        </div>
+    </header>
+
+    <!-- 1. Spacetime Fabric -->
+    <section class="mb-20">
+        <div class="flex items-center gap-6 mb-6">
+            <div class="section-number">1</div>
+            <div>
+                <h2 class="text-4xl text-brown-800">The Fabric</h2>
+                <p class="text-gray-600 font-bold">Curvature of Spacetime</p>
+            </div>
+        </div>
+        <div class="retro-box p-6 bg-purple-50">
+            <div class="lesson-text">
+                <strong>Concept:</strong> Einstein realized gravity isn't a force; it's a <strong>shape</strong>. Mass tells space how to curve, and space tells mass how to move.
+                <br><strong>Interaction:</strong> Move your mouse to warp the fabric of the universe.
+            </div>
+            <canvas id="fabricCanvas" width="800" height="400" class="mb-4"></canvas>
+        </div>
+    </section>
+
+    <!-- 2. Equivalence Principle -->
+    <section class="mb-20">
+        <div class="flex items-center gap-6 mb-6">
+            <div class="section-number">2</div>
+            <div>
+                <h2 class="text-4xl text-brown-800">Equivalence</h2>
+                <p class="text-gray-600 font-bold">Gravity = Acceleration</p>
+            </div>
+        </div>
+        <div class="retro-box p-6 bg-blue-50">
+            <div class="lesson-text">
+                <strong>Concept:</strong> Being in a box on Earth feels <em>exactly</em> like being in a rocket accelerating at 1g. Physics cannot tell the difference!
+                <br><strong>Interaction:</strong> Drop the ball in both scenarios. They are identical.
+            </div>
+            <canvas id="equivCanvas" width="800" height="300" class="mb-4"></canvas>
+            <div class="flex justify-center">
+                <button onclick="dropBalls()" class="retro-btn btn-blue">Drop Drop!</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. Light Bending -->
+    <section class="mb-20">
+        <div class="flex items-center gap-6 mb-6">
+            <div class="section-number">3</div>
+            <div>
+                <h2 class="text-4xl text-brown-800">Bending Light</h2>
+                <p class="text-gray-600 font-bold">Deflection of Starlight</p>
+            </div>
+        </div>
+        <div class="retro-box p-6 bg-yellow-50">
+            <div class="lesson-text">
+                <strong>Concept:</strong> Because gravity curves space, even <strong>light</strong> must follow a curved path. This was proven during the 1919 Solar Eclipse.
+                <br><strong>Interaction:</strong> Increase the star's mass to bend the laser beam.
+            </div>
+            <canvas id="bendCanvas" width="800" height="300" class="mb-4"></canvas>
+            <div class="flex gap-4 items-center justify-center bg-white p-4 border-2 border-black rounded-lg">
+                <label class="font-bold">Mass:</label>
+                <input type="range" id="massSlider" min="0" max="100" value="0" class="w-1/2">
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. Gravitational Lensing -->
+    <section class="mb-20">
+        <div class="flex items-center gap-6 mb-6">
+            <div class="section-number">4</div>
+            <div>
+                <h2 class="text-4xl text-brown-800">Einstein Ring</h2>
+                <p class="text-gray-600 font-bold">Gravitational Lensing</p>
+            </div>
+        </div>
+        <div class="retro-box p-6 bg-black border-white">
+            <div class="lesson-text">
+                <strong>Concept:</strong> A massive object acts like a lens, magnifying and distorting things behind it. If aligned perfectly, you see a ring.
+                <br><strong>Interaction:</strong> Move the Black Hole (Lens) over the background galaxy.
+            </div>
+            <canvas id="lensCanvas" width="800" height="400" class="mb-4 border-gray-600"></canvas>
+            <p class="text-center text-white font-mono">Move mouse to position the Lens</p>
+        </div>
+    </section>
+
+    <!-- 5. Time Dilation -->
+    <section class="mb-20">
+        <div class="flex items-center gap-6 mb-6">
+            <div class="section-number">5</div>
+            <div>
+                <h2 class="text-4xl text-brown-800">Time Warping</h2>
+                <p class="text-gray-600 font-bold">Gravitational Time Dilation</p>
+            </div>
+        </div>
+        <div class="retro-box p-6 bg-indigo-50">
+            <div class="lesson-text">
+                <strong>Concept:</strong> Time flows <strong>slower</strong> closer to a massive object. "This little maneuver's gonna cost us 51 years."
+                <br><strong>Interaction:</strong> Move the rocket closer to the black hole and watch its clock slow down compared to Earth.
+            </div>
+            <canvas id="timeCanvas" width="800" height="300" class="mb-4"></canvas>
+            <div class="flex gap-4 items-center justify-center bg-white p-4 border-2 border-black rounded-lg">
+                <label class="font-bold">Distance to Event Horizon:</label>
+                <input type="range" id="distSlider" min="1" max="100" value="100" class="w-1/2">
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. Schwarzschild Radius -->
+    <section class="mb-20">
+        <div class="flex items-center gap-6 mb-6">
+            <div class="section-number">6</div>
+            <div>
+                <h2 class="text-4xl text-brown-800">The Limit</h2>
+                <p class="text-gray-600 font-bold">Schwarzschild Radius</p>
+            </div>
+        </div>
+        <div class="retro-box p-6 bg-red-50">
+            <div class="lesson-text">
+                <strong>Concept:</strong> Anything can become a black hole if you crush it small enough. For Earth, that size is a marble (9mm).
+                <br><strong>Interaction:</strong> Crush the Earth until it collapses into a singularity.
+            </div>
+            <canvas id="crushCanvas" width="800" height="300" class="mb-4"></canvas>
+            <div class="flex justify-center">
+                <button onclick="crushEarth()" id="crushBtn" class="retro-btn btn-red">COMPRESS MATTER</button>
+                <button onclick="resetCrush()" class="retro-btn bg-gray-500 ml-4">Reset</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 7. Photon Sphere -->
+    <section class="mb-20">
+        <div class="flex items-center gap-6 mb-6">
+            <div class="section-number">7</div>
+            <div>
+                <h2 class="text-4xl text-brown-800">Photon Sphere</h2>
+                <p class="text-gray-600 font-bold">Orbiting Light</p>
+            </div>
+        </div>
+        <div class="retro-box p-6 bg-orange-50">
+            <div class="lesson-text">
+                <strong>Concept:</strong> At 1.5x the radius of the black hole, light itself orbits in a circle. If you stood there, you could see the back of your own head!
+                <br><strong>Interaction:</strong> Fire lasers. Try to get one stuck in the photon sphere orbit.
+            </div>
+            <canvas id="photonCanvas" width="800" height="400" class="mb-4"></canvas>
+            <div class="flex justify-center gap-4">
+                <button onclick="fireLaser()" class="retro-btn btn-orange">FIRE LASER</button>
+                <input type="range" id="laserAngle" min="-20" max="20" value="0" class="w-32">
+            </div>
+        </div>
+    </section>
+
+    <!-- 8. The Event Horizon -->
+    <section class="mb-20">
+        <div class="flex items-center gap-6 mb-6">
+            <div class="section-number">8</div>
+            <div>
+                <h2 class="text-4xl text-brown-800">No Return</h2>
+                <p class="text-gray-600 font-bold">The Event Horizon</p>
+            </div>
+        </div>
+        <div class="retro-box p-6 bg-gray-900 text-white">
+            <div class="lesson-text text-black">
+                <strong>Concept:</strong> The boundary where escape velocity exceeds the speed of light ($c$). Once inside, all paths lead to the center.
+                <br><strong>Interaction:</strong> Try to escape with the rocket. If you cross the line, you are doomed.
+            </div>
+            <canvas id="horizonCanvas" width="800" height="300" class="mb-4 border-white"></canvas>
+            <div class="flex justify-center gap-4">
+                <button onclick="launchEscape()" class="retro-btn btn-green">Launch Engines</button>
+                <button onclick="resetEscape()" class="retro-btn bg-gray-500">Reset</button>
+            </div>
+            <p id="escapeStatus" class="text-center mt-2 font-mono font-bold">Status: Ready</p>
+        </div>
+    </section>
+
+    <!-- 9. Gravitational Redshift -->
+    <section class="mb-20">
+        <div class="flex items-center gap-6 mb-6">
+            <div class="section-number">9</div>
+            <div>
+                <h2 class="text-4xl text-brown-800">Fading Light</h2>
+                <p class="text-gray-600 font-bold">Gravitational Redshift</p>
+            </div>
+        </div>
+        <div class="retro-box p-6 bg-gray-100">
+            <div class="lesson-text">
+                <strong>Concept:</strong> Light climbing out of a gravity well loses energy. It doesn't slow down; it changes color (Blue &rarr; Red).
+                <br><strong>Interaction:</strong> Drag the light packet away from the black hole.
+            </div>
+            <canvas id="redshiftCanvas" width="800" height="200" class="mb-4 bg-black"></canvas>
+            <div class="flex justify-center">
+                <p class="font-bold text-lg" id="waveText">Energy: High (Blue)</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 10. Spaghettification (Detailed) -->
+    <section class="mb-20">
+        <div class="flex items-center gap-6 mb-6">
+            <div class="section-number">10</div>
+            <div>
+                <h2 class="text-4xl text-brown-800">Spaghettification</h2>
+                <p class="text-gray-600 font-bold">Extreme Tidal Forces</p>
+            </div>
+        </div>
+        <div class="retro-box p-6 bg-black border-white">
+            <div class="lesson-text">
+                <strong>Concept:</strong> Near a singularity, gravity changes so fast over short distances that your feet are pulled infinitely harder than your head.
+                <br><strong>Interaction:</strong> Use the slider to increase Tidal Forces on the astronaut grid.
+            </div>
+            <canvas id="spagCanvas" width="800" height="400" class="mb-4 border-gray-700"></canvas>
+            <div class="flex gap-4 items-center justify-center bg-white p-4 border-2 border-black rounded-lg">
+                <label class="font-bold">Tidal Force Strength:</label>
+                <input type="range" id="tideSlider" min="0" max="100" value="0" class="w-1/2">
+            </div>
+        </div>
+    </section>
+
+    <!-- 11. Frame Dragging -->
+    <section class="mb-20">
+        <div class="flex items-center gap-6 mb-6">
+            <div class="section-number">11</div>
+            <div>
+                <h2 class="text-4xl text-brown-800">Frame Dragging</h2>
+                <p class="text-gray-600 font-bold">Kerr Black Holes</p>
+            </div>
+        </div>
+        <div class="retro-box p-6 bg-teal-50">
+            <div class="lesson-text">
+                <strong>Concept:</strong> A rotating black hole drags spacetime along with it, like a spoon in honey. This region is called the <strong>Ergosphere</strong>.
+                <br><strong>Interaction:</strong> Spin the black hole and watch space twist.
+            </div>
+            <canvas id="dragCanvas" width="800" height="400" class="mb-4"></canvas>
+            <div class="flex gap-4 items-center justify-center bg-white p-4 border-2 border-black rounded-lg">
+                <label class="font-bold">Spin Rate:</label>
+                <input type="range" id="spinSlider" min="0" max="50" value="0" class="w-1/2">
+            </div>
+        </div>
+    </section>
+
+    <!-- 12. Accretion Disk -->
+    <section class="mb-20">
+        <div class="flex items-center gap-6 mb-6">
+            <div class="section-number">12</div>
+            <div>
+                <h2 class="text-4xl text-brown-800">The Disk</h2>
+                <p class="text-gray-600 font-bold">Doppler Beaming</p>
+            </div>
+        </div>
+        <div class="retro-box p-6 bg-orange-50">
+            <div class="lesson-text">
+                <strong>Concept:</strong> Matter spirals in at nearly light speed. The side moving towards us looks brighter and bluer (Doppler Beaming).
+                <br><strong>Interaction:</strong> Adjust the <strong>Inclination Angle</strong>. Tilt it edge-on to see the extreme difference in brightness caused by relativistic speed.
+            </div>
+            <canvas id="diskCanvas" width="800" height="400" class="mb-4 bg-black"></canvas>
+            <div class="flex gap-4 items-center justify-center bg-white p-4 border-2 border-black rounded-lg">
+                <label class="font-bold">Inclination Angle:</label>
+                <input type="range" id="incSlider" min="0" max="80" value="30" class="w-1/2">
+            </div>
+        </div>
+    </section>
+
+    <!-- 13. Hawking Radiation -->
+    <section class="mb-20">
+        <div class="flex items-center gap-6 mb-6">
+            <div class="section-number">13</div>
+            <div>
+                <h2 class="text-4xl text-brown-800">Evaporation</h2>
+                <p class="text-gray-600 font-bold">Hawking Radiation</p>
+            </div>
+        </div>
+        <div class="retro-box p-6 bg-purple-100">
+            <div class="lesson-text">
+                <strong>Concept:</strong> Virtual particle pairs pop into existence. If one falls in and the other escapes, the black hole loses mass and "evaporates".
+                <br><strong>Interaction:</strong> Speed up time to watch it vanish, or feed it to keep it alive!
+            </div>
+            <canvas id="hawkingCanvas" width="800" height="300" class="mb-4 bg-black"></canvas>
+            <div class="flex justify-center gap-4 items-center mb-2">
+                <div class="flex items-center gap-2">
+                    <label class="font-bold">Time Speed:</label>
+                    <input type="range" id="evapSlider" min="1" max="10" value="1">
+                </div>
+                <button onclick="feedBH()" class="retro-btn btn-purple">FEED MATTER 🍽️</button>
+            </div>
+            <p class="text-center font-bold" id="massReadout">Mass: 100%</p>
+        </div>
+    </section>
+
+    <!-- 14. Wormhole -->
+    <section class="mb-20">
+        <div class="flex items-center gap-6 mb-6">
+            <div class="section-number">14</div>
+            <div>
+                <h2 class="text-4xl text-brown-800">Wormhole</h2>
+                <p class="text-gray-600 font-bold">Einstein-Rosen Bridge</p>
+            </div>
+        </div>
+        <div class="retro-box p-6 bg-cyan-50">
+            <div class="lesson-text">
+                <strong>Concept:</strong> General Relativity allows for "shortcuts" by folding spacetime. Connecting point A to point B instantly.
+                <br><strong>Interaction:</strong> Fold the space paper to connect the two dots.
+            </div>
+            <canvas id="wormCanvas" width="800" height="300" class="mb-4"></canvas>
+            <div class="flex gap-4 items-center justify-center bg-white p-4 border-2 border-black rounded-lg">
+                <label class="font-bold">Fold Space:</label>
+                <input type="range" id="foldSlider" min="0" max="100" value="0" class="w-1/2">
+            </div>
+        </div>
+    </section>
+
+    <!-- 15. Galactic Orbits (UPDATED) -->
+    <section class="mb-20">
+        <div class="flex items-center gap-6 mb-6">
+            <div class="section-number">15</div>
+            <div>
+                <h2 class="text-4xl text-brown-800">The Monster</h2>
+                <p class="text-gray-600 font-bold">Supermassive Black Hole (Sgr A*)</p>
+            </div>
+        </div>
+        <div class="retro-box p-6 bg-space-black text-white">
+            <div class="lesson-text text-black">
+                <strong>Concept:</strong> At the center of our galaxy lives a monster 4 million times the mass of the Sun. Stars whip around it at incredible speeds (S-Stars).
+                <br><strong>Interaction:</strong> Increase the Black Hole's mass to see gravity tighten the orbits and speed up the stars (Kepler's 3rd Law).
+            </div>
+            <canvas id="sgrCanvas" width="800" height="400" class="mb-4 border-white"></canvas>
+            <div class="flex gap-4 items-center justify-center bg-gray-800 p-4 border-2 border-white rounded-lg text-black">
+                <label class="font-bold text-white">Black Hole Mass:</label>
+                <input type="range" id="sgrMassSlider" min="1" max="10" step="0.5" value="1" class="w-1/2">
+            </div>
+        </div>
+    </section>
+
+    <footer class="text-center text-gray-600 py-12 border-t-4 border-dotted border-purple-300">
+        <p class="font-bold text-lg">The Celestica Initiative</p>
+        <p>Lecture 10 Complete - You have survived the singularity! ⚫</p>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+        function rand(min, max) { return Math.random() * (max - min) + min; }
+
+        // --- 1. FABRIC ---
+        const fbCanvas = document.getElementById('fabricCanvas');
+        const fbCtx = fbCanvas.getContext('2d');
+        let fbMouse = {x: -1000, y: -1000};
+        fbCanvas.addEventListener('mousemove', e => {
+            const r = fbCanvas.getBoundingClientRect();
+            fbMouse.x = e.clientX - r.left; fbMouse.y = e.clientY - r.top;
+        });
+
+        function updateFabric() {
+            fbCtx.fillStyle = '#050b14'; fbCtx.fillRect(0,0,800,400);
+            fbCtx.strokeStyle = '#4ade80'; fbCtx.lineWidth = 1;
+            
+            const cols = 40; const rows = 20;
+            const cellW = 800/cols; const cellH = 400/rows;
+            
+            // Grid
+            for(let y=0; y<=rows; y++) {
+                fbCtx.beginPath();
+                for(let x=0; x<=cols; x++) {
+                    let px = x*cellW; let py = y*cellH;
+                    let d = Math.hypot(px-fbMouse.x, py-fbMouse.y);
+                    let pull = Math.max(0, (200-d)/200) * 50;
+                    let angle = Math.atan2(py-fbMouse.y, px-fbMouse.x);
+                    let tx = px - Math.cos(angle)*pull;
+                    let ty = py - Math.sin(angle)*pull;
+                    if(x==0) fbCtx.moveTo(tx, ty); else fbCtx.lineTo(tx, ty);
+                }
+                fbCtx.stroke();
+            }
+            for(let x=0; x<=cols; x++) {
+                fbCtx.beginPath();
+                for(let y=0; y<=rows; y++) {
+                    let px = x*cellW; let py = y*cellH;
+                    let d = Math.hypot(px-fbMouse.x, py-fbMouse.y);
+                    let pull = Math.max(0, (200-d)/200) * 50;
+                    let angle = Math.atan2(py-fbMouse.y, px-fbMouse.x);
+                    let tx = px - Math.cos(angle)*pull;
+                    let ty = py - Math.sin(angle)*pull;
+                    if(y==0) fbCtx.moveTo(tx, ty); else fbCtx.lineTo(tx, ty);
+                }
+                fbCtx.stroke();
+            }
+            
+            // Mass
+            if(fbMouse.x > 0 && fbMouse.x < 800 && fbMouse.y > 0 && fbMouse.y < 400) {
+                fbCtx.fillStyle = 'white'; fbCtx.beginPath(); fbCtx.arc(fbMouse.x, fbMouse.y, 10, 0, Math.PI*2); fbCtx.fill();
+            }
+            requestAnimationFrame(updateFabric);
+        }
+        updateFabric();
+
+        // --- 2. EQUIVALENCE ---
+        const eqCanvas = document.getElementById('equivCanvas');
+        const eqCtx = eqCanvas.getContext('2d');
+        let eqY = 0; let eqV = 0; let eqDrop = false;
+        function dropBalls() { eqDrop = true; eqY = 0; eqV = 0; }
+        function updateEquiv() {
+            eqCtx.fillStyle = '#FFFDD0'; eqCtx.fillRect(0,0,800,300);
+            
+            // Box 1 (Earth)
+            eqCtx.fillStyle = '#e2e8f0'; eqCtx.fillRect(100, 50, 200, 200);
+            eqCtx.strokeRect(100, 50, 200, 200);
+            eqCtx.fillStyle = 'black'; eqCtx.font = '20px Changa One'; eqCtx.fillText("EARTH (Gravity)", 130, 40);
+            
+            // Box 2 (Rocket)
+            eqCtx.fillStyle = '#e2e8f0'; eqCtx.fillRect(500, 50, 200, 200);
+            eqCtx.strokeRect(500, 50, 200, 200);
+            eqCtx.fillStyle = 'black'; eqCtx.fillText("ROCKET (Accel)", 530, 40);
+            
+            if(eqDrop) {
+                eqV += 0.5; eqY += eqV;
+                if(eqY > 170) { eqY = 170; eqV = -eqV * 0.5; if(Math.abs(eqV)<1) eqDrop=false; }
+            }
+            
+            // Ball 1
+            eqCtx.fillStyle = '#ef4444'; eqCtx.beginPath(); eqCtx.arc(200, 80+eqY, 10, 0, Math.PI*2); eqCtx.fill();
+            // Ball 2
+            eqCtx.fillStyle = '#3b82f6'; eqCtx.beginPath(); eqCtx.arc(600, 80+eqY, 10, 0, Math.PI*2); eqCtx.fill();
+            
+            // Rocket Flame
+            if(eqDrop && eqY < 160) {
+                eqCtx.fillStyle = 'orange';
+                eqCtx.beginPath(); eqCtx.moveTo(550, 260); eqCtx.lineTo(650, 260); eqCtx.lineTo(600, 290); eqCtx.fill();
+            }
+            
+            requestAnimationFrame(updateEquiv);
+        }
+        updateEquiv();
+
+        // --- 3. BENDING ---
+        const bnCanvas = document.getElementById('bendCanvas');
+        const bnCtx = bnCanvas.getContext('2d');
+        function updateBend() {
+            let mass = document.getElementById('massSlider').value;
+            bnCtx.fillStyle = '#050b14'; bnCtx.fillRect(0,0,800,300);
+            
+            let cx = 400, cy = 150;
+            let sz = 5 + mass/2;
+            
+            // Star
+            bnCtx.fillStyle = '#fbbf24'; bnCtx.shadowBlur = 20; bnCtx.shadowColor = 'orange';
+            bnCtx.beginPath(); bnCtx.arc(cx, cy, sz, 0, Math.PI*2); bnCtx.fill();
+            bnCtx.shadowBlur = 0;
+            
+            // Light Ray
+            bnCtx.strokeStyle = '#06b6d4'; bnCtx.lineWidth = 3; bnCtx.shadowBlur = 10; bnCtx.shadowColor = 'cyan';
+            bnCtx.beginPath();
+            for(let x=0; x<800; x+=5) {
+                let dx = x - cx;
+                // Simple deflection model: y dips based on closeness to x center
+                let dist = Math.abs(dx);
+                let dip = (mass * 2000) / (dist*dist + 2000);
+                let y = 200 + dip; // Beam starts at y=200? No, pass below star.
+                // Actually, deflection angle.
+                // Let's animate a particle trace
+                // Simple curve:
+                if(x==0) bnCtx.moveTo(x, 220);
+                else bnCtx.lineTo(x, 220 - dip);
+            }
+            bnCtx.stroke();
+            bnCtx.shadowBlur = 0;
+            requestAnimationFrame(updateBend);
+        }
+        updateBend();
+
+        // --- 4. LENSING ---
+        const lnCanvas = document.getElementById('lensCanvas');
+        const lnCtx = lnCanvas.getContext('2d');
+        let lnMouse = {x: 200, y: 200};
+        lnCanvas.addEventListener('mousemove', e => {
+            let r = lnCanvas.getBoundingClientRect(); lnMouse.x = e.clientX - r.left; lnMouse.y = e.clientY - r.top;
+        });
+        function updateLens() {
+            lnCtx.fillStyle = 'black'; lnCtx.fillRect(0,0,800,400);
+            
+            // Background Galaxy (Centered)
+            let gx = 400, gy = 200;
+            
+            // Lens Position (Mouse)
+            let lx = lnMouse.x; let ly = lnMouse.y;
+            
+            // Distort galaxy based on lens pos
+            // We draw galaxy as a collection of points and warp them
+            let dist = Math.hypot(lx-gx, ly-gy);
+            
+            // Draw lens
+            lnCtx.fillStyle = 'black'; lnCtx.strokeStyle = 'white'; lnCtx.lineWidth=2;
+            lnCtx.beginPath(); lnCtx.arc(lx, ly, 30, 0, Math.PI*2); lnCtx.fill(); lnCtx.stroke();
+            
+            // Draw lensed image (Simple Einstein Ring logic)
+            // If lens is close to galaxy, draw ring. If far, draw distorted blob.
+            lnCtx.strokeStyle = '#8b5cf6'; lnCtx.lineWidth = 4;
+            lnCtx.shadowBlur = 10; lnCtx.shadowColor = 'purple';
+            
+            if(dist < 40) {
+                // Einstein Ring
+                lnCtx.beginPath(); lnCtx.arc(lx, ly, 60, 0, Math.PI*2); lnCtx.stroke();
+            } else {
+                // Arcs
+                let angle = Math.atan2(gy-ly, gx-lx);
+                lnCtx.beginPath(); 
+                lnCtx.arc(lx, ly, 60, angle - 0.5, angle + 0.5); 
+                lnCtx.stroke();
+                
+                // Counter arc
+                lnCtx.beginPath(); 
+                lnCtx.arc(lx, ly, 60, angle + Math.PI - 0.3, angle + Math.PI + 0.3); 
+                lnCtx.stroke();
+            }
+            lnCtx.shadowBlur = 0;
+            
+            requestAnimationFrame(updateLens);
+        }
+        updateLens();
+
+        // --- 5. TIME DILATION ---
+        const tmCanvas = document.getElementById('timeCanvas');
+        const tmCtx = tmCanvas.getContext('2d');
+        let tEarth = 0; let tRocket = 0;
+        function updateTime() {
+            tmCtx.fillStyle = '#FFFDD0'; tmCtx.fillRect(0,0,800,300);
+            let dist = parseInt(document.getElementById('distSlider').value);
+            
+            // Black Hole
+            tmCtx.fillStyle = 'black'; tmCtx.beginPath(); tmCtx.arc(50, 150, 40, 0, Math.PI*2); tmCtx.fill();
+            
+            // Rocket
+            let rx = 50 + dist * 6;
+            tmCtx.fillStyle = '#3b82f6'; tmCtx.fillRect(rx, 140, 40, 20);
+            
+            // Earth Clock (Top Right)
+            drawClock(tmCtx, 700, 80, tEarth, "Earth Time");
+            // Rocket Clock (Above Rocket)
+            drawClock(tmCtx, rx+20, 100, tRocket, "Rocket Time");
+            
+            tEarth += 0.1;
+            // Dilation formula: t' = t * sqrt(1 - rs/r)
+            // r roughly maps to dist. rs = small.
+            let factor = Math.sqrt(1 - 10/(dist+10)); 
+            tRocket += 0.1 * factor;
+            
+            requestAnimationFrame(updateTime);
+        }
+        function drawClock(ctx, x, y, t, label) {
+            ctx.strokeStyle = 'black'; ctx.lineWidth = 2;
+            ctx.beginPath(); ctx.arc(x, y, 30, 0, Math.PI*2); ctx.stroke();
+            ctx.moveTo(x, y); ctx.lineTo(x + Math.cos(t)*25, y + Math.sin(t)*25); ctx.stroke();
+            ctx.fillStyle = 'black'; ctx.font = "12px monospace"; ctx.fillText(label, x-30, y-40);
+        }
+        updateTime();
+
+        // --- 6. CRUSH ---
+        const crCanvas = document.getElementById('crushCanvas');
+        const crCtx = crCanvas.getContext('2d');
+        let crRad = 100;
+        function crushEarth() { if(crRad > 5) crRad *= 0.95; }
+        function resetCrush() { crRad = 100; }
+        function updateCrush() {
+            crCtx.fillStyle = '#fef2f2'; crCtx.fillRect(0,0,800,300);
+            let cx = 400, cy = 150;
+            
+            if(crRad <= 5) {
+                crCtx.fillStyle = 'black';
+                crCtx.beginPath(); crCtx.arc(cx, cy, 10, 0, Math.PI*2); crCtx.fill();
+                crCtx.strokeStyle = 'white'; crCtx.stroke();
+                crCtx.fillStyle = 'red'; crCtx.font="20px Changa One"; crCtx.fillText("BLACK HOLE FORMED", 320, 100);
+            } else {
+                crCtx.fillStyle = '#3b82f6';
+                crCtx.beginPath(); crCtx.arc(cx, cy, crRad, 0, Math.PI*2); crCtx.fill();
+                // Continents
+                crCtx.fillStyle = '#22c55e';
+                crCtx.beginPath(); crCtx.arc(cx-crRad*0.3, cy-crRad*0.2, crRad*0.4, 0, Math.PI*2); crCtx.fill();
+            }
+            requestAnimationFrame(updateCrush);
+        }
+        updateCrush();
+
+        // --- 7. PHOTON SPHERE ---
+        const phCanvas = document.getElementById('photonCanvas');
+        const phCtx = phCanvas.getContext('2d');
+        let lasers = [];
+        function fireLaser() {
+            let ang = parseInt(document.getElementById('laserAngle').value) * (Math.PI/180);
+            lasers.push({x: 50, y: 200, vx: Math.cos(ang)*5, vy: Math.sin(ang)*5, life: 1});
+        }
+        function updatePhoton() {
+            phCtx.fillStyle = '#050b14'; phCtx.fillRect(0,0,800,400);
+            let cx = 400, cy = 200;
+            let rs = 40; // Schwarzschild radius
+            let ps = rs * 1.5; // Photon sphere radius (60)
+            
+            // BH
+            phCtx.fillStyle = 'black'; phCtx.beginPath(); phCtx.arc(cx, cy, rs, 0, Math.PI*2); phCtx.fill();
+            phCtx.strokeStyle = 'white'; phCtx.beginPath(); phCtx.arc(cx, cy, rs, 0, Math.PI*2); phCtx.stroke();
+            
+            // Photon Sphere Guide
+            phCtx.strokeStyle = '#f59e0b'; phCtx.setLineDash([5,5]);
+            phCtx.beginPath(); phCtx.arc(cx, cy, ps, 0, Math.PI*2); phCtx.stroke();
+            phCtx.setLineDash([]);
+            
+            lasers.forEach(l => {
+                let dx = l.x - cx; let dy = l.y - cy;
+                let d2 = dx*dx + dy*dy; let d = Math.sqrt(d2);
+                
+                // Gravity
+                let f = 1000 / d2;
+                l.vx -= (dx/d) * f;
+                l.vy -= (dy/d) * f;
+                
+                l.x += l.vx; l.y += l.vy;
+                
+                // Draw
+                phCtx.fillStyle = '#ef4444'; phCtx.fillRect(l.x, l.y, 3, 3);
+                
+                // Swallow
+                if(d < rs) l.life = 0;
+            });
+            lasers = lasers.filter(l => l.life > 0);
+            requestAnimationFrame(updatePhoton);
+        }
+        updatePhoton();
+
+        // --- 8. HORIZON ESCAPE ---
+        const hzCanvas = document.getElementById('horizonCanvas');
+        const hzCtx = hzCanvas.getContext('2d');
+        let hzShip = {x: 600, v: 0};
+        let hzThrust = false;
+        function launchEscape() { hzThrust = true; }
+        function resetEscape() { hzShip.x = 600; hzShip.v = 0; hzThrust = false; document.getElementById('escapeStatus').innerText="Status: Ready"; }
+        function updateHorizon() {
+            hzCtx.fillStyle = '#111'; hzCtx.fillRect(0,0,800,300);
+            
+            // Horizon Line
+            hzCtx.strokeStyle = 'red'; hzCtx.lineWidth = 4;
+            hzCtx.beginPath(); hzCtx.moveTo(200, 0); hzCtx.lineTo(200, 300); hzCtx.stroke();
+            hzCtx.fillStyle = 'red'; hzCtx.fillText("EVENT HORIZON", 150, 20);
+            
+            // Physics
+            let dist = hzShip.x; // Center is 0 roughly
+            let g = 5000 / (dist*dist + 1); // Singularity at x=0
+            
+            if(hzShip.x > 0) {
+                hzShip.v -= 0.1; // Gravity pull left
+                if(hzThrust) hzShip.v += 0.15; // Engine push right
+                hzShip.x += hzShip.v;
+            }
+            
+            // Ship
+            hzCtx.fillStyle = 'white';
+            hzCtx.fillRect(hzShip.x, 140, 20, 20);
+            if(hzThrust) {
+                hzCtx.fillStyle = 'orange';
+                hzCtx.fillRect(hzShip.x-10, 145, 10, 10);
+            }
+            
+            if(hzShip.x < 200) {
+                document.getElementById('escapeStatus').innerText = "STATUS: CROSSED HORIZON. LOST FOREVER.";
+                document.getElementById('escapeStatus').style.color = "red";
+            }
+            
+            requestAnimationFrame(updateHorizon);
+        }
+        updateHorizon();
+
+        // --- 9. REDSHIFT ---
+        const rsCanvas = document.getElementById('redshiftCanvas');
+        const rsCtx = rsCanvas.getContext('2d');
+        let rsX = 100; let rsDrag = false;
+        rsCanvas.addEventListener('mousedown', ()=>rsDrag=true);
+        rsCanvas.addEventListener('mouseup', ()=>rsDrag=false);
+        rsCanvas.addEventListener('mousemove', (e)=>{
+            if(rsDrag) {
+                let r = rsCanvas.getBoundingClientRect();
+                rsX = Math.max(50, Math.min(750, e.clientX - r.left));
+            }
+        });
+        function updateRedshift() {
+            rsCtx.fillStyle = 'black'; rsCtx.fillRect(0,0,800,200);
+            
+            // BH on left
+            rsCtx.fillStyle = 'black'; rsCtx.strokeStyle='white';
+            rsCtx.beginPath(); rsCtx.arc(0, 100, 50, 0, Math.PI*2); rsCtx.fill(); rsCtx.stroke();
+            
+            // Packet
+            let dist = rsX;
+            // Color shift: 0 (near) -> Red, 800 (far) -> Blue? 
+            // Wait, climbing OUT loses energy. Near = High Gravity potential?
+            // Actually, if emitted at r, observed at infinity.
+            // Let's visualize "local color".
+            // Deep in well = appears RED to outsider.
+            // Let's make it: Near BH = Red, Far = Blue.
+            let hue = (dist/800) * 240; // 0=Red, 240=Blue
+            
+            rsCtx.fillStyle = `hsl(${hue}, 100%, 50%)`;
+            rsCtx.shadowBlur = 20; rsCtx.shadowColor = rsCtx.fillStyle;
+            
+            // Draw Wave
+            rsCtx.beginPath();
+            for(let i=0; i<50; i++) {
+                let y = 100 + Math.sin(i*0.5)*10;
+                if(i==0) rsCtx.moveTo(rsX-25+i, y); else rsCtx.lineTo(rsX-25+i, y);
+            }
+            rsCtx.stroke();
+            rsCtx.shadowBlur = 0;
+            
+            document.getElementById('waveText').innerText = dist < 200 ? "High Redshift (Low Energy)" : "Normal Spectrum";
+            document.getElementById('waveText').style.color = `hsl(${hue}, 100%, 50%)`;
+            
+            requestAnimationFrame(updateRedshift);
+        }
+        updateRedshift();
+
+        // --- 10. SPAGHETTIFICATION ---
+        const sgCanvas = document.getElementById('spagCanvas');
+        const sgCtx = sgCanvas.getContext('2d');
+        function updateSpag() {
+            sgCtx.fillStyle = 'black'; sgCtx.fillRect(0,0,800,400);
+            let force = document.getElementById('tideSlider').value;
+            let stretch = 1 + (force/10);
+            let width = 1 / stretch;
+            
+            let cx = 400, cy = 200;
+            
+            // Grid
+            sgCtx.strokeStyle = '#333';
+            for(let x=0; x<=800; x+=40) {
+                sgCtx.beginPath(); sgCtx.moveTo(x,0); sgCtx.lineTo(x,400); sgCtx.stroke();
+            }
+            
+            // Astronaut
+            sgCtx.save();
+            sgCtx.translate(cx, cy);
+            sgCtx.fillStyle = 'white';
+            // Head
+            sgCtx.beginPath(); sgCtx.arc(0, -60*stretch, 20*width, 0, Math.PI*2); sgCtx.fill();
+            // Body
+            sgCtx.fillRect(-15*width, -40*stretch, 30*width, 80*stretch);
+            // Legs
+            sgCtx.fillRect(-15*width, 40*stretch, 10*width, 60*stretch);
+            sgCtx.fillRect(5*width, 40*stretch, 10*width, 60*stretch);
+            sgCtx.restore();
+            
+            requestAnimationFrame(updateSpag);
+        }
+        updateSpag();
+
+        // --- 11. FRAME DRAGGING ---
+        const drCanvas = document.getElementById('dragCanvas');
+        const drCtx = drCanvas.getContext('2d');
+        let drAngle = 0;
+        function updateDrag() {
+            drCtx.fillStyle = '#050b14'; drCtx.fillRect(0,0,800,400);
+            let spin = document.getElementById('spinSlider').value;
+            drAngle += spin * 0.01;
+            
+            let cx = 400, cy = 200;
+            
+            // Draw swirled space
+            for(let r=20; r<300; r+=20) {
+                drCtx.strokeStyle = `rgba(6, 182, 212, ${1 - r/300})`;
+                drCtx.beginPath();
+                // Ellipse orbit
+                for(let a=0; a<Math.PI*2; a+=0.1) {
+                    let twist = (300-r)*0.01 * drAngle; // More twist near center
+                    let x = cx + Math.cos(a + twist) * r;
+                    let y = cy + Math.sin(a + twist) * r * 0.5; // Flattened
+                    if(a==0) drCtx.moveTo(x,y); else drCtx.lineTo(x,y);
+                }
+                drCtx.stroke();
+            }
+            
+            // Black Hole
+            drCtx.fillStyle = 'black'; drCtx.beginPath(); drCtx.arc(cx, cy, 20, 0, Math.PI*2); drCtx.fill();
+            
+            requestAnimationFrame(updateDrag);
+        }
+        updateDrag();
+
+        // --- 12. ACCRETION DISK ---
+        const dkCanvas = document.getElementById('diskCanvas');
+        const dkCtx = dkCanvas.getContext('2d');
+        let dkParts = [];
+        for(let i=0; i<300; i++) dkParts.push({r: rand(50, 200), a: rand(0, Math.PI*2)});
+        
+        function updateDisk() {
+            dkCtx.fillStyle = 'black'; dkCtx.fillRect(0,0,800,400);
+            let cx = 400, cy = 200;
+            let inc = parseInt(document.getElementById('incSlider').value) * (Math.PI/180);
+            
+            dkParts.forEach(p => {
+                // Keplerian speed: v ~ 1/sqrt(r)
+                p.a += 15 / Math.sqrt(p.r);
+                
+                // Perspective flattening
+                let flat = Math.cos(inc); 
+                
+                let x = cx + Math.cos(p.a) * p.r;
+                let y = cy + Math.sin(p.a) * p.r * flat; 
+                
+                // Doppler Beaming:
+                // Velocity vector component towards viewer
+                // Tangential velocity is perpendicular to radius
+                // V_line_of_sight ~ sin(angle) * sin(inclination)
+                let v_los = -Math.sin(p.a) * Math.sin(inc);
+                
+                // Blueshift (moving towards) = Brighter/Bluer
+                // Redshift (moving away) = Dimmer/Redder
+                let intensity = 0.5 + v_los * 0.5; // Range 0 to 1
+                let hue = 200 + v_los * 60; // 200 (Blue) -> 140 (Cyan/Green) .. wait.
+                // Lets do: Toward = 220 (Blue), Away = 0 (Red)
+                hue = v_los > 0 ? 220 : 0;
+                let light = 30 + intensity * 40;
+                
+                dkCtx.fillStyle = `hsl(${hue}, 100%, ${light}%)`;
+                dkCtx.fillRect(x, y, 3, 3);
+            });
+            
+            // Hole
+            dkCtx.fillStyle = 'black'; dkCtx.beginPath(); dkCtx.arc(cx, cy, 40, 0, Math.PI*2); dkCtx.fill();
+            dkCtx.strokeStyle='white'; dkCtx.stroke();
+            
+            requestAnimationFrame(updateDisk);
+        }
+        updateDisk();
+
+        // --- 13. HAWKING ---
+        const hkCanvas = document.getElementById('hawkingCanvas');
+        const hkCtx = hkCanvas.getContext('2d');
+        let hkParts = [];
+        let hkMass = 100;
+        
+        function feedBH() { if(hkMass < 200) hkMass += 20; }
+        
+        function updateHawking() {
+            hkCtx.fillStyle = 'black'; hkCtx.fillRect(0,0,800,300);
+            
+            let timeSpeed = parseInt(document.getElementById('evapSlider').value);
+            
+            let cx = 400, cy = 150;
+            let r = 50 * (hkMass/100);
+            if(r<0) r=0;
+            
+            // BH
+            hkCtx.fillStyle = 'white'; hkCtx.shadowBlur = 20; hkCtx.beginPath(); hkCtx.arc(cx, cy, r, 0, Math.PI*2); hkCtx.fill(); hkCtx.shadowBlur=0;
+            hkCtx.fillStyle = 'black'; hkCtx.beginPath(); hkCtx.arc(cx, cy, Math.max(0, r-2), 0, Math.PI*2); hkCtx.fill();
+            
+            // Spawn Pairs (More time speed = more spawn checks)
+            for(let t=0; t<timeSpeed; t++) {
+                if(Math.random() > 0.9 && hkMass > 5) {
+                    let angle = rand(0, Math.PI*2);
+                    let px = cx + Math.cos(angle)*r; let py = cy + Math.sin(angle)*r;
+                    hkParts.push({x: px, y: py, vx: Math.cos(angle), vy: Math.sin(angle), type: 'esc'});
+                    hkParts.push({x: px, y: py, vx: -Math.cos(angle), vy: -Math.sin(angle), type: 'in'});
+                }
+            }
+            
+            hkParts.forEach((p, i) => {
+                p.x += p.vx * timeSpeed; 
+                p.y += p.vy * timeSpeed;
+                
+                if(p.type === 'esc') {
+                    hkCtx.fillStyle = '#4ade80'; hkCtx.fillRect(p.x, p.y, 2, 2);
+                    if(p.x<0||p.x>800) { 
+                        hkParts.splice(i, 1); 
+                        hkMass -= 0.05 * timeSpeed; // Mass loss logic
+                    } 
+                } else {
+                    hkCtx.fillStyle = '#ef4444'; hkCtx.fillRect(p.x, p.y, 2, 2);
+                    let d = Math.hypot(p.x-cx, p.y-cy);
+                    if(d < r-5) hkParts.splice(i, 1); // Eaten
+                }
+            });
+            
+            if(hkMass <= 0) {
+                document.getElementById('massReadout').innerText = "Mass: 0% (EVAPORATED!)";
+                hkMass = 0;
+            } else {
+                document.getElementById('massReadout').innerText = `Mass: ${Math.floor(hkMass)}%`;
+            }
+            
+            requestAnimationFrame(updateHawking);
+        }
+        updateHawking();
+
+        // --- 14. WORMHOLE ---
+        const wmCanvas = document.getElementById('wormCanvas');
+        const wmCtx = wmCanvas.getContext('2d');
+        function updateWorm() {
+            wmCtx.fillStyle = '#ecfeff'; wmCtx.fillRect(0,0,800,300);
+            let fold = document.getElementById('foldSlider').value;
+            
+            // Draw Paper
+            let Ax = 100 + fold*2; let Ay = 150;
+            let Bx = 700 - fold*2; let By = 150;
+            
+            wmCtx.strokeStyle = 'black'; wmCtx.lineWidth = 2;
+            wmCtx.beginPath(); wmCtx.moveTo(100, 150); wmCtx.lineTo(700, 150); wmCtx.stroke();
+            
+            // Points
+            wmCtx.fillStyle = 'red'; wmCtx.beginPath(); wmCtx.arc(Ax, Ay, 5, 0, Math.PI*2); wmCtx.fill();
+            wmCtx.fillStyle = 'blue'; wmCtx.beginPath(); wmCtx.arc(Bx, By, 5, 0, Math.PI*2); wmCtx.fill();
+            
+            // Fold visualization (Arc)
+            if(fold > 0) {
+                wmCtx.strokeStyle = 'rgba(0,0,0,0.2)';
+                wmCtx.beginPath(); 
+                wmCtx.arc(400, 150, (Bx-Ax)/2, 0, Math.PI); 
+                wmCtx.stroke();
+            }
+            
+            if(Math.abs(Ax-Bx) < 10) {
+                wmCtx.font = "20px Changa One"; wmCtx.fillStyle = "purple"; wmCtx.fillText("INSTANT TRAVEL!", 350, 100);
+            }
+            
+            requestAnimationFrame(updateWorm);
+        }
+        updateWorm();
+
+        // --- 15. SGR A* (High Fidelity 3D Orbits) ---
+        const sgCanvas2 = document.getElementById('sgrCanvas');
+        const sgCtx2 = sgCanvas2.getContext('2d');
+        let sgrStars = [];
+        const numSgrStars = 100;
+        
+        // Initialize stars with 3D orbital parameters
+        for(let i=0; i<numSgrStars; i++) {
+            sgrStars.push({
+                a: rand(60, 300), // Semi-major axis
+                e: rand(0.3, 0.9), // Eccentricity
+                inc: rand(0, Math.PI), // Inclination
+                lan: rand(0, Math.PI*2), // Longitude of ascending node
+                arg: rand(0, Math.PI*2), // Argument of periapsis
+                M: rand(0, Math.PI*2), // Mean anomaly
+                color: `hsl(${rand(200, 250)}, 100%, 80%)` // Base blue-white color
+            });
+        }
+        
+        function updateSgr() {
+            // Fading trails
+            sgCtx2.fillStyle = 'rgba(5, 11, 20, 0.15)'; 
+            sgCtx2.fillRect(0,0,800,400);
+            
+            let cx = 400, cy = 200;
+            let mass = parseFloat(document.getElementById('sgrMassSlider').value);
+            
+            // Draw Central BH (with glow)
+            let glow = sgCtx2.createRadialGradient(cx, cy, 5, cx, cy, 30);
+            glow.addColorStop(0, 'rgba(255, 255, 255, 1)');
+            glow.addColorStop(0.2, 'rgba(100, 200, 255, 0.5)');
+            glow.addColorStop(1, 'rgba(0, 0, 0, 0)');
+            
+            sgCtx2.fillStyle = glow; 
+            sgCtx2.beginPath(); sgCtx2.arc(cx, cy, 30, 0, Math.PI*2); sgCtx2.fill();
+            
+            // Draw Event Horizon (Black center)
+            sgCtx2.fillStyle = 'black';
+            sgCtx2.beginPath(); sgCtx2.arc(cx, cy, 6 * Math.pow(mass, 0.5), 0, Math.PI*2); sgCtx2.fill();
+            sgCtx2.strokeStyle = 'rgba(255,255,255,0.8)'; 
+            sgCtx2.lineWidth = 1;
+            sgCtx2.stroke();
+
+            // Sort stars by Z depth so foreground stars draw on top
+            // We need to compute positions first
+            let starPoints = [];
+
+            sgrStars.forEach(s => {
+                // Update Mean Anomaly (Kepler's 3rd: n^2 a^3 = GM)
+                // n ~ sqrt(M / a^3)
+                let n = 50 * Math.sqrt(mass) / Math.pow(s.a, 1.5);
+                s.M += n;
+                
+                // Solve Kepler Eq: M = E - e sin E (Approx E ~ M for visual, or 1 iteration)
+                let E = s.M; 
+                // Simple iteration for better accuracy at high eccentricity
+                E = s.M + s.e * Math.sin(E); 
+                
+                // Polar coordinates in orbital plane
+                let r = s.a * (1 - s.e * Math.cos(E));
+                // True anomaly nu
+                let nu = 2 * Math.atan(Math.sqrt((1+s.e)/(1-s.e)) * Math.tan(E/2));
+                
+                // 3D Position transformation
+                // Positions in orbital plane
+                let ox = r * Math.cos(nu);
+                let oy = r * Math.sin(nu);
+                
+                // Rotate by Argument of Periapsis (arg)
+                let x1 = ox * Math.cos(s.arg) - oy * Math.sin(s.arg);
+                let y1 = ox * Math.sin(s.arg) + oy * Math.cos(s.arg);
+                
+                // Rotate by Inclination (inc)
+                let x2 = x1;
+                let y2 = y1 * Math.cos(s.inc);
+                let z2 = y1 * Math.sin(s.inc);
+                
+                // Rotate by Longitude of Ascending Node (lan)
+                let x = x2 * Math.cos(s.lan) - y2 * Math.sin(s.lan);
+                let y = x2 * Math.sin(s.lan) + y2 * Math.cos(s.lan);
+                let z = z2; // Depth
+                
+                // Perspective Projection
+                let scale = 300 / (300 + z); // 300 is approximate camera distance
+                let px = cx + x * scale;
+                let py = cy + y * scale;
+                
+                // Calculate speed for Doppler effect visual (roughly)
+                // v ~ sqrt(2/r - 1/a). Fast at small r.
+                let vFactor = (2/r - 1/s.a) * 5000;
+                
+                starPoints.push({x: px, y: py, z: z, r: r, v: vFactor, baseCol: s.color});
+            });
+
+            // Sort by Z (painter's algorithm)
+            starPoints.sort((a,b) => b.z - a.z);
+
+            starPoints.forEach(p => {
+                let size = Math.max(0.5, 3 * (300 / (300 + p.z)));
+                let alpha = Math.min(1, (300 + p.z)/600);
+                
+                sgCtx2.fillStyle = p.baseCol;
+                
+                // Doppler tint: Fast & Close = White/Blue, Slow & Far = Dim
+                // Let's make periapsis passes flash bright
+                if (p.r < 50) {
+                    sgCtx2.fillStyle = '#fff';
+                    size *= 1.5;
+                }
+                
+                sgCtx2.globalAlpha = alpha;
+                sgCtx2.beginPath(); sgCtx2.arc(p.x, p.y, size, 0, Math.PI*2); sgCtx2.fill();
+                sgCtx2.globalAlpha = 1.0;
+            });
+            
+            requestAnimationFrame(updateSgr);
+        }
+        updateSgr();
+
+    </script>
+</body>
+</html>
